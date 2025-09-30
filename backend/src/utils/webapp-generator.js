@@ -419,14 +419,33 @@ function generateWebAppHTML(botSettings, botId) {
     
     // Events rendering
     function renderEventsContent(container, content) {
-      const { schedule = [], activities = [], products = [] } = content;
+      const { 
+        schedule = [], 
+        activities = [], 
+        products = [], 
+        surveys = [],
+        pages = {} 
+      } = content;
       
       let html = '';
       
       // Schedule
-      if (schedule.length > 0) {
+      if (pages.schedule !== false && (schedule.length > 0 || pages.schedule === true)) {
         html += '<div class="section"><h2 class="section-title">📅 Расписание</h2>';
-        schedule.forEach((item, index) => {
+        
+        if (schedule.length === 0) {
+          // Показываем заглушку
+          html += \`
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">📅</div>
+                <div class="card-title">Расписание пусто</div>
+              </div>
+              <div class="card-description">Добавьте события в конструкторе для отображения расписания</div>
+            </div>
+          \`;
+        } else {
+          schedule.forEach((item, index) => {
           html += \`
             <div class="card fade-in" style="animation-delay: \${index * 0.1}s">
               <div class="card-header">
@@ -440,50 +459,152 @@ function generateWebAppHTML(botSettings, botId) {
               </div>
             </div>
           \`;
-        });
+          });
+        }
         html += '</div>';
       }
       
       // Activities
-      if (activities.length > 0) {
+      if (pages.activities !== false && (activities.length > 0 || pages.activities === true)) {
         html += '<div class="section"><h2 class="section-title">🎯 Активности</h2>';
-        activities.forEach((item, index) => {
+        
+        if (activities.length === 0) {
           html += \`
-            <div class="card fade-in" style="animation-delay: \${index * 0.1}s" onclick="registerForActivity('\${item.id}')">
+            <div class="card">
               <div class="card-header">
-                <div class="card-icon">\${item.emoji || '✨'}</div>
-                <div class="card-title">\${item.name}</div>
-                <div class="card-price">\${item.points || 0} баллов</div>
+                <div class="card-icon">🎯</div>
+                <div class="card-title">Активности не добавлены</div>
               </div>
-              <div class="card-description">\${item.description || ''}</div>
-              <button class="btn btn-primary" onclick="registerForActivity('\${item.id}'); event.stopPropagation();">
-                Зарегистрироваться
-              </button>
+              <div class="card-description">Добавьте активности в конструкторе</div>
             </div>
           \`;
-        });
+        } else {
+          activities.forEach((item, index) => {
+            html += \`
+              <div class="card fade-in" style="animation-delay: \${index * 0.1}s" onclick="registerForActivity('\${item.id}')">
+                <div class="card-header">
+                  <div class="card-icon">\${item.emoji || '✨'}</div>
+                  <div class="card-title">\${item.name}</div>
+                  <div class="card-price">\${item.points || 0} баллов</div>
+                </div>
+                <div class="card-description">\${item.description || ''}</div>
+                <button class="btn btn-primary" onclick="registerForActivity('\${item.id}'); event.stopPropagation();">
+                  Зарегистрироваться
+                </button>
+              </div>
+            \`;
+          });
+        }
         html += '</div>';
       }
       
       // Merch Shop
-      if (products.length > 0) {
+      if (pages.shop !== false && (products.length > 0 || pages.shop === true)) {
         html += '<div class="section"><h2 class="section-title">🛒 Мерч-шоп</h2>';
-        products.forEach((item, index) => {
+        
+        if (products.length === 0) {
           html += \`
-            <div class="card fade-in" style="animation-delay: \${index * 0.1}s">
+            <div class="card">
               <div class="card-header">
-                <div class="card-icon">\${item.emoji || '🎁'}</div>
-                <div class="card-title">\${item.name}</div>
-                <div class="card-price">\${item.price} ₽</div>
+                <div class="card-icon">🛒</div>
+                <div class="card-title">Товары не добавлены</div>
               </div>
-              <div class="card-description">\${item.description || ''}</div>
-              <button class="btn btn-primary" onclick="addToCart('\${item.id}', '\${item.name}', \${item.price})">
-                В корзину
-              </button>
+              <div class="card-description">Добавьте товары в конструкторе</div>
             </div>
           \`;
-        });
+        } else {
+          products.forEach((item, index) => {
+            html += \`
+              <div class="card fade-in" style="animation-delay: \${index * 0.1}s">
+                <div class="card-header">
+                  <div class="card-icon">\${item.emoji || '🎁'}</div>
+                  <div class="card-title">\${item.name}</div>
+                  <div class="card-price">\${item.price} ₽</div>
+                </div>
+                <div class="card-description">\${item.description || ''}</div>
+                <button class="btn btn-primary" onclick="addToCart('\${item.id}', '\${item.name}', \${item.price})">
+                  В корзину
+                </button>
+              </div>
+            \`;
+          });
+        }
         html += '</div>';
+      }
+      
+      // Surveys/Опросы
+      if (pages.surveys !== false && (surveys.length > 0 || pages.surveys === true)) {
+        html += '<div class="section"><h2 class="section-title">📊 Опросы</h2>';
+        
+        if (surveys.length === 0) {
+          html += \`
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Опросы не добавлены</div>
+              </div>
+              <div class="card-description">Добавьте опросы в конструкторе</div>
+            </div>
+          \`;
+        } else {
+          surveys.forEach((item, index) => {
+            html += \`
+              <div class="card fade-in" style="animation-delay: \${index * 0.1}s" onclick="openSurvey('\${item.id}')">
+                <div class="card-header">
+                  <div class="card-icon">\${item.emoji || '📋'}</div>
+                  <div class="card-title">\${item.title}</div>
+                </div>
+                <div class="card-description">\${item.description || ''}</div>
+                <button class="btn btn-primary" onclick="openSurvey('\${item.id}'); event.stopPropagation();">
+                  Пройти опрос
+                </button>
+              </div>
+            \`;
+          });
+        }
+        html += '</div>';
+      }
+      
+      // QR Codes
+      if (pages.qr === true) {
+        html += \`
+          <div class="section">
+            <h2 class="section-title">📱 QR-коды</h2>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">📱</div>
+                <div class="card-title">Мой QR код</div>
+              </div>
+              <div class="card-description">Ваш персональный QR для регистрации и получения баллов</div>
+              <button class="btn btn-primary" onclick="tg.showPopup({title: 'QR Код', message: 'Функция генерации QR кодов скоро будет доступна!'})">
+                Показать QR
+              </button>
+            </div>
+          </div>
+        \`;
+      }
+      
+      // Admin Panel
+      if (pages.admin === true) {
+        html += \`
+          <div class="section">
+            <h2 class="section-title">🔧 Админ-панель</h2>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">👥</div>
+                <div class="card-title">Статистика</div>
+              </div>
+              <div class="card-description">Всего участников: 0<br>Активные активности: 0</div>
+            </div>
+            <div class="card">
+              <div class="card-header">
+                <div class="card-icon">📊</div>
+                <div class="card-title">Аналитика</div>
+              </div>
+              <div class="card-description">Просмотры: 0<br>Регистрации: 0</div>
+            </div>
+          </div>
+        \`;
       }
       
       container.innerHTML = html || '<div class="empty-state"><div class="empty-state-icon">📋</div><p>Контент скоро появится</p></div>';
