@@ -62,7 +62,8 @@ from telegram import (
     KeyboardButton,
     WebAppInfo,
     LabeledPrice,
-    PreCheckoutQuery${hasPolls ? ',\n    Poll' : ''}${hasQrCodes ? ',\n    InputFile' : ''}
+    PreCheckoutQuery,
+    BotCommand${hasPolls ? ',\n    Poll' : ''}${hasQrCodes ? ',\n    InputFile' : ''}
 )
 from telegram.ext import (
     Application, 
@@ -722,11 +723,34 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     if callback_data.startswith('pay_'):
         await handle_payment_request(query, context, callback_data[4:])
     elif callback_data in SCENES:
-        # Переход к сцене - создаем корректный fake_update
-        import copy
-        fake_update = copy.deepcopy(update)
-        fake_update.message = query.message
-        await send_scene(fake_update, context, callback_data)
+        # Переход к сцене - отправляем новое сообщение
+        scene = SCENES.get(callback_data)
+        if scene:
+            # Формируем сообщение сцены
+            scene_text = scene.get('text', f"📋 {scene.get('name', 'Раздел')}")
+            
+            # Формируем клавиатуру для сцены
+            buttons = []
+            for button in scene.get('buttons', []):
+                if button.get('web_app'):
+                    buttons.append([InlineKeyboardButton(button['text'], web_app=WebAppInfo(url=button['web_app']))])
+                elif button.get('callback_data'):
+                    buttons.append([InlineKeyboardButton(button['text'], callback_data=button['callback_data'])])
+                elif button.get('url'):
+                    buttons.append([InlineKeyboardButton(button['text'], url=button['url'])])
+            
+            keyboard = InlineKeyboardMarkup(buttons) if buttons else None
+            
+            # Редактируем сообщение
+            try:
+                await query.edit_message_text(text=scene_text, reply_markup=keyboard)
+            except Exception as e:
+                logger.error(f"Ошибка редактирования сообщения: {e}")
+                await context.bot.send_message(
+                    chat_id=query.from_user.id,
+                    text=scene_text,
+                    reply_markup=keyboard
+                )
     else:
         # Обработка кастомных callback'ов
         await handle_custom_callback(query, context, callback_data)
@@ -734,6 +758,44 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
 async def handle_custom_callback(query, context, callback_data: str):
     """Обработка кастомных callback'ов"""
     user_id = query.from_user.id
+    
+    # Проверяем, может это команда из сценариев (my_qr -> /qr, schedule -> /schedule и т.д.)
+    # Ищем сцену с trigger, который содержит callback_data
+    matching_scene = None
+    for scene_id, scene in SCENES.items():
+        if scene.get('trigger'):
+            command_name = scene['trigger'].lstrip('/')
+            # Сравниваем: my_qr == qr, schedule == schedule и т.д.
+            if callback_data == command_name or callback_data == f'my_{command_name}':
+                matching_scene = scene
+                break
+    
+    if matching_scene:
+        # Нашли соответствующую сцену - вызываем её
+        scene_text = matching_scene.get('text', f"📋 {matching_scene.get('name', 'Раздел')}")
+        
+        # Формируем клавиатуру для сцены
+        buttons = []
+        for button in matching_scene.get('buttons', []):
+            if button.get('web_app'):
+                buttons.append([InlineKeyboardButton(button['text'], web_app=WebAppInfo(url=button['web_app']))])
+            elif button.get('callback_data'):
+                buttons.append([InlineKeyboardButton(button['text'], callback_data=button['callback_data'])])
+            elif button.get('url'):
+                buttons.append([InlineKeyboardButton(button['text'], url=button['url'])])
+        
+        keyboard = InlineKeyboardMarkup(buttons) if buttons else None
+        
+        try:
+            await query.edit_message_text(text=scene_text, reply_markup=keyboard)
+        except Exception as e:
+            logger.error(f"Ошибка редактирования: {e}")
+            await context.bot.send_message(
+                chat_id=query.from_user.id,
+                text=scene_text,
+                reply_markup=keyboard
+            )
+        return
     
     # Обработка меню и каталогов
     if callback_data == '/menu' or callback_data == '/catalog':
@@ -993,6 +1055,33 @@ def main() -> None:
     
     # Создание приложения
     application = Application.builder().token(BOT_TOKEN).build()
+    
+    # Установка команд в меню бота (как в BotFather)
+    async def post_init(app):
+        """Установка команд в меню после инициализации"""
+        commands = [
+            BotCommand("start", "🏠 Главное меню"),
+            BotCommand("help", "❓ Помощь"),
+${botSettings.features.analytics ? `            BotCommand("stats", "📊 Статистика"),` : ''}
+${
+  botSettings.scenes && botSettings.scenes.length > 0
+    ? botSettings.scenes
+        .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
+        .map(scene => {
+          const commandName = scene.trigger.slice(1);
+          const commandDesc = scene.name || commandName;
+          // Ограничиваем длину описания до 60 символов (лимит Telegram)
+          const desc = commandDesc.length > 56 ? commandDesc.substring(0, 56) + '...' : commandDesc;
+          return `            BotCommand("${commandName}", "${desc}"),`;
+        })
+        .join('\n')
+    : ''
+}
+        ]
+        await app.bot.set_my_commands(commands)
+        logger.info(f"✅ Установлено {len(commands)} команд в меню бота")
+    
+    application.post_init = post_init
 
     # Регистрация обработчиков команд
     application.add_handler(CommandHandler("start", start))
