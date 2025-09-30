@@ -90,15 +90,17 @@ function generateWebAppHTML(botSettings, botId) {
     .card {
       background: white;
       color: #1a1a1a;
-      border-radius: 16px;
-      padding: 16px;
-      margin-bottom: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-      transition: transform 0.2s, box-shadow 0.2s;
+      border-radius: 20px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08), 0 1px 3px rgba(0, 0, 0, 0.05);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1px solid rgba(0, 0, 0, 0.05);
     }
     
     .card:active {
-      transform: scale(0.98);
+      transform: translateY(2px);
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
     }
     
     .card-header {
@@ -109,27 +111,33 @@ function generateWebAppHTML(botSettings, botId) {
     }
     
     .card-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 12px;
+      width: 56px;
+      height: 56px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 24px;
+      font-size: 28px;
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
+      box-shadow: 0 4px 16px rgba(139, 92, 246, 0.25);
     }
     
     .card-title {
-      font-size: 18px;
-      font-weight: 600;
+      font-size: 19px;
+      font-weight: 700;
       flex: 1;
+      line-height: 1.3;
+      color: #1a1a1a;
     }
     
     .card-price {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--accent-color);
+      font-size: 24px;
+      font-weight: 800;
+      background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
     
     .card-description {
@@ -158,26 +166,28 @@ function generateWebAppHTML(botSettings, botId) {
     .btn {
       display: block;
       width: 100%;
-      padding: 16px;
+      padding: 18px;
       border: none;
-      border-radius: 12px;
-      font-size: 16px;
-      font-weight: 600;
+      border-radius: 16px;
+      font-size: 17px;
+      font-weight: 700;
       cursor: pointer;
-      transition: all 0.3s;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
       text-align: center;
       text-decoration: none;
+      position: relative;
+      overflow: hidden;
     }
     
     .btn-primary {
       background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
       color: white;
-      box-shadow: 0 4px 12px rgba(139, 92, 246, 0.3);
+      box-shadow: 0 6px 20px rgba(139, 92, 246, 0.35);
     }
     
     .btn-primary:active {
-      transform: translateY(2px);
-      box-shadow: 0 2px 6px rgba(139, 92, 246, 0.3);
+      transform: scale(0.97);
+      box-shadow: 0 3px 10px rgba(139, 92, 246, 0.35);
     }
     
     .btn-outline {

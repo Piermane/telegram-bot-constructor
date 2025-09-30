@@ -296,7 +296,7 @@ const BotBuilderPage: React.FC = () => {
     const newScene: BotScene = {
       id: `scene_${Date.now()}`,
       name: 'Новая сцена',
-      trigger: 'new_scene',
+      trigger: '/new_scene',  // ✅ ВСЕГДА НАЧИНАЕТСЯ С /
       message: 'Введите сообщение для этой сцены...',
       buttons: []
     };

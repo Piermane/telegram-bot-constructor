@@ -134,11 +134,14 @@ class UserAction:
 class DatabaseManager:
     def __init__(self, db_path: str = 'bot_database.db'):
         self.db_path = db_path
+        # Регистрация адаптеров для datetime (Python 3.12+)
+        sqlite3.register_adapter(datetime.datetime, lambda val: val.isoformat())
+        sqlite3.register_adapter(datetime.date, lambda val: val.isoformat())
         self.init_database()
     
     def init_database(self):
         """Инициализация всех таблиц"""
-        conn = sqlite3.connect(self.db_path)
+        conn = sqlite3.connect(self.db_path, detect_types=sqlite3.PARSE_DECLTYPES)
         cursor = conn.cursor()
         
         # Таблица пользователей
