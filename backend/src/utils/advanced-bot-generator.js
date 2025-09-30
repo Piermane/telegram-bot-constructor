@@ -20,23 +20,21 @@ function generateAdvancedPythonBot(botSettings, botInfo) {
   return `#!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-${botSettings.name} - Professional Telegram Bot
-Создан с помощью TelegramBot Constructor PRO
+${botSettings.name} - Telegram Bot
+Создан с помощью Telegram Bot Constructor
 
 🤖 Бот: @${botInfo.username}
 📂 Категория: ${botSettings.category}
 📝 Описание: ${botSettings.description}
 
-💼 ПРОМЫШЛЕННЫЕ ФУНКЦИИ:
+⚙️ ФУНКЦИИ:
 ${hasWebApp ? '📱 Web App интеграция' : ''}
 ${hasPayments ? '💳 Платежная система' : ''}
 ${hasGeolocation ? '📍 Геолокация и доставка' : ''}
 🔔 Уведомления администратора
-📊 Расширенная аналитика
+📊 Аналитика и статистика
 🗄️ База данных SQLite
 ⚡ Асинхронная обработка
-
-🚀 ГОТОВ К ПРОДАКШНУ!
 """
 
 import logging
@@ -589,6 +587,30 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     
     await send_scene(update, context, "start")
 
+${
+  // Генерируем обработчики для всех команд из сцен
+  botSettings.scenes && botSettings.scenes.length > 0
+    ? botSettings.scenes
+        .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
+        .map(scene => {
+          const commandName = scene.trigger.slice(1); // убираем /
+          return `
+async def ${commandName}_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Обработчик команды ${scene.trigger}"""
+    user = update.effective_user
+    logger.info(f"👤 {user.first_name} вызвал команду ${scene.trigger}")
+    
+    ${botSettings.features.analytics ? `
+    AnalyticsManager.log_event("command_used", user.id, "${scene.id}", {"command": "${scene.trigger}"})
+    ` : ''}
+    
+    await send_scene(update, context, "${scene.id}")
+`;
+        })
+        .join('\n')
+    : ''
+}
+
 async def help_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Команда помощи"""
     help_text = f"""
@@ -918,6 +940,19 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     ${botSettings.features.analytics ? `application.add_handler(CommandHandler("stats", stats_command))` : ''}
+    ${
+      // Регистрируем все команды из сцен
+      botSettings.scenes && botSettings.scenes.length > 0
+        ? botSettings.scenes
+            .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
+            .map(scene => {
+              const commandName = scene.trigger.slice(1);
+              return `application.add_handler(CommandHandler("${commandName}", ${commandName}_command))`;
+            })
+            .map(handler => `    ${handler}`)
+            .join('\n    ')
+        : ''
+    }
 
     # Регистрация обработчиков callback'ов
     application.add_handler(CallbackQueryHandler(button_callback))

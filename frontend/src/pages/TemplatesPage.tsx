@@ -22,9 +22,13 @@ import {
   Spinner,
   Center,
   Alert,
-  AlertIcon
+  AlertIcon,
+  Flex,
+  Stack,
+  Image,
+  useBreakpointValue
 } from '@chakra-ui/react';
-import { FiClock, FiUsers, FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiSettings } from 'react-icons/fi';
+import { FiClock, FiUsers, FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiSettings, FiZap, FiCheck, FiArrowRight } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
@@ -137,22 +141,68 @@ const TemplatesPage: React.FC = () => {
     );
   }
 
+  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
+  const bgGradient = useColorModeValue(
+    'linear(to-br, purple.50, blue.50)',
+    'linear(to-br, gray.900, gray.800)'
+  );
+
   return (
     <>
       <Helmet>
-        <title>Шаблоны ботов - TelegramBot Constructor</title>
+        <title>Шаблоны ботов - Telegram Bot Constructor</title>
       </Helmet>
 
-      <Container maxW="container.xl" py={8}>
-        <VStack spacing={8} align="stretch">
-          
-          {/* Заголовок */}
-          <Box textAlign="center">
-            <Heading size="xl" mb={4}>🎯 Шаблоны ботов</Heading>
-            <Text color="gray.600" fontSize="lg">
-              Готовые решения для быстрого старта. Выберите подходящий шаблон и настройте под свои задачи.
+      {/* Hero Section */}
+      <Box bgGradient={bgGradient} py={16} px={4}>
+        <Container maxW="container.xl">
+          <VStack spacing={6} textAlign="center">
+            <Badge 
+              colorScheme="purple" 
+              fontSize="sm" 
+              px={3} 
+              py={1} 
+              borderRadius="full"
+              textTransform="uppercase"
+              letterSpacing="wide"
+            >
+              Готовые решения
+            </Badge>
+            <Heading 
+              size="2xl" 
+              fontWeight="bold"
+              bgGradient="linear(to-r, purple.600, blue.600)"
+              bgClip="text"
+            >
+              Шаблоны Telegram ботов
+            </Heading>
+            <Text 
+              color="gray.600" 
+              fontSize="xl" 
+              maxW="2xl"
+              lineHeight="tall"
+            >
+              Профессиональные решения для бизнеса, готовые к запуску за минуты.
+              Выберите шаблон и адаптируйте под свои задачи.
             </Text>
-          </Box>
+            <HStack spacing={4} pt={4}>
+              <Button
+                size="lg"
+                colorScheme="purple"
+                rightIcon={<FiArrowRight />}
+                onClick={() => navigate('/bots/new')}
+                _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
+                transition="all 0.2s"
+              >
+                Создать с нуля
+              </Button>
+            </HStack>
+          </VStack>
+        </Container>
+      </Box>
+
+      <Container maxW="container.xl" py={12}>
+        <VStack spacing={12} align="stretch">
 
           {/* Категории */}
           <Tabs 
@@ -174,93 +224,187 @@ const TemplatesPage: React.FC = () => {
             <TabPanels>
               <TabPanel px={0}>
                 <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-                  {filteredTemplates.map((template) => (
+                  {filteredTemplates.map((template, index) => (
                     <Card 
                       key={template.id}
                       bg={cardBg}
-                      borderColor={borderColor}
                       borderWidth="1px"
+                      borderColor={borderColor}
+                      borderRadius="2xl"
+                      overflow="hidden"
+                      position="relative"
+                      cursor="pointer"
+                      onClick={() => handleUseTemplate(template)}
                       _hover={{ 
-                        transform: 'translateY(-4px)', 
-                        shadow: 'lg',
-                        borderColor: 'blue.300'
+                        transform: 'translateY(-8px)', 
+                        shadow: '2xl',
+                        borderColor: 'purple.400'
                       }}
-                      transition="all 0.2s"
+                      transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                      _before={{
+                        content: '""',
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        right: 0,
+                        height: '4px',
+                        bgGradient: `linear(to-r, ${getCategoryColor(template.category)}.400, ${getCategoryColor(template.category)}.600)`,
+                        opacity: 0,
+                        transition: 'opacity 0.3s'
+                      }}
+                      _after={{
+                        content: '""',
+                        position: 'absolute',
+                        inset: 0,
+                        borderRadius: '2xl',
+                        padding: '1px',
+                        background: `linear-gradient(135deg, ${getCategoryColor(template.category)}.400, ${getCategoryColor(template.category)}.600)`,
+                        WebkitMask: 'linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)',
+                        WebkitMaskComposite: 'xor',
+                        maskComposite: 'exclude',
+                        opacity: 0,
+                        transition: 'opacity 0.3s'
+                      }}
+                      sx={{
+                        '&:hover::before': { opacity: 1 },
+                        '&:hover::after': { opacity: 0.5 },
+                        animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
+                      }}
                     >
-                      <CardHeader pb={2}>
-                        <VStack align="start" spacing={2}>
-                          <HStack justify="space-between" w="100%">
-                            <Heading size="md">{template.name}</Heading>
-                            <Badge colorScheme={getCategoryColor(template.category)}>
-                              {template.category}
-                            </Badge>
+                      {/* Premium Badge для сложных шаблонов */}
+                      {template.features.length >= 5 && (
+                        <Box
+                          position="absolute"
+                          top={4}
+                          right={4}
+                          zIndex={2}
+                        >
+                          <Badge
+                            colorScheme="purple"
+                            fontSize="xs"
+                            px={3}
+                            py={1}
+                            borderRadius="full"
+                            display="flex"
+                            alignItems="center"
+                            gap={1}
+                            bg="purple.500"
+                            color="white"
+                          >
+                            <Icon as={FiZap} />
+                            Расширенный
+                          </Badge>
+                        </Box>
+                      )}
+
+                      <CardBody p={6}>
+                        <VStack align="start" spacing={5}>
+                          {/* Иконка и заголовок */}
+                          <HStack spacing={3} w="full">
+                            <Flex
+                              w={12}
+                              h={12}
+                              borderRadius="xl"
+                              bgGradient={`linear(to-br, ${getCategoryColor(template.category)}.400, ${getCategoryColor(template.category)}.600)`}
+                              align="center"
+                              justify="center"
+                              fontSize="2xl"
+                              flexShrink={0}
+                            >
+                              {template.name.match(/[🎪🍕🏥📱💪]/)?.[0] || '🤖'}
+                            </Flex>
+                            <VStack align="start" spacing={1} flex={1}>
+                              <Heading size="md" fontWeight="bold">
+                                {template.name.replace(/[🎪🍕🏥📱💪]/g, '').trim()}
+                              </Heading>
+                              <Badge 
+                                colorScheme={getCategoryColor(template.category)}
+                                fontSize="xs"
+                                textTransform="capitalize"
+                              >
+                                {template.category}
+                              </Badge>
+                            </VStack>
                           </HStack>
-                          
-                          <Text color="gray.600" fontSize="sm">
+
+                          {/* Описание */}
+                          <Text 
+                            color="gray.600" 
+                            fontSize="sm"
+                            lineHeight="tall"
+                            noOfLines={2}
+                          >
                             {template.description}
                           </Text>
-                        </VStack>
-                      </CardHeader>
 
-                      <CardBody pt={0}>
-                        <VStack align="start" spacing={4}>
-                          
-                          {/* Превью */}
-                          <Box
-                            p={3}
-                            bg="gray.50"
-                            borderRadius="md"
-                            fontSize="sm"
-                            w="100%"
-                            fontFamily="monospace"
-                            whiteSpace="pre-line"
-                          >
-                            {template.preview}
-                          </Box>
-
-                          {/* Характеристики */}
-                          <VStack align="start" spacing={2} w="100%">
-                            <HStack>
-                              <Text fontSize="sm" color="gray.600">Сценариев:</Text>
-                              <Badge>{template.scenesCount}</Badge>
+                          {/* Статистика */}
+                          <Stack direction="row" spacing={4} w="full">
+                            <HStack spacing={2}>
+                              <Icon as={FiClock} color="gray.500" boxSize={4} />
+                              <Text fontSize="xs" color="gray.600" fontWeight="medium">
+                                {template.scenesCount} сценариев
+                              </Text>
                             </HStack>
-                            
+                            <HStack spacing={2}>
+                              <Icon as={FiCheck} color="green.500" boxSize={4} />
+                              <Text fontSize="xs" color="gray.600" fontWeight="medium">
+                                {template.features.length} функций
+                              </Text>
+                            </HStack>
+                          </Stack>
+
+                          {/* Ключевые функции */}
+                          <VStack align="start" spacing={2} w="full">
                             {template.hasWebApp && (
-                              <Badge colorScheme="purple" size="sm">📱 Web App</Badge>
+                              <HStack spacing={2}>
+                                <Box
+                                  w={1.5}
+                                  h={1.5}
+                                  borderRadius="full"
+                                  bg="purple.400"
+                                />
+                                <Text fontSize="xs" color="gray.700">Web приложение</Text>
+                              </HStack>
                             )}
-                            
                             {template.hasPayment && (
-                              <Badge colorScheme="green" size="sm">💳 Оплата</Badge>
+                              <HStack spacing={2}>
+                                <Box
+                                  w={1.5}
+                                  h={1.5}
+                                  borderRadius="full"
+                                  bg="green.400"
+                                />
+                                <Text fontSize="xs" color="gray.700">Приём платежей</Text>
+                              </HStack>
                             )}
+                            {template.features.slice(0, 1).map((feature) => (
+                              <HStack key={feature} spacing={2}>
+                                <Box
+                                  w={1.5}
+                                  h={1.5}
+                                  borderRadius="full"
+                                  bg="blue.400"
+                                />
+                                <Text fontSize="xs" color="gray.700" textTransform="capitalize">
+                                  {feature}
+                                </Text>
+                              </HStack>
+                            ))}
                           </VStack>
 
-                          {/* Теги функций */}
-                          <Box>
-                            <Text fontSize="xs" color="gray.500" mb={1}>Функции:</Text>
-                            <HStack flexWrap="wrap" spacing={1}>
-                              {template.features.slice(0, 3).map((feature) => (
-                                <Badge key={feature} size="sm" variant="outline">
-                                  {feature}
-                                </Badge>
-                              ))}
-                              {template.features.length > 3 && (
-                                <Badge size="sm" variant="outline">
-                                  +{template.features.length - 3}
-                                </Badge>
-                              )}
-                            </HStack>
-                          </Box>
-
-                          {/* Кнопка использования */}
+                          {/* Кнопка действия */}
                           <Button
-                            colorScheme="blue"
-                            size="sm"
-                            w="100%"
-                            onClick={() => handleUseTemplate(template)}
+                            w="full"
+                            size="md"
+                            colorScheme={getCategoryColor(template.category)}
+                            rightIcon={<FiArrowRight />}
+                            fontWeight="semibold"
+                            borderRadius="xl"
+                            _hover={{ transform: 'translateX(4px)' }}
+                            transition="all 0.2s"
                           >
-                            🚀 Использовать шаблон
+                            Использовать
                           </Button>
-
                         </VStack>
                       </CardBody>
                     </Card>
@@ -270,26 +414,49 @@ const TemplatesPage: React.FC = () => {
             </TabPanels>
           </Tabs>
 
-          {/* Информация о создании с нуля */}
+          {/* CTA Section */}
           <Box
-            p={6}
-            bg="blue.50"
-            borderRadius="lg"
-            border="1px"
-            borderColor="blue.200"
+            mt={8}
+            p={12}
+            bgGradient="linear(to-r, purple.500, blue.500)"
+            borderRadius="3xl"
             textAlign="center"
+            position="relative"
+            overflow="hidden"
+            _before={{
+              content: '""',
+              position: 'absolute',
+              inset: 0,
+              bgImage: 'radial-gradient(circle at 20% 50%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+              pointerEvents: 'none'
+            }}
           >
-            <Heading size="md" mb={2}>🛠️ Нужно что-то особенное?</Heading>
-            <Text color="gray.600" mb={4}>
-              Создайте уникального бота с нуля используя наш конструктор
-            </Text>
-            <Button
-              colorScheme="blue"
-              variant="outline"
-              onClick={() => navigate('/bots/new')}
-            >
-              Создать с нуля
-            </Button>
+            <VStack spacing={6} position="relative" zIndex={1}>
+              <Icon as={FiZap} boxSize={12} color="white" />
+              <Heading size="xl" color="white" fontWeight="bold">
+                Нужно индивидуальное решение?
+              </Heading>
+              <Text color="whiteAlpha.900" fontSize="lg" maxW="2xl">
+                Создайте уникального бота с нуля используя визуальный конструктор.
+                Полный контроль над функционалом и дизайном.
+              </Text>
+              <HStack spacing={4} pt={4}>
+                <Button
+                  size="lg"
+                  bg="white"
+                  color="purple.600"
+                  _hover={{ bg: 'whiteAlpha.900', transform: 'translateY(-2px)', shadow: 'xl' }}
+                  onClick={() => navigate('/bots/new')}
+                  rightIcon={<FiArrowRight />}
+                  fontWeight="bold"
+                  borderRadius="xl"
+                  px={8}
+                  transition="all 0.2s"
+                >
+                  Создать с нуля
+                </Button>
+              </HStack>
+            </VStack>
           </Box>
 
         </VStack>

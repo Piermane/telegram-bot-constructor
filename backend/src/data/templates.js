@@ -299,16 +299,16 @@ const BOT_TEMPLATES = {
     }
   },
 
-  // PROFESSIONAL EVENT MANAGEMENT TEMPLATE
+  // EVENT MANAGEMENT TEMPLATE
   professional_event: {
     id: 'professional_event',
-    name: '🎪 Professional Event Management',
+    name: '🎪 Управление мероприятиями',
     category: 'events_conference',
-    description: 'Промышленный бот для управления мероприятиями с полным функционалом: WebApp, QR коды, мерч-шоп, опросы, админ-панель',
+    description: 'Бот для управления мероприятиями с полным функционалом: WebApp, QR коды, мерч-шоп, опросы, админ-панель',
     icon: '🎪',
     complexity: 'enterprise',
-    tags: ['мероприятие', 'конференция', 'webapp', 'админка', 'профессиональный'],
-    preview: '🎪 Professional Event\n\n🌐 WebApp Dashboard\n📱 QR Коды\n🛒 Мерч-шоп\n📊 Аналитика\n⚙️ Админ-панель',
+    tags: ['мероприятие', 'конференция', 'webapp', 'админка', 'события'],
+    preview: '🎪 Мероприятие\n\n🌐 WebApp Dashboard\n📱 QR Коды\n🛒 Мерч-шоп\n📊 Аналитика\n⚙️ Админ-панель',
     features: {
       multiLanguage: true,
       analytics: true,
@@ -450,6 +450,42 @@ const BOT_TEMPLATES = {
         permissions: ['admin', 'organizer']
       }
     ],
+    webAppContent: {
+      products: [
+        { id: '1', name: 'Футболка мероприятия', price: 500, emoji: '👕', description: 'Официальная футболка с логотипом' },
+        { id: '2', name: 'Кружка', price: 350, emoji: '☕', description: 'Фирменная кружка' },
+        { id: '3', name: 'Стикерпак', price: 150, emoji: '🎨', description: 'Набор стикеров' },
+        { id: '4', name: 'Блокнот', price: 250, emoji: '📓', description: 'Блокнот участника' }
+      ],
+      surveys: [
+        { id: 's1', title: 'Опрос участников', maxPoints: 50, emoji: '📊', description: 'Помогите нам стать лучше' },
+        { id: 's2', title: 'Викторина', maxPoints: 100, emoji: '🎯', description: 'Проверьте свои знания' }
+      ],
+      activities: [
+        { id: 'a1', name: 'Посетить стенд компании А', points: 20, emoji: '🏢', description: 'Узнайте о партнере' },
+        { id: 'a2', name: 'Сделать фото в фотозоне', points: 15, emoji: '📸', description: 'Поделитесь моментами' },
+        { id: 'a3', name: 'Пройти мастер-класс', points: 50, emoji: '🎓', description: 'Обучение от экспертов' },
+        { id: 'a4', name: 'Нетворкинг', points: 30, emoji: '🤝', description: 'Обменяйтесь контактами' }
+      ],
+      schedule: [
+        { id: 'e1', title: 'Регистрация участников', speaker: 'Организаторы', startTime: '2024-01-15T09:00', endTime: '2024-01-15T10:00' },
+        { id: 'e2', title: 'Открытие мероприятия', speaker: 'Генеральный директор', startTime: '2024-01-15T10:00', endTime: '2024-01-15T10:30' },
+        { id: 'e3', title: 'Основной доклад', speaker: 'Эксперт по AI', startTime: '2024-01-15T10:30', endTime: '2024-01-15T12:00' },
+        { id: 'e4', title: 'Обеденный перерыв', speaker: '', startTime: '2024-01-15T12:00', endTime: '2024-01-15T13:00' },
+        { id: 'e5', title: 'Панельная дискуссия', speaker: 'Ведущие специалисты', startTime: '2024-01-15T13:00', endTime: '2024-01-15T15:00' }
+      ],
+      qrEnabled: true,
+      qrText: 'Сканируйте QR-коды на стендах',
+      qrReward: 10,
+      pages: {
+        shop: true,
+        surveys: true,
+        activities: true,
+        schedule: true,
+        qr: true,
+        admin: true
+      }
+    },
     integrations: {
       webhook: { 
         enabled: true, 
@@ -470,7 +506,8 @@ const BOT_TEMPLATES = {
         events: ['page_view', 'button_click', 'qr_scan', 'purchase'],
         dashboard: true
       }
-    }
+    },
+    webAppUrl: 'https://webapp-bot-constructor.loca.lt'
   },
 
 };

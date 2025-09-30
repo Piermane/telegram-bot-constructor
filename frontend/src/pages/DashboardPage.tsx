@@ -18,12 +18,15 @@ import {
   Icon,
   useColorModeValue,
   Container,
-  Flex
+  Flex,
+  Stack,
+  Avatar,
+  Progress
 } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AddIcon, ViewIcon, SettingsIcon, InfoIcon } from '@chakra-ui/icons';
-import { FiTarget, FiZap, FiShield } from 'react-icons/fi';
+import { AddIcon, ViewIcon, SettingsIcon, InfoIcon, ChevronRightIcon } from '@chakra-ui/icons';
+import { FiTarget, FiZap, FiShield, FiTrendingUp, FiUsers, FiMessageSquare, FiActivity, FiArrowRight } from 'react-icons/fi';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -90,14 +93,205 @@ const DashboardPage: React.FC = () => {
   return (
     <>
       <Helmet>
-        <title>Панель управления - TelegramBot Constructor PRO</title>
+        <title>Панель управления - Telegram Bot Constructor</title>
       </Helmet>
 
-      <Container maxW="container.xl" py={8}>
-        <VStack spacing={8} align="stretch">
+      {/* Hero Section */}
+      <Box 
+        bgGradient="linear(135deg, purple.600 0%, blue.500 100%)"
+        py={16}
+        px={4}
+        position="relative"
+        overflow="hidden"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          inset: 0,
+          bgImage: 'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+          pointerEvents: 'none'
+        }}
+      >
+        <Container maxW="container.xl" position="relative" zIndex={1}>
+          <VStack spacing={6} align="start" color="white">
+            <Badge 
+              colorScheme="whiteAlpha" 
+              fontSize="sm" 
+              px={3} 
+              py={1} 
+              borderRadius="full"
+              bg="whiteAlpha.300"
+            >
+              Панель управления
+            </Badge>
+            <Heading 
+              size="2xl" 
+              fontWeight="bold"
+              maxW="3xl"
+            >
+              Добро пожаловать 👋
+            </Heading>
+            <Text fontSize="xl" maxW="2xl" color="whiteAlpha.900">
+              Создавайте и управляйте Telegram ботами без программирования.
+              Готово к запуску за несколько минут.
+            </Text>
+            <HStack spacing={4} pt={4}>
+              <Button
+                size="lg"
+                bg="white"
+                color="purple.600"
+                _hover={{ bg: 'whiteAlpha.900', transform: 'translateY(-2px)', shadow: 'xl' }}
+                rightIcon={<AddIcon />}
+                onClick={handleCreateBot}
+                fontWeight="bold"
+                borderRadius="xl"
+                px={8}
+                transition="all 0.2s"
+              >
+                Создать бота
+              </Button>
+              <Button
+                size="lg"
+                variant="outline"
+                borderColor="whiteAlpha.400"
+                color="white"
+                _hover={{ bg: 'whiteAlpha.200', borderColor: 'white' }}
+                rightIcon={<ViewIcon />}
+                onClick={() => navigate('/bots')}
+                fontWeight="semibold"
+                borderRadius="xl"
+                px={8}
+              >
+                Мои боты
+              </Button>
+            </HStack>
+          </VStack>
+        </Container>
+      </Box>
+
+      <Container maxW="container.xl" py={12}>
+        <VStack spacing={12} align="stretch">
           
-          {/* Приветствие и главная кнопка */}
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
+          {/* Статистика */}
+          <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6}>
+            <Card 
+              bg={cardBg} 
+              borderWidth="1px" 
+              borderColor={borderColor}
+              borderRadius="2xl"
+              overflow="hidden"
+              transition="all 0.3s"
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+            >
+              <CardBody p={6}>
+                <HStack spacing={4}>
+                  <Flex
+                    w={12}
+                    h={12}
+                    borderRadius="xl"
+                    bgGradient="linear(to-br, purple.400, purple.600)"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon as={FiActivity} boxSize={6} color="white" />
+                  </Flex>
+                  <Stat>
+                    <StatLabel color="gray.600" fontSize="sm">Всего ботов</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalBots}</StatNumber>
+                  </Stat>
+                </HStack>
+              </CardBody>
+            </Card>
+
+            <Card 
+              bg={cardBg} 
+              borderWidth="1px" 
+              borderColor={borderColor}
+              borderRadius="2xl"
+              overflow="hidden"
+              transition="all 0.3s"
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+            >
+              <CardBody p={6}>
+                <HStack spacing={4}>
+                  <Flex
+                    w={12}
+                    h={12}
+                    borderRadius="xl"
+                    bgGradient="linear(to-br, green.400, green.600)"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon as={FiZap} boxSize={6} color="white" />
+                  </Flex>
+                  <Stat>
+                    <StatLabel color="gray.600" fontSize="sm">Активных</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold" color="green.500">{stats.activeBots}</StatNumber>
+                  </Stat>
+                </HStack>
+              </CardBody>
+            </Card>
+
+            <Card 
+              bg={cardBg} 
+              borderWidth="1px" 
+              borderColor={borderColor}
+              borderRadius="2xl"
+              overflow="hidden"
+              transition="all 0.3s"
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+            >
+              <CardBody p={6}>
+                <HStack spacing={4}>
+                  <Flex
+                    w={12}
+                    h={12}
+                    borderRadius="xl"
+                    bgGradient="linear(to-br, blue.400, blue.600)"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon as={FiUsers} boxSize={6} color="white" />
+                  </Flex>
+                  <Stat>
+                    <StatLabel color="gray.600" fontSize="sm">Пользователей</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalUsers}</StatNumber>
+                  </Stat>
+                </HStack>
+              </CardBody>
+            </Card>
+
+            <Card 
+              bg={cardBg} 
+              borderWidth="1px" 
+              borderColor={borderColor}
+              borderRadius="2xl"
+              overflow="hidden"
+              transition="all 0.3s"
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+            >
+              <CardBody p={6}>
+                <HStack spacing={4}>
+                  <Flex
+                    w={12}
+                    h={12}
+                    borderRadius="xl"
+                    bgGradient="linear(to-br, orange.400, orange.600)"
+                    align="center"
+                    justify="center"
+                  >
+                    <Icon as={FiMessageSquare} boxSize={6} color="white" />
+                  </Flex>
+                  <Stat>
+                    <StatLabel color="gray.600" fontSize="sm">Сообщений</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalMessages}</StatNumber>
+                  </Stat>
+                </HStack>
+              </CardBody>
+            </Card>
+          </SimpleGrid>
+
+          {/* Остальной контент */}
+          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" borderRadius="2xl">
             <CardBody>
               <Flex direction={{ base: 'column', lg: 'row' }} align="center" gap={8}>
                 <VStack align="start" spacing={4} flex={1}>

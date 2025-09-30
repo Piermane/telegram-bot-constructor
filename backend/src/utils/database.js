@@ -70,11 +70,20 @@ const db = {
           token VARCHAR(255) NOT NULL,
           description TEXT,
           config JSONB,
+          telegram_username VARCHAR(255),
           status VARCHAR(50) DEFAULT 'stopped',
           created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
           updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         )
       `);
+      
+      // Add telegram_username column if it doesn't exist
+      try {
+        await this.query('ALTER TABLE bots ADD COLUMN IF NOT EXISTS telegram_username VARCHAR(255)');
+        logger.info('✅ Migration: telegram_username column added');
+      } catch (error) {
+        logger.debug('Migration note:', error.message);
+      }
 
       // Add missing columns to existing tables (migrations)
       try {
