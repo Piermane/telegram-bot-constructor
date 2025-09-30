@@ -940,17 +940,16 @@ def main() -> None:
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
     ${botSettings.features.analytics ? `application.add_handler(CommandHandler("stats", stats_command))` : ''}
-    ${
+${
       // Регистрируем все команды из сцен
       botSettings.scenes && botSettings.scenes.length > 0
         ? botSettings.scenes
             .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
             .map(scene => {
               const commandName = scene.trigger.slice(1);
-              return `application.add_handler(CommandHandler("${commandName}", ${commandName}_command))`;
+              return `    application.add_handler(CommandHandler("${commandName}", ${commandName}_command))`;
             })
-            .map(handler => `    ${handler}`)
-            .join('\n    ')
+            .join('\n')
         : ''
     }
 

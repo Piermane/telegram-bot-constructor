@@ -296,10 +296,10 @@ const DashboardPage: React.FC = () => {
               <Flex direction={{ base: 'column', lg: 'row' }} align="center" gap={8}>
                 <VStack align="start" spacing={4} flex={1}>
                   <Heading size="xl" color="blue.500">
-                    🤖 TelegramBot Constructor PRO
+                    🤖 Telegram Bot Constructor
                   </Heading>
                   <Text fontSize="lg" color="gray.600">
-                    Создавайте профессиональных Telegram ботов без программирования. 
+                    Создавайте Telegram ботов быстро и просто. 
                     Готовые шаблоны, автоматический деплой и полное управление.
                   </Text>
                   <HStack spacing={4}>

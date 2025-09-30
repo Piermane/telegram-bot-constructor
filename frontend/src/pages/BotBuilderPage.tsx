@@ -811,8 +811,8 @@ const BotBuilderPage: React.FC = () => {
                           <FormControl>
                             <FormLabel>🌐 URL WebApp сервера</FormLabel>
                             <Input
-                              placeholder="https://webapp-bot-constructor.loca.lt"
-                              value={botSettings.webAppUrl || 'https://webapp-bot-constructor.loca.lt'}
+                              placeholder="https://your-webapp-url.com"
+                              value={botSettings.webAppUrl || ''}
                               onChange={(e) => setBotSettings(prev => ({
                                 ...prev,
                                 webAppUrl: e.target.value

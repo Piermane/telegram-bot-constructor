@@ -80,7 +80,18 @@ const RegisterPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bgGradient="linear(to-br, blue.50, purple.50)"
+        position="relative"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bgImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1), transparent 50%)',
+          pointerEvents: 'none'
+        }}
         p={4}
       >
         <Box maxW="md" w="full">

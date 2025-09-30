@@ -29,10 +29,16 @@ import {
   ModalBody,
   ModalFooter,
   ModalCloseButton,
-  useDisclosure
+  useDisclosure,
+  Box,
+  Flex,
+  Icon,
+  Stat,
+  StatLabel,
+  StatNumber
 } from '@chakra-ui/react';
 import { AddIcon, ExternalLinkIcon, EditIcon, DeleteIcon, SettingsIcon } from '@chakra-ui/icons';
-import { FiMoreVertical, FiRefreshCw } from 'react-icons/fi';
+import { FiMoreVertical, FiRefreshCw, FiActivity, FiClock, FiLayers, FiPlay, FiPause, FiAlertCircle } from 'react-icons/fi';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
@@ -127,17 +133,49 @@ const BotListPage: React.FC = () => {
     }
   };
 
-  const getStatusText = (status: string) => {
+  const getStatusBadge = (status: string) => {
     switch (status) {
-      case 'running': return '🟢 Работает';
-      case 'stopped': return '⚪ Остановлен';
-      case 'error': return '🔴 Ошибка';
-      default: return '❓ Неизвестно';
+      case 'running': 
+        return (
+          <Badge colorScheme="green" px={3} py={1} borderRadius="full" display="flex" alignItems="center" gap={1}>
+            <Icon as={FiPlay} boxSize={3} />
+            Работает
+          </Badge>
+        );
+      case 'stopped': 
+        return (
+          <Badge colorScheme="gray" px={3} py={1} borderRadius="full" display="flex" alignItems="center" gap={1}>
+            <Icon as={FiPause} boxSize={3} />
+            Остановлен
+          </Badge>
+        );
+      case 'error': 
+        return (
+          <Badge colorScheme="red" px={3} py={1} borderRadius="full" display="flex" alignItems="center" gap={1}>
+            <Icon as={FiAlertCircle} boxSize={3} />
+            Ошибка
+          </Badge>
+        );
+      default: 
+        return (
+          <Badge px={3} py={1} borderRadius="full">
+            Неизвестно
+          </Badge>
+        );
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleString('ru-RU');
+    if (!dateString) return 'Н/Д';
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return 'Н/Д';
+    return date.toLocaleString('ru-RU', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
   };
 
   if (loading) {
@@ -226,17 +264,23 @@ const BotListPage: React.FC = () => {
             </Card>
           ) : (
             <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-              {bots.map((bot) => (
+              {bots.map((bot, index) => (
                 <Card
                   key={bot.id}
                   bg={cardBg}
-                  borderColor={borderColor}
                   borderWidth="1px"
+                  borderColor={borderColor}
                   _hover={{ 
-                    shadow: 'md',
-                    borderColor: 'blue.300'
+                    shadow: 'xl',
+                    transform: 'translateY(-4px)',
+                    borderColor: bot.status === 'running' ? 'green.400' : 'blue.300'
                   }}
-                  transition="all 0.2s"
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  position="relative"
+                  overflow="hidden"
+                  sx={{
+                    animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`
+                  }}
                 >
                   <CardHeader pb={2}>
                     <HStack justify="space-between">
@@ -289,9 +333,7 @@ const BotListPage: React.FC = () => {
                       
                       {/* Статус */}
                       <HStack>
-                        <Badge colorScheme={getStatusColor(bot.status)}>
-                          {getStatusText(bot.status)}
-                        </Badge>
+                        {getStatusBadge(bot.status)}
                         {bot.pid && (
                           <Text fontSize="xs" color="gray.500">
                             PID: {bot.pid}

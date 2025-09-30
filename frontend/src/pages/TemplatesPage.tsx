@@ -181,7 +181,7 @@ const TemplatesPage: React.FC = () => {
               maxW="2xl"
               lineHeight="tall"
             >
-              Профессиональные решения для бизнеса, готовые к запуску за минуты.
+              Готовые решения для бизнеса, запуск за минуты.
               Выберите шаблон и адаптируйте под свои задачи.
             </Text>
             <HStack spacing={4} pt={4}>
@@ -274,24 +274,23 @@ const TemplatesPage: React.FC = () => {
                       {template.features.length >= 5 && (
                         <Box
                           position="absolute"
-                          top={4}
-                          right={4}
+                          top={3}
+                          right={3}
                           zIndex={2}
                         >
                           <Badge
                             colorScheme="purple"
                             fontSize="xs"
-                            px={3}
+                            px={2}
                             py={1}
                             borderRadius="full"
                             display="flex"
                             alignItems="center"
-                            gap={1}
                             bg="purple.500"
                             color="white"
+                            boxShadow="sm"
                           >
-                            <Icon as={FiZap} />
-                            Расширенный
+                            <Icon as={FiZap} boxSize={3} />
                           </Badge>
                         </Box>
                       )}

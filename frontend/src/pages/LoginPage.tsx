@@ -56,24 +56,48 @@ const LoginPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="gray.50"
+        bgGradient="linear(to-br, blue.50, purple.50)"
         p={4}
+        position="relative"
+        _before={{
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          bgImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1), transparent 50%)',
+          pointerEvents: 'none'
+        }}
       >
-        <Box maxW="md" w="full">
+        <Box maxW="md" w="full" zIndex={1}>
           <VStack spacing={8} align="center">
             {/* Logo */}
-            <VStack spacing={2}>
-              <Text fontSize="4xl">🤖</Text>
-              <Heading size="lg" textAlign="center">
-                TelegramBot Constructor
+            <VStack spacing={3}>
+              <Box
+                fontSize="5xl"
+                filter="drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3))"
+              >
+                🤖
+              </Box>
+              <Heading 
+                size="xl" 
+                textAlign="center"
+                bgGradient="linear(to-r, blue.600, purple.600)"
+                bgClip="text"
+              >
+                Telegram Bot Constructor
               </Heading>
-              <Text color="gray.600" textAlign="center">
-                DEV Environment
-              </Text>
             </VStack>
 
             {/* Login Form */}
-            <Card bg={cardBg} w="full" shadow="lg">
+            <Card 
+              bg={cardBg} 
+              w="full" 
+              shadow="2xl"
+              borderWidth="1px"
+              borderColor={useColorModeValue('gray.200', 'gray.600')}
+            >
               <CardBody p={8}>
                 <VStack spacing={6}>
                   <Heading size="md" textAlign="center">
