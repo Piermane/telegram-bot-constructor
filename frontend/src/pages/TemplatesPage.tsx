@@ -54,6 +54,11 @@ const TemplatesPage: React.FC = () => {
 
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
+  const bgGradient = useColorModeValue(
+    'linear(to-br, purple.50, blue.50)',
+    'linear(to-br, gray.900, gray.800)'
+  );
 
   const categories = [
     { id: 'all', name: 'Все шаблоны', icon: FiSettings },
@@ -140,12 +145,6 @@ const TemplatesPage: React.FC = () => {
       </>
     );
   }
-
-  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
-  const bgGradient = useColorModeValue(
-    'linear(to-br, purple.50, blue.50)',
-    'linear(to-br, gray.900, gray.800)'
-  );
 
   return (
     <>
