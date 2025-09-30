@@ -32,10 +32,11 @@ app.use(helmet({
     directives: {
       defaultSrc: ["'self'"],
       styleSrc: ["'self'", "'unsafe-inline'", "https://fonts.googleapis.com"],
-      scriptSrc: ["'self'", "'unsafe-inline'"],
+      scriptSrc: ["'self'", "'unsafe-inline'", "https://telegram.org"],
       imgSrc: ["'self'", "data:", "https:"],
       fontSrc: ["'self'", "https://fonts.gstatic.com"],
-      connectSrc: ["'self'", "http://localhost:5555", "https://*.railway.app"],
+      connectSrc: ["'self'", "http://localhost:5555", "https://*.railway.app", "https://telegram.org"],
+      frameSrc: ["https://telegram.org", "https://oauth.telegram.org"],
     },
   },
 }));
@@ -764,11 +765,25 @@ app.get('/', (req, res) => {
 });
 
 // Serve static frontend files AFTER webapp route
+// Serve WebApp files for each bot
+app.use('/bot-webapp/:botId', (req, res, next) => {
+  const { botId } = req.params;
+  const webAppPath = path.join(__dirname, '../deployed_bots', botId, 'webapp');
+  
+  express.static(webAppPath)(req, res, next);
+});
+
 app.use(express.static(path.join(__dirname, '../public')));
 
-// WebApp endpoint for Telegram bots
-app.get('/webapp/:botId?', (req, res) => {
+// WebApp endpoint for Telegram bots (redirect to bot-specific webapp)
+app.get('/webapp/:botId', (req, res) => {
   const { botId } = req.params;
+  res.redirect(`/bot-webapp/${botId}/index.html`);
+});
+
+// Legacy route (fallback)
+app.get('/webapp', (req, res) => {
+  const { botId } = req.query;
   
   res.send(`
     <!DOCTYPE html>

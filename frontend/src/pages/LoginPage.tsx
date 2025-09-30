@@ -73,21 +73,34 @@ const LoginPage: React.FC = () => {
         <Box maxW="md" w="full" zIndex={1}>
           <VStack spacing={8} align="center">
             {/* Logo */}
-            <VStack spacing={3}>
+            <VStack spacing={4}>
               <Box
-                fontSize="5xl"
-                filter="drop-shadow(0 4px 12px rgba(99, 102, 241, 0.3))"
+                bgGradient="linear(to-br, blue.500, purple.600)"
+                borderRadius="2xl"
+                p={6}
+                boxShadow="0 20px 60px rgba(99, 102, 241, 0.4)"
               >
-                🤖
+                <svg width="64" height="64" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
+                  <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
               </Box>
-              <Heading 
-                size="xl" 
-                textAlign="center"
-                bgGradient="linear(to-r, blue.600, purple.600)"
-                bgClip="text"
-              >
-                Telegram Bot Constructor
-              </Heading>
+              <VStack spacing={1}>
+                <Heading 
+                  size="2xl" 
+                  textAlign="center"
+                  fontWeight="bold"
+                  bgGradient="linear(to-r, blue.600, purple.600)"
+                  bgClip="text"
+                  letterSpacing="tight"
+                >
+                  Bot Constructor
+                </Heading>
+                <Text color="gray.600" fontSize="lg" fontWeight="medium">
+                  Создавайте ботов без кода
+                </Text>
+              </VStack>
             </VStack>
 
             {/* Login Form */}

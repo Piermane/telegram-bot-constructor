@@ -85,7 +85,9 @@ CURRENCY = "RUB"
 
 # Настройки WebApp
 ${hasWebApp ? `
-WEBAPP_URL = "${botSettings.webAppUrl || 'https://webapp-bot-constructor.loca.lt'}"  # localtunnel WebApp
+# URL сервера (из переменной окружения или дефолт)
+SERVER_URL = os.getenv('SERVER_URL', '${botSettings.serverUrl || process.env.SERVER_URL || 'http://localhost:5000'}')
+WEBAPP_URL = f"{SERVER_URL}/bot-webapp/${botId}"  # Индивидуальный WebApp для этого бота
 WEBAPP_TYPE = "${botSettings.category}"
 ` : '# WebApp отключен'}
 
@@ -551,8 +553,13 @@ async def send_scene(update: Update, context: ContextTypes.DEFAULT_TYPE, scene_i
     ` : ''}
     
     # Отправка сообщения
+    # Получаем постоянную клавиатуру команд если она есть
+    persistent_keyboard = context.user_data.get('reply_markup') if hasattr(context, 'user_data') else None
+    
     if keyboard:
         await update.message.reply_text(message, reply_markup=keyboard, parse_mode='HTML')
+    elif persistent_keyboard:
+        await update.message.reply_text(message, reply_markup=persistent_keyboard, parse_mode='HTML')
     else:
         await update.message.reply_text(message, parse_mode='HTML')
 
@@ -584,6 +591,34 @@ async def start(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
         except Exception as e:
             logger.error(f"Ошибка отправки уведомления админу: {e}")
     ` : ''}
+    
+    # Создаем постоянную клавиатуру с командами
+    ${
+      botSettings.scenes && botSettings.scenes.some(s => s.trigger && s.trigger.startsWith('/') && s.trigger !== '/start')
+        ? `
+    keyboard_buttons = []
+    # Добавляем кнопки команд из сцен
+    ${botSettings.scenes
+      .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
+      .map(scene => {
+        const buttonText = scene.name || scene.trigger;
+        return `keyboard_buttons.append(KeyboardButton("${buttonText}"))`;
+      })
+      .join('\n    ')}
+    
+    # Формируем клавиатуру по 2 кнопки в ряд
+    keyboard_layout = []
+    for i in range(0, len(keyboard_buttons), 2):
+        keyboard_layout.append(keyboard_buttons[i:i+2])
+    
+    # Добавляем кнопку помощи в последний ряд
+    keyboard_layout.append([KeyboardButton("❓ Помощь")])
+    
+    reply_markup = ReplyKeyboardMarkup(keyboard_layout, resize_keyboard=True, one_time_keyboard=False)
+    context.user_data['reply_markup'] = reply_markup
+    `
+        : ''
+    }
     
     await send_scene(update, context, "start")
 
@@ -871,15 +906,32 @@ async def handle_message(update: Update, context: ContextTypes.DEFAULT_TYPE) -> 
     AnalyticsManager.log_event("message_received", user_id, data={"message_length": len(message_text)})
     ` : ''}
     
-    # Обработка команд
-    if message_text.lower() in ['помощь', 'help', 'справка']:
+    # Обработка кнопок клавиатуры
+    ${
+      botSettings.scenes && botSettings.scenes.length > 0
+        ? botSettings.scenes
+            .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
+            .map(scene => {
+              const buttonText = scene.name || scene.trigger;
+              const commandName = scene.trigger.slice(1);
+              return `if message_text == "${buttonText}":
+        await ${commandName}_command(update, context)
+        return`;
+            })
+            .join('\n    ')
+        : ''
+    }
+    
+    # Обработка команд помощи
+    if message_text.lower() in ['помощь', 'help', 'справка', '❓ помощь']:
         await help_command(update, context)
         return
     
-    # Автоответ
+    # Автоответ для неизвестных команд
     await update.message.reply_text(
         f"🤖 Спасибо за сообщение!\\n\\n"
-        f"Я понимаю команды и кнопки. Используйте /start для главного меню."
+        f"Используйте кнопки ниже или команду /start для главного меню.",
+        reply_markup=context.user_data.get('reply_markup') if hasattr(context, 'user_data') else None
     )
 
 ${hasGeolocation ? `

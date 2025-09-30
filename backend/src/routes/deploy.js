@@ -5,6 +5,7 @@ const path = require('path');
 const { spawn, exec } = require('child_process');
 const https = require('https');
 const { generateAdvancedPythonBot } = require('../utils/advanced-bot-generator');
+const { generateWebAppHTML } = require('../utils/webapp-generator');
 const db = require('../utils/database');
 
 // Хранилище запущенных процессов ботов (только для runtime, данные в БД)
@@ -164,7 +165,18 @@ router.post('/create', async (req, res) => {
     // 5. СОЗДАЕМ requirements.txt
     await fs.writeFile(path.join(botDir, 'requirements.txt'), 'python-telegram-bot==20.7');
 
-    // 6. СОХРАНЯЕМ настройки в JSON для восстановления
+    // 6. ГЕНЕРИРУЕМ WebApp для бота (если включен WebApp функционал)
+    if (botSettings.features && botSettings.features.webApp) {
+      const webAppDir = path.join(botDir, 'webapp');
+      await fs.mkdir(webAppDir, { recursive: true });
+      
+      const webAppHTML = generateWebAppHTML(botSettings, botId);
+      await fs.writeFile(path.join(webAppDir, 'index.html'), webAppHTML);
+      
+      console.log('📱 WebApp создан для бота');
+    }
+
+    // 7. СОХРАНЯЕМ настройки в JSON для восстановления
     await fs.writeFile(
       path.join(botDir, 'settings.json'),
       JSON.stringify(botSettings, null, 2)
@@ -246,7 +258,7 @@ router.get('/list', async (req, res) => {
   try {
     // Получаем все боты из БД
     const result = await db.query(
-      'SELECT id, name, telegram_username, description, status, config, created_at FROM bots ORDER BY created_at DESC'
+      'SELECT id, name, telegram_username, description, status, config, created_at, started_at FROM bots ORDER BY created_at DESC'
     );
     
     const botsList = result.rows.map(bot => {
@@ -262,6 +274,7 @@ router.get('/list', async (req, res) => {
         status: bot.status,
         url: `https://t.me/${bot.telegram_username}`,
         createdAt: bot.created_at,
+        startedAt: bot.started_at || bot.created_at, // Время запуска или создания
         pid: runningInfo?.pid,
         scenes: bot.config?.scenes?.length || 0,
         settings: bot.config // Настройки для редактирования
@@ -433,23 +446,30 @@ router.delete('/stop/:botId', async (req, res) => {
   try {
     const { botId } = req.params;
     const dbId = parseInt(botId.replace('bot_', ''));
-    const botInfo = runningBots.get(botId);
-
-    if (!botInfo) {
+    
+    // Проверяем существование в БД
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден'
+        message: 'Бот не найден в базе данных'
       });
     }
+    
+    const botInfo = runningBots.get(botId);
 
-    console.log('🛑 Останавливаем бота:', botInfo.username);
+    console.log(`🛑 Останавливаем бота: ${botRecord.rows[0].telegram_username}`);
 
-    // Останавливаем процесс
-    try {
-      process.kill(botInfo.process.pid, 'SIGTERM');
-      console.log(`✅ Процесс бота ${botInfo.username} остановлен (PID: ${botInfo.process.pid})`);
-    } catch (e) {
-      console.log('Процесс уже остановлен');
+    // Останавливаем процесс если он запущен
+    if (botInfo && botInfo.process) {
+      try {
+        process.kill(botInfo.process.pid, 'SIGTERM');
+        console.log(`✅ Процесс бота остановлен (PID: ${botInfo.process.pid})`);
+      } catch (e) {
+        console.log('⚠️ Процесс уже остановлен или недоступен');
+      }
+    } else {
+      console.log('ℹ️ Процесс не был запущен');
     }
 
     // Обновляем статус в БД (НЕ удаляем запись!)
@@ -481,16 +501,27 @@ router.delete('/delete/:botId', async (req, res) => {
   try {
     const { botId } = req.params;
     const dbId = parseInt(botId.replace('bot_', ''));
+    
+    // Проверяем существование в БД
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    if (botRecord.rows.length === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'Бот не найден в базе данных'
+      });
+    }
+
+    console.log(`🗑️ Удаляем бота: ${botRecord.rows[0].telegram_username}`);
+    
     const botInfo = runningBots.get(botId);
 
-    console.log('🗑️ Удаляем бота:', botId);
-
     // Останавливаем процесс если запущен
-    if (botInfo) {
+    if (botInfo && botInfo.process) {
       try {
         process.kill(botInfo.process.pid, 'SIGTERM');
+        console.log('✅ Процесс остановлен перед удалением');
       } catch (e) {
-        console.log('Процесс уже остановлен');
+        console.log('⚠️ Процесс уже остановлен');
       }
       runningBots.delete(botId);
     }
@@ -614,6 +645,78 @@ router.post('/start/:botId', async (req, res) => {
   }
 });
 
-module.exports = router;
+/**
+ * API для WebApp - получение данных бота
+ */
+router.get('/webapp/:botId/data', async (req, res) => {
+  try {
+    const { botId } = req.params;
+    const dbId = parseInt(botId.replace('bot_', ''));
+    
+    // Получаем данные бота из БД
+    const result = await db.query('SELECT config FROM bots WHERE id = $1', [dbId]);
+    
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Бот не найден' });
+    }
+    
+    const config = result.rows[0].config;
+    
+    // Формируем данные для WebApp
+    const webAppData = {
+      name: config.name,
+      description: config.description,
+      category: config.category,
+      webAppContent: config.webAppContent || {},
+      features: config.features,
+      theme: {
+        primaryColor: config.category === 'ecommerce' ? '#3b82f6' : '#8b5cf6',
+        accentColor: config.category === 'ecommerce' ? '#10b981' : '#ec4899'
+      }
+    };
+    
+    res.json({
+      success: true,
+      data: webAppData
+    });
+    
+  } catch (error) {
+    console.error('Ошибка получения данных WebApp:', error);
+    res.status(500).json({
+      success: false,
+      message: `Ошибка: ${error.message}`
+    });
+  }
+});
+
+/**
+ * API для WebApp - отправка действия (заказ, регистрация и т.д.)
+ */
+router.post('/webapp/:botId/action', async (req, res) => {
+  try {
+    const { botId } = req.params;
+    const { action, data, userId } = req.body;
+    
+    console.log(`📱 WebApp Action: ${action}`, data);
+    
+    // Здесь можно сохранять действия в БД, отправлять уведомления админу и т.д.
+    // Пример: заказ, регистрация на активность, обратная связь
+    
+    // TODO: Интеграция с ботом - отправить уведомление через Telegram
+    
+    res.json({
+      success: true,
+      message: 'Действие выполнено',
+      actionId: Date.now()
+    });
+    
+  } catch (error) {
+    console.error('Ошибка обработки действия WebApp:', error);
+    res.status(500).json({
+      success: false,
+      message: `Ошибка: ${error.message}`
+    });
+  }
+});
 
 module.exports = router;
