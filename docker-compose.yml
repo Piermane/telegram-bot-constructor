@@ -1,0 +1,154 @@
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: tbc-postgres
+    environment:
+      POSTGRES_DB: telegram_bot_constructor
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres123
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - ./database/init:/docker-entrypoint-initdb.d
+      - postgres_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tbc-network
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: tbc-redis
+    command: redis-server --appendonly yes
+    volumes:
+      - redis_data:/data
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - tbc-network
+
+  # pgAdmin for database management
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: tbc-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@tbc.dev
+      PGADMIN_DEFAULT_PASSWORD: admin123
+      PGADMIN_CONFIG_SERVER_MODE: 'False'
+    volumes:
+      - pgadmin_data:/var/lib/pgadmin
+      - ./database/pgadmin-servers.json:/pgadmin4/servers.json
+    ports:
+      - "8080:80"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    networks:
+      - tbc-network
+
+  # Backend API Server
+  backend:
+    build: 
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: tbc-backend
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres123@postgres:5432/telegram_bot_constructor
+      REDIS_URL: redis://redis:6379
+      JWT_SECRET: dev-jwt-secret-key-change-in-production
+      PORT: 5555
+      CORS_ORIGIN: http://localhost:3000
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/logs:/app/logs
+    ports:
+      - "5555:5555"
+    depends_on:
+      - postgres
+      - redis
+    networks:
+      - tbc-network
+    restart: unless-stopped
+
+  # Frontend React App
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: tbc-frontend
+    environment:
+      REACT_APP_API_URL: http://localhost:5555
+      REACT_APP_WS_URL: ws://localhost:5000
+      CHOKIDAR_USEPOLLING: true
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+      - /app/node_modules
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    networks:
+      - tbc-network
+    restart: unless-stopped
+
+  # Bot Runtime Service (для выполнения созданных ботов)
+  bot-runtime:
+    build:
+      context: ./bot-runtime
+      dockerfile: Dockerfile
+    container_name: tbc-bot-runtime
+    environment:
+      NODE_ENV: development
+      DATABASE_URL: postgresql://postgres:postgres123@postgres:5432/telegram_bot_constructor
+      REDIS_URL: redis://redis:6379
+      API_URL: http://backend:5555
+      PORT: 5001
+    volumes:
+      - ./bot-runtime/src:/app/src
+      - ./bot-runtime/logs:/app/logs
+    ports:
+      - "5001:5001"
+    depends_on:
+      - postgres
+      - redis
+      - backend
+    networks:
+      - tbc-network
+    restart: unless-stopped
+
+  # WebApp для ботов (HTTPS)
+  webapp:
+    build: ./webapp
+    container_name: tbc-webapp
+    ports:
+      - "8443:8443"
+    environment:
+      WEBAPP_PORT: 8443
+    networks:
+      - tbc-network
+
+volumes:
+  postgres_data:
+    driver: local
+  redis_data:
+    driver: local
+  pgadmin_data:
+    driver: local
+
+networks:
+  tbc-network:
+    driver: bridge

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WebApp - TelegramBot Constructor</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: var(--tg-theme-secondary-bg-color, #f5f5f5);
+            border-radius: 12px;
+        }
+        
+        .header h1 {
+            font-size: 24px;
+            margin-bottom: 10px;
+            color: var(--tg-theme-text-color, #000);
+        }
+        
+        .header p {
+            color: var(--tg-theme-hint-color, #999);
+            font-size: 14px;
+        }
+        
+        .menu-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .menu-item {
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 12px;
+            padding: 20px 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .menu-item:hover {
+            opacity: 0.8;
+            transform: translateY(-2px);
+        }
+        
+        .menu-item .icon {
+            font-size: 24px;
+        }
+        
+        .menu-item .title {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .menu-item .price {
+            font-size: 12px;
+            opacity: 0.8;
+        }
+        
+        .cart {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: var(--tg-theme-button-color, #3390ec);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 25px;
+            padding: 15px 30px;
+            font-weight: 600;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            display: none;
+        }
+        
+        .cart.show {
+            display: block;
+        }
+        
+        .category {
+            margin-bottom: 30px;
+        }
+        
+        .category-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            padding: 10px 0;
+            border-bottom: 2px solid var(--tg-theme-button-color, #3390ec);
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+        
+        .error {
+            background: #ff4757;
+            color: white;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1 id="bot-name">🤖 WebApp Loading...</h1>
+            <p id="bot-description">Подключение к боту...</p>
+        </div>
+
+        <div id="loading" class="loading">
+            📱 Загружаем WebApp...
+        </div>
+
+        <div id="content" style="display: none;">
+            <!-- Меню ресторана -->
+            <div id="restaurant-menu" style="display: none;">
+                <div class="category">
+                    <div class="category-title">🍕 Пицца</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="margherita">
+                            <div class="icon">🍕</div>
+                            <div class="title">Маргарита</div>
+                            <div class="price">890₽</div>
+                        </div>
+                        <div class="menu-item" data-item="pepperoni">
+                            <div class="icon">🍕</div>
+                            <div class="title">Пепперони</div>
+                            <div class="price">1190₽</div>
+                        </div>
+                        <div class="menu-item" data-item="four-cheese">
+                            <div class="icon">🧀</div>
+                            <div class="title">Четыре сыра</div>
+                            <div class="price">1290₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-title">🍝 Паста</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="carbonara">
+                            <div class="icon">🍝</div>
+                            <div class="title">Карбонара</div>
+                            <div class="price">790₽</div>
+                        </div>
+                        <div class="menu-item" data-item="bolognese">
+                            <div class="icon">🍝</div>
+                            <div class="title">Болоньезе</div>
+                            <div class="price">890₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-title">🥤 Напитки</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="cola">
+                            <div class="icon">🥤</div>
+                            <div class="title">Кола</div>
+                            <div class="price">190₽</div>
+                        </div>
+                        <div class="menu-item" data-item="water">
+                            <div class="icon">💧</div>
+                            <div class="title">Вода</div>
+                            <div class="price">90₽</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Каталог электроники -->
+            <div id="electronics-catalog" style="display: none;">
+                <div class="category">
+                    <div class="category-title">📱 Смартфоны</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="iphone15">
+                            <div class="icon">📱</div>
+                            <div class="title">iPhone 15</div>
+                            <div class="price">79990₽</div>
+                        </div>
+                        <div class="menu-item" data-item="samsung-s24">
+                            <div class="icon">📱</div>
+                            <div class="title">Samsung S24</div>
+                            <div class="price">69990₽</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="category">
+                    <div class="category-title">💻 Ноутбуки</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="macbook">
+                            <div class="icon">💻</div>
+                            <div class="title">MacBook Air</div>
+                            <div class="price">129990₽</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Расписание фитнеса -->
+            <div id="fitness-schedule" style="display: none;">
+                <div class="category">
+                    <div class="category-title">🏃‍♂️ Сегодня</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-item="morning-yoga">
+                            <div class="icon">🧘‍♀️</div>
+                            <div class="title">Йога</div>
+                            <div class="price">08:00 - 09:00</div>
+                        </div>
+                        <div class="menu-item" data-item="crossfit">
+                            <div class="icon">🏋️‍♂️</div>
+                            <div class="title">CrossFit</div>
+                            <div class="price">19:00 - 20:00</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Универсальное меню -->
+            <div id="universal-menu">
+                <div class="category">
+                    <div class="category-title">📋 Основные разделы</div>
+                    <div class="menu-grid">
+                        <div class="menu-item" data-action="info">
+                            <div class="icon">ℹ️</div>
+                            <div class="title">Информация</div>
+                        </div>
+                        <div class="menu-item" data-action="contact">
+                            <div class="icon">📞</div>
+                            <div class="title">Контакты</div>
+                        </div>
+                        <div class="menu-item" data-action="feedback">
+                            <div class="icon">⭐</div>
+                            <div class="title">Отзыв</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <button id="cart-btn" class="cart">
+            🛒 Корзина • <span id="cart-total">0₽</span>
+        </button>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        const tg = window.Telegram.WebApp;
+        
+        // Настройка темы
+        tg.ready();
+        tg.expand();
+        
+        // Состояние корзины
+        let cart = {};
+        let total = 0;
+        
+        // Получаем данные бота из URL параметров
+        const urlParams = new URLSearchParams(window.location.search);
+        const botType = urlParams.get('type') || 'universal';
+        const botName = urlParams.get('name') || 'WebApp';
+        const botDescription = urlParams.get('description') || 'Выберите нужный раздел';
+        
+        // Обновляем заголовок
+        document.getElementById('bot-name').textContent = botName;
+        document.getElementById('bot-description').textContent = botDescription;
+        
+        // Показываем соответствующее меню
+        setTimeout(() => {
+            document.getElementById('loading').style.display = 'none';
+            document.getElementById('content').style.display = 'block';
+            
+            // Скрываем все меню
+            document.querySelectorAll('#content > div').forEach(el => {
+                el.style.display = 'none';
+            });
+            
+            // Показываем нужное меню
+            switch(botType) {
+                case 'restaurant':
+                    document.getElementById('restaurant-menu').style.display = 'block';
+                    break;
+                case 'electronics':
+                    document.getElementById('electronics-catalog').style.display = 'block';
+                    break;
+                case 'fitness':
+                    document.getElementById('fitness-schedule').style.display = 'block';
+                    break;
+                default:
+                    document.getElementById('universal-menu').style.display = 'block';
+            }
+        }, 1000);
+        
+        // Обработчики кликов
+        document.addEventListener('click', (e) => {
+            const item = e.target.closest('.menu-item');
+            if (!item) return;
+            
+            const itemId = item.dataset.item || item.dataset.action;
+            const title = item.querySelector('.title').textContent;
+            const priceText = item.querySelector('.price').textContent;
+            
+            if (item.dataset.item) {
+                // Добавление в корзину
+                const price = parseInt(priceText.replace(/[^0-9]/g, '')) || 0;
+                
+                if (cart[itemId]) {
+                    cart[itemId].quantity++;
+                } else {
+                    cart[itemId] = {
+                        title: title,
+                        price: price,
+                        quantity: 1
+                    };
+                }
+                
+                updateCart();
+                
+                // Анимация добавления
+                item.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    item.style.transform = '';
+                }, 150);
+                
+                // Уведомляем Telegram
+                tg.HapticFeedback.impactOccurred('light');
+                
+            } else if (item.dataset.action) {
+                // Действие
+                const data = {
+                    action: itemId,
+                    title: title
+                };
+                
+                tg.sendData(JSON.stringify(data));
+                tg.close();
+            }
+        });
+        
+        // Обновление корзины
+        function updateCart() {
+            total = 0;
+            let itemCount = 0;
+            
+            Object.values(cart).forEach(item => {
+                total += item.price * item.quantity;
+                itemCount += item.quantity;
+            });
+            
+            document.getElementById('cart-total').textContent = total + '₽';
+            
+            const cartBtn = document.getElementById('cart-btn');
+            if (itemCount > 0) {
+                cartBtn.classList.add('show');
+                cartBtn.textContent = `🛒 Корзина (${itemCount}) • ${total}₽`;
+            } else {
+                cartBtn.classList.remove('show');
+            }
+        }
+        
+        // Клик по корзине
+        document.getElementById('cart-btn').addEventListener('click', () => {
+            const cartData = {
+                action: 'checkout',
+                cart: cart,
+                total: total
+            };
+            
+            tg.sendData(JSON.stringify(cartData));
+        });
+        
+        // Отправка данных при закрытии
+        tg.onEvent('mainButtonClicked', () => {
+            const data = {
+                action: 'main_button',
+                cart: cart,
+                total: total
+            };
+            
+            tg.sendData(JSON.stringify(data));
+        });
+        
+        // Настройка главной кнопки
+        if (Object.keys(cart).length > 0) {
+            tg.MainButton.setText('Оформить заказ');
+            tg.MainButton.show();
+        }
+        
+        console.log('WebApp initialized:', {
+            botType,
+            botName,
+            initData: tg.initData,
+            user: tg.initDataUnsafe.user
+        });
+    </script>
+</body>
+</html>

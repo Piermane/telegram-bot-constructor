@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Panel</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000000);
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .admin-header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px 0;
+            border-bottom: 2px solid var(--tg-theme-button-color, #0088cc);
+        }
+        
+        .admin-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 8px;
+            color: var(--tg-theme-button-color, #0088cc);
+        }
+        
+        .admin-subtitle {
+            font-size: 14px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .stat-card {
+            background: var(--tg-theme-secondary-bg-color, #f8f8f8);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: bold;
+            color: var(--tg-theme-button-color, #0088cc);
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .admin-sections {
+            display: grid;
+            gap: 20px;
+        }
+        
+        .section {
+            background: var(--tg-theme-secondary-bg-color, #f8f8f8);
+            border-radius: 12px;
+            padding: 20px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .action-buttons {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 12px;
+        }
+        
+        .admin-button {
+            background: var(--tg-theme-button-color, #0088cc);
+            color: var(--tg-theme-button-text-color, #ffffff);
+            border: none;
+            border-radius: 8px;
+            padding: 12px 16px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .admin-button:hover {
+            opacity: 0.9;
+            transform: translateY(-1px);
+        }
+        
+        .admin-button.secondary {
+            background: var(--tg-theme-secondary-bg-color, #e0e0e0);
+            color: var(--tg-theme-text-color, #000);
+        }
+        
+        .admin-button.danger {
+            background: #ff4444;
+            color: white;
+        }
+        
+        .user-list {
+            max-height: 300px;
+            overflow-y: auto;
+        }
+        
+        .user-item {
+            display: flex;
+            justify-content: between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+        }
+        
+        .user-item:last-child {
+            border-bottom: none;
+        }
+        
+        .user-info {
+            flex-grow: 1;
+        }
+        
+        .user-name {
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .user-details {
+            font-size: 12px;
+            color: var(--tg-theme-hint-color, #999);
+        }
+        
+        .user-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .small-button {
+            padding: 4px 8px;
+            font-size: 12px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        .activity-log {
+            max-height: 200px;
+            overflow-y: auto;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 12px;
+            background: #f0f0f0;
+            padding: 15px;
+            border-radius: 8px;
+            white-space: pre-wrap;
+        }
+        
+        .broadcast-form {
+            display: grid;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: grid;
+            gap: 8px;
+        }
+        
+        .form-label {
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .form-input, .form-textarea {
+            padding: 12px;
+            border: 1px solid var(--tg-theme-hint-color, #e0e0e0);
+            border-radius: 8px;
+            font-size: 14px;
+            background: var(--tg-theme-bg-color, #ffffff);
+            color: var(--tg-theme-text-color, #000);
+        }
+        
+        .form-textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+        
+        @media (max-width: 480px) {
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-header">
+        <h1 class="admin-title">⚙️ Админ-панель</h1>
+        <p class="admin-subtitle">Управление мероприятием</p>
+    </div>
+
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div class="stat-number" id="totalUsers">42</div>
+            <div class="stat-label">Участников</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="activeUsers">28</div>
+            <div class="stat-label">Активных</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalMessages">156</div>
+            <div class="stat-label">Сообщений</div>
+        </div>
+        <div class="stat-card">
+            <div class="stat-number" id="totalScans">89</div>
+            <div class="stat-label">QR сканов</div>
+        </div>
+    </div>
+
+    <div class="admin-sections">
+        <!-- Управление пользователями -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>👥</span>
+                Управление участниками
+            </h2>
+            <div class="action-buttons">
+                <button class="admin-button" onclick="exportUsers()">
+                    <span>📊</span>
+                    Экспорт данных
+                </button>
+                <button class="admin-button secondary" onclick="showUsersList()">
+                    <span>👁️</span>
+                    Список участников
+                </button>
+                <button class="admin-button secondary" onclick="sendPersonalMessage()">
+                    <span>💬</span>
+                    Личное сообщение
+                </button>
+            </div>
+            
+            <div class="user-list" id="usersList" style="display: none; margin-top: 15px;">
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-name">Иван Петров</div>
+                        <div class="user-details">Баллы: 150 | Активностей: 3 | Онлайн 5 мин назад</div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="small-button admin-button">Сообщение</button>
+                    </div>
+                </div>
+                <div class="user-item">
+                    <div class="user-info">
+                        <div class="user-name">Мария Сидорова</div>
+                        <div class="user-details">Баллы: 320 | Активностей: 7 | Онлайн сейчас</div>
+                    </div>
+                    <div class="user-actions">
+                        <button class="small-button admin-button">Сообщение</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Массовые рассылки -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📢</span>
+                Массовые рассылки
+            </h2>
+            <div class="broadcast-form">
+                <div class="form-group">
+                    <label class="form-label">Получатели:</label>
+                    <select class="form-input">
+                        <option>Все участники</option>
+                        <option>Только активные</option>
+                        <option>По ролям</option>
+                        <option>Пользовательский список</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Сообщение:</label>
+                    <textarea class="form-textarea" placeholder="Введите текст рассылки..."></textarea>
+                </div>
+                <div class="action-buttons">
+                    <button class="admin-button" onclick="sendBroadcast()">
+                        <span>📤</span>
+                        Отправить рассылку
+                    </button>
+                    <button class="admin-button secondary" onclick="previewBroadcast()">
+                        <span>👁️</span>
+                        Предпросмотр
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Управление контентом -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📝</span>
+                Управление контентом
+            </h2>
+            <div class="action-buttons">
+                <button class="admin-button" onclick="manageSchedule()">
+                    <span>📅</span>
+                    Расписание
+                </button>
+                <button class="admin-button" onclick="manageActivities()">
+                    <span>🎯</span>
+                    Активности
+                </button>
+                <button class="admin-button" onclick="manageProducts()">
+                    <span>🛒</span>
+                    Товары
+                </button>
+                <button class="admin-button" onclick="managePolls()">
+                    <span>📊</span>
+                    Опросы
+                </button>
+            </div>
+        </div>
+
+        <!-- Аналитика -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📊</span>
+                Аналитика и отчеты
+            </h2>
+            <div class="action-buttons">
+                <button class="admin-button" onclick="viewAnalytics()">
+                    <span>📈</span>
+                    Подробная аналитика
+                </button>
+                <button class="admin-button secondary" onclick="generateReport()">
+                    <span>📋</span>
+                    Сгенерировать отчет
+                </button>
+            </div>
+        </div>
+
+        <!-- Журнал активности -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>📜</span>
+                Журнал активности
+            </h2>
+            <div class="activity-log" id="activityLog">
+[15:23] Пользователь @ivan_petrov сканировал QR код "ACTIVITY_001"
+[15:22] Отправлена рассылка 42 участникам
+[15:20] Пользователь @maria_s завершил активность "Мастер-класс"
+[15:18] Новая регистрация: @alex_new
+[15:15] Пользователь @ivan_petrov купил товар "Футболка"
+[15:12] Создан новый опрос "Оцените мероприятие"
+            </div>
+            <div style="margin-top: 10px;">
+                <button class="admin-button secondary" onclick="refreshLog()">
+                    <span>🔄</span>
+                    Обновить
+                </button>
+            </div>
+        </div>
+
+        <!-- Настройки системы -->
+        <div class="section">
+            <h2 class="section-title">
+                <span>⚙️</span>
+                Настройки системы
+            </h2>
+            <div class="action-buttons">
+                <button class="admin-button secondary" onclick="botSettings()">
+                    <span>🤖</span>
+                    Настройки бота
+                </button>
+                <button class="admin-button secondary" onclick="backupData()">
+                    <span>💾</span>
+                    Резервная копия
+                </button>
+                <button class="admin-button danger" onclick="resetBot()">
+                    <span>🔄</span>
+                    Сброс данных
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Инициализация Telegram WebApp
+        let tg = window.Telegram.WebApp;
+        tg.ready();
+        tg.expand();
+
+        // Проверка прав администратора
+        const initData = tg.initDataUnsafe || {};
+        const user = initData.user || {};
+
+        // Функции администратора
+        function exportUsers() {
+            tg.showAlert('📊 Экспорт данных участников...\n\nВ реальном боте здесь будет загружен Excel файл с данными всех участников.');
+        }
+
+        function showUsersList() {
+            const usersList = document.getElementById('usersList');
+            if (usersList.style.display === 'none') {
+                usersList.style.display = 'block';
+            } else {
+                usersList.style.display = 'none';
+            }
+        }
+
+        function sendPersonalMessage() {
+            tg.showPopup({
+                title: '💬 Личное сообщение',
+                message: 'Введите ID пользователя или выберите из списка:',
+                buttons: [
+                    {id: 'cancel', type: 'cancel'},
+                    {id: 'send', type: 'default', text: 'Отправить'}
+                ]
+            });
+        }
+
+        function sendBroadcast() {
+            const message = document.querySelector('.form-textarea').value;
+            if (!message.trim()) {
+                tg.showAlert('⚠️ Введите текст сообщения');
+                return;
+            }
+            
+            tg.showConfirm('📢 Отправить рассылку всем участникам?', (confirmed) => {
+                if (confirmed) {
+                    tg.showAlert('✅ Рассылка отправлена 42 участникам!');
+                    document.querySelector('.form-textarea').value = '';
+                }
+            });
+        }
+
+        function previewBroadcast() {
+            const message = document.querySelector('.form-textarea').value;
+            if (!message.trim()) {
+                tg.showAlert('⚠️ Введите текст сообщения');
+                return;
+            }
+            
+            tg.showAlert('👁️ Предпросмотр:\n\n' + message);
+        }
+
+        function manageSchedule() {
+            tg.showAlert('📅 Управление расписанием\n\n• Добавить событие\n• Редактировать время\n• Установить напоминания\n• Управление залами');
+        }
+
+        function manageActivities() {
+            tg.showAlert('🎯 Управление активностями\n\n• Создать новую активность\n• QR коды для регистрации\n• Настройка баллов\n• Статистика участия');
+        }
+
+        function manageProducts() {
+            tg.showAlert('🛒 Управление товарами\n\n• Добавить товар\n• Установить цену в баллах\n• Управление остатками\n• История заказов');
+        }
+
+        function managePolls() {
+            tg.showAlert('📊 Управление опросами\n\n• Создать опрос\n• Просмотр результатов\n• Экспорт ответов\n• Статистика');
+        }
+
+        function viewAnalytics() {
+            const analyticsData = `
+📈 Подробная аналитика:
+
+👥 Участники:
+• Всего: 42
+• Активных: 28 (67%)
+• Новых сегодня: 5
+
+🎯 Активности:
+• Завершено: 156
+• Средний балл: 95
+• Популярная: Мастер-класс (23 участника)
+
+📱 QR коды:
+• Всего сканов: 89
+• Уникальных: 67
+• Средний на пользователя: 2.1
+
+🛒 Мерч-шоп:
+• Заказов: 12
+• Общая сумма: 1,840 баллов
+• Популярный товар: Футболка
+            `;
+            tg.showAlert(analyticsData);
+        }
+
+        function generateReport() {
+            tg.showAlert('📋 Генерация отчета...\n\nВ реальном боте здесь будет сформирован подробный PDF отчет с графиками и статистикой.');
+        }
+
+        function refreshLog() {
+            const log = document.getElementById('activityLog');
+            const newEntry = `[${new Date().toLocaleTimeString()}] Журнал обновлен администратором\n`;
+            log.textContent = newEntry + log.textContent;
+        }
+
+        function botSettings() {
+            tg.showAlert('🤖 Настройки бота\n\n• Приветственное сообщение\n• Автоответы\n• Команды\n• Интеграции');
+        }
+
+        function backupData() {
+            tg.showConfirm('💾 Создать резервную копию всех данных?', (confirmed) => {
+                if (confirmed) {
+                    tg.showAlert('✅ Резервная копия создана!');
+                }
+            });
+        }
+
+        function resetBot() {
+            tg.showConfirm('⚠️ ВНИМАНИЕ!\n\nЭто действие удалит ВСЕ данные бота. Продолжить?', (confirmed) => {
+                if (confirmed) {
+                    tg.showAlert('❌ Данные сброшены. Бот перезапущен.');
+                }
+            });
+        }
+
+        // Автообновление статистики
+        function updateStats() {
+            // В реальном боте здесь будет API запрос
+            document.getElementById('totalUsers').textContent = Math.floor(Math.random() * 50) + 30;
+            document.getElementById('activeUsers').textContent = Math.floor(Math.random() * 30) + 20;
+            document.getElementById('totalMessages').textContent = Math.floor(Math.random() * 200) + 100;
+            document.getElementById('totalScans').textContent = Math.floor(Math.random() * 100) + 50;
+        }
+
+        // Обновление каждую минуту
+        setInterval(updateStats, 60000);
+
+        console.log('Admin panel loaded for:', user);
+    </script>
+</body>
+</html>
