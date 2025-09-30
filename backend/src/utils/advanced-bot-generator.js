@@ -42,6 +42,7 @@ ${hasGeolocation ? '📍 Геолокация и доставка' : ''}
 ⚡ Асинхронная обработка
 """
 
+import os
 import logging
 import sqlite3
 import json

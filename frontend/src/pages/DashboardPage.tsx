@@ -180,7 +180,9 @@ const DashboardPage: React.FC = () => {
               borderRadius="2xl"
               overflow="hidden"
               transition="all 0.3s"
-              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl', borderColor: 'purple.400' }}
+              cursor="pointer"
+              onClick={() => navigate('/bots')}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>

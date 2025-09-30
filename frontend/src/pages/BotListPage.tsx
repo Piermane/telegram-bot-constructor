@@ -22,14 +22,6 @@ import {
   MenuList,
   MenuItem,
   useToast,
-  Modal,
-  ModalOverlay,
-  ModalContent,
-  ModalHeader,
-  ModalBody,
-  ModalFooter,
-  ModalCloseButton,
-  useDisclosure,
   Box,
   Flex,
   Icon,
@@ -56,12 +48,10 @@ interface Bot {
 const BotListPage: React.FC = () => {
   const navigate = useNavigate();
   const toast = useToast();
-  const { isOpen, onOpen, onClose } = useDisclosure();
   
   const [bots, setBots] = useState<Bot[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [selectedBot, setSelectedBot] = useState<Bot | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
   const cardBg = useColorModeValue('white', 'gray.800');
@@ -109,6 +99,42 @@ const BotListPage: React.FC = () => {
         });
         loadBots(); // Перезагружаем список
       } else {
+        toast({
+          title: 'Ошибка остановки бота',
+          description: data.message || 'Неизвестная ошибка',
+          status: 'error',
+          duration: 5000,
+        });
+      }
+    } catch (err) {
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось остановить бота',
+        status: 'error',
+        duration: 5000,
+      });
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleDeleteBot = async (botId: string) => {
+    setActionLoading(botId);
+    try {
+      const response = await fetch(`/api/deploy/delete/${botId}`, {
+        method: 'DELETE'
+      });
+      const data = await response.json();
+      
+      if (data.success) {
+        toast({
+          title: 'Бот удален',
+          description: data.message,
+          status: 'success',
+          duration: 3000,
+        });
+        loadBots(); // Перезагружаем список
+      } else {
         throw new Error(data.message);
       }
     } catch (err) {
@@ -120,7 +146,6 @@ const BotListPage: React.FC = () => {
       });
     } finally {
       setActionLoading(null);
-      onClose();
     }
   };
 
@@ -328,15 +353,24 @@ const BotListPage: React.FC = () => {
                           >
                             Редактировать
                           </MenuItem>
+                          {bot.status === 'running' && (
+                            <MenuItem
+                              icon={<Icon as={FiPause} />}
+                              onClick={() => handleStopBot(bot.id)}
+                            >
+                              Остановить
+                            </MenuItem>
+                          )}
                           <MenuItem
                             icon={<DeleteIcon />}
                             color="red.500"
                             onClick={() => {
-                              setSelectedBot(bot);
-                              onOpen();
+                              if (window.confirm(`Удалить бота "${bot.name}"? Это действие необратимо!`)) {
+                                handleDeleteBot(bot.id);
+                              }
                             }}
                           >
-                            Остановить
+                            Удалить
                           </MenuItem>
                         </MenuList>
                       </Menu>
@@ -402,34 +436,6 @@ const BotListPage: React.FC = () => {
         </VStack>
       </Container>
 
-      {/* Модал подтверждения остановки */}
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
-        <ModalContent>
-          <ModalHeader>Остановить бота</ModalHeader>
-          <ModalCloseButton />
-          <ModalBody>
-            <Text>
-              Вы уверены, что хотите остановить бота "{selectedBot?.name}" (@{selectedBot?.username})?
-            </Text>
-            <Text mt={2} color="gray.600" fontSize="sm">
-              Бот перестанет отвечать пользователям до повторного запуска.
-            </Text>
-          </ModalBody>
-          <ModalFooter>
-            <Button variant="ghost" mr={3} onClick={onClose}>
-              Отмена
-            </Button>
-            <Button
-              colorScheme="red"
-              isLoading={actionLoading === selectedBot?.id}
-              onClick={() => selectedBot && handleStopBot(selectedBot.id)}
-            >
-              Остановить
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </>
   );
 };

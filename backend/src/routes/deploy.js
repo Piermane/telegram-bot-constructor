@@ -457,8 +457,9 @@ router.delete('/stop/:botId', async (req, res) => {
     }
     
     const botInfo = runningBots.get(botId);
+    const botData = botRecord.rows[0];
 
-    console.log(`🛑 Останавливаем бота: ${botRecord.rows[0].telegram_username}`);
+    console.log(`🛑 Останавливаем бота: ${botData.telegram_username || botData.name || botId}`);
 
     // Останавливаем процесс если он запущен
     if (botInfo && botInfo.process) {
@@ -511,7 +512,8 @@ router.delete('/delete/:botId', async (req, res) => {
       });
     }
 
-    console.log(`🗑️ Удаляем бота: ${botRecord.rows[0].telegram_username}`);
+    const botData = botRecord.rows[0];
+    console.log(`🗑️ Удаляем бота: ${botData.telegram_username || botData.name || botId}`);
     
     const botInfo = runningBots.get(botId);
 
