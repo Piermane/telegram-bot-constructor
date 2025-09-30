@@ -204,35 +204,50 @@ const BotListPage: React.FC = () => {
         <VStack spacing={8} align="stretch">
           
           {/* Заголовок */}
-          <HStack justify="space-between">
+          <Flex 
+            justify="space-between" 
+            align="center"
+            flexWrap="wrap"
+            gap={4}
+          >
             <VStack align="start" spacing={1}>
-              <Heading size="xl">🤖 Мои боты</Heading>
-              <Text color="gray.600">
+              <Heading size="xl" bgGradient="linear(to-r, blue.600, purple.600)" bgClip="text">
+                🤖 Мои боты
+              </Heading>
+              <Text color="gray.600" fontSize="md">
                 Управляйте своими Telegram ботами
               </Text>
             </VStack>
             
-            <VStack>
+            <HStack spacing={3}>
+              <Button
+                size="lg"
+                variant="outline"
+                leftIcon={<Icon as={FiRefreshCw} />}
+                onClick={loadBots}
+                isLoading={loading}
+                colorScheme="gray"
+              >
+                Обновить
+              </Button>
               <Button
                 as={RouterLink}
                 to="/bots/new"
                 leftIcon={<AddIcon />}
                 colorScheme="blue"
                 size="lg"
+                bgGradient="linear(to-r, blue.500, purple.600)"
+                _hover={{
+                  bgGradient: "linear(to-r, blue.600, purple.700)",
+                  transform: "translateY(-2px)",
+                  boxShadow: "xl"
+                }}
+                transition="all 0.2s"
               >
                 Создать бота
               </Button>
-              <Button
-                size="sm"
-                variant="outline"
-                leftIcon={<FiRefreshCw />}
-                onClick={loadBots}
-                isLoading={loading}
-              >
-                Обновить
-              </Button>
-            </VStack>
-          </HStack>
+            </HStack>
+          </Flex>
 
           {error && (
             <Alert status="error">

@@ -809,17 +809,22 @@ const BotBuilderPage: React.FC = () => {
                       {botSettings.features.webApp && (
                         <VStack spacing={6} align="stretch">
                           <FormControl>
-                            <FormLabel>🌐 URL WebApp сервера</FormLabel>
+                            <FormLabel>
+                              🌐 URL WebApp сервера 
+                              <Badge ml={2} colorScheme="green" fontSize="xs">Автоматически</Badge>
+                            </FormLabel>
                             <Input
-                              placeholder="https://your-webapp-url.com"
+                              placeholder="Оставьте пустым для автоопределения"
                               value={botSettings.webAppUrl || ''}
                               onChange={(e) => setBotSettings(prev => ({
                                 ...prev,
                                 webAppUrl: e.target.value
                               }))}
+                              isDisabled
+                              bg="gray.50"
                             />
-                            <Text fontSize="sm" color="gray.500" mt={1}>
-                              💡 Используйте ngrok или свой домен для доступа из Telegram
+                            <Text fontSize="sm" color="gray.600" mt={1}>
+                              ℹ️ URL определяется автоматически из переменной SERVER_URL
                             </Text>
                           </FormControl>
                           

@@ -159,7 +159,7 @@ router.post('/create', async (req, res) => {
     await fs.mkdir(botDir, { recursive: true });
 
     // 4. ГЕНЕРИРУЕМ Python код бота
-    const pythonCode = generateAdvancedPythonBot(botSettings, botInfo);
+    const pythonCode = generateAdvancedPythonBot(botSettings, botInfo, botId);
     await fs.writeFile(path.join(botDir, 'bot.py'), pythonCode);
 
     // 5. СОЗДАЕМ requirements.txt
@@ -366,7 +366,7 @@ router.put('/:botId/update', async (req, res) => {
       username: botInfo.username,
       ...botInfo
     };
-    const newPythonCode = generateAdvancedPythonBot(botSettings, botInfoForGeneration);
+    const newPythonCode = generateAdvancedPythonBot(botSettings, botInfoForGeneration, botId);
 
     // Сохраняем новый код и настройки
     await fs.writeFile(path.join(botInfo.dir, 'bot.py'), newPythonCode);

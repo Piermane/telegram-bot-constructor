@@ -94,6 +94,15 @@ const db = {
         logger.debug('Migration note:', error.message);
       }
 
+      // Migration: Add started_at to bots table
+      try {
+        await this.query('ALTER TABLE bots ADD COLUMN IF NOT EXISTS started_at TIMESTAMP');
+        logger.info('✅ Migration: started_at column added to bots');
+      } catch (error) {
+        // Column might already exist
+        logger.debug('Migration note:', error.message);
+      }
+
       // Create super admin if not exists
       const adminExists = await this.query('SELECT id FROM users WHERE email = $1', ['admin@botconstructor.local']);
       if (adminExists.rows.length === 0) {

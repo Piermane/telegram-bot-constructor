@@ -2,7 +2,12 @@
  * Продвинутый генератор Python кода для промышленных ботов
  */
 
-function generateAdvancedPythonBot(botSettings, botInfo) {
+function generateAdvancedPythonBot(botSettings, botInfo, botId) {
+  // Валидация: botId обязателен
+  if (!botId) {
+    throw new Error('botId is required parameter for generateAdvancedPythonBot');
+  }
+  
   const hasWebApp = botSettings.features?.webApp || false;
   const hasPayments = botSettings.features?.payments || botSettings.integrations?.payment?.enabled || false;
   const hasGeolocation = botSettings.features?.geolocation || false;
