@@ -828,7 +828,7 @@ const BotBuilderPage: React.FC = () => {
                             </Text>
                           </FormControl>
                           
-                          <SimpleGrid columns={2} spacing={6}>
+                          <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
                           <Card bg="blue.50" p={4}>
                             <VStack align="start" spacing={3}>
                               <Heading size="sm">🎨 Дизайн WebApp</Heading>
@@ -944,7 +944,7 @@ const BotBuilderPage: React.FC = () => {
                                   Удалить
                                 </Button>
                               </HStack>
-                              <SimpleGrid columns={2} spacing={3}>
+                              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                                 <Input
                                   placeholder="Название товара"
                                   value={product.name || ''}
@@ -1049,7 +1049,7 @@ const BotBuilderPage: React.FC = () => {
                                   Удалить
                                 </Button>
                               </HStack>
-                              <SimpleGrid columns={2} spacing={3}>
+                              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                                 <Input
                                   placeholder="Название опроса"
                                   value={survey.title || ''}
@@ -1154,7 +1154,7 @@ const BotBuilderPage: React.FC = () => {
                                   Удалить
                                 </Button>
                               </HStack>
-                              <SimpleGrid columns={2} spacing={3}>
+                              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                                 <Input
                                   placeholder="Название активности"
                                   value={activity.name || ''}
@@ -1259,7 +1259,7 @@ const BotBuilderPage: React.FC = () => {
                                   Удалить
                                 </Button>
                               </HStack>
-                              <SimpleGrid columns={2} spacing={3}>
+                              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                                 <Input
                                   placeholder="Название события"
                                   value={event.title || ''}
@@ -1418,7 +1418,7 @@ const BotBuilderPage: React.FC = () => {
                                   Удалить
                                 </Button>
                               </HStack>
-                              <SimpleGrid columns={2} spacing={3}>
+                              <SimpleGrid columns={{ base: 1, md: 2 }} spacing={3}>
                                 <Input
                                   placeholder="Название локации"
                                   value={location.name || ''}
@@ -1501,7 +1501,7 @@ const BotBuilderPage: React.FC = () => {
                         <Text fontSize="sm" color="gray.600" mb={3}>
                           Выберите какие страницы показывать в WebApp
                         </Text>
-                        <SimpleGrid columns={2} spacing={4}>
+                        <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
                           <FormControl display="flex" alignItems="center">
                             <FormLabel htmlFor="show-shop" mb="0">
                               🛒 Магазин
@@ -1637,7 +1637,7 @@ const BotBuilderPage: React.FC = () => {
                     <Heading size="md">💾 Настройки базы данных</Heading>
                   </CardHeader>
                   <CardBody>
-                    <SimpleGrid columns={3} spacing={6}>
+                    <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
                       <FormControl display="flex" alignItems="center">
                         <FormLabel htmlFor="save-contacts" mb="0" fontSize="sm">
                           Сохранять контакты
@@ -1755,7 +1755,7 @@ const BotBuilderPage: React.FC = () => {
                         </Text>
                       </FormControl>
 
-                      <SimpleGrid columns={3} spacing={4}>
+                      <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={4}>
                         <FormControl display="flex" alignItems="center">
                           <FormLabel htmlFor="notify-new-user" mb="0" fontSize="sm">
                             Новые пользователи
@@ -1820,7 +1820,7 @@ const BotBuilderPage: React.FC = () => {
                   <Heading size="md">🔧 Дополнительные функции</Heading>
                 </CardHeader>
                 <CardBody>
-                  <SimpleGrid columns={2} spacing={6}>
+                  <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
                     <FormControl display="flex" alignItems="center">
                       <FormLabel htmlFor="analytics" mb="0">
                         Аналитика и статистика

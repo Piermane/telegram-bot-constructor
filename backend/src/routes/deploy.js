@@ -333,16 +333,24 @@ router.put('/:botId/update', async (req, res) => {
     
     // Извлекаем DB ID из botId
     const dbId = parseInt(botId.replace('bot_', ''));
-    const botInfo = runningBots.get(botId);
-
-    if (!botInfo) {
+    
+    // Проверяем существование в БД (главный источник истины!)
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден'
+        message: 'Бот не найден в базе данных'
       });
     }
+    
+    const botData = botRecord.rows[0];
+    const botInfo = runningBots.get(botId) || {
+      dir: path.join(__dirname, '../../deployed_bots', botId),
+      username: botData.telegram_username,
+      token: botData.config?.token || botSettings.token
+    };
 
-    console.log('🔄 Обновляем бота:', botId);
+    console.log('🔄 Обновляем бота:', botData.telegram_username || botId);
 
     // Валидация токена (если изменился)
     if (botSettings.token !== botInfo.token) {
@@ -374,13 +382,32 @@ router.put('/:botId/update', async (req, res) => {
       path.join(botInfo.dir, 'settings.json'),
       JSON.stringify(botSettings, null, 2)
     );
-
-    // Останавливаем старый процесс
-    try {
-      process.kill(botInfo.process.pid, 'SIGTERM');
-    } catch (e) {
-      console.log('Процесс уже остановлен');
+    
+    // Регенерируем WebApp (если включен)
+    if (botSettings.features?.webApp) {
+      console.log('📱 Обновляем WebApp...');
+      await generateWebAppHTML(botSettings, botId);
     }
+
+    // Останавливаем старый процесс (если работает)
+    if (botInfo.process && botInfo.process.pid) {
+      try {
+        console.log(`⏹️ Останавливаем старый процесс (PID: ${botInfo.process.pid})...`);
+        process.kill(botInfo.process.pid, 'SIGTERM');
+        
+        // КРИТИЧНО: Ждем 2 секунды чтобы процесс корректно завершился
+        // Это предотвращает конфликт getUpdates
+        await new Promise(resolve => setTimeout(resolve, 2000));
+        console.log('✅ Старый процесс остановлен');
+      } catch (e) {
+        console.log('⚠️ Процесс уже остановлен или недоступен');
+      }
+    }
+    
+    // Удаляем из памяти старую версию
+    runningBots.delete(botId);
+    
+    console.log('🚀 Запускаем обновленного бота...');
 
     // Запускаем новый процесс
     const newBotProcess = spawn('python3', ['bot.py'], {
@@ -411,11 +438,15 @@ router.put('/:botId/update', async (req, res) => {
       ...botInfo,
       process: newBotProcess,
       settings: botSettings,
+      token: botSettings.token,
       pid: newBotProcess.pid,
       updatedAt: new Date()
     });
+    
+    // Обновляем статус в БД на 'running'
+    await db.query('UPDATE bots SET status = $1, started_at = NOW() WHERE id = $2', ['running', dbId]);
 
-    console.log(`🔄 Бот ${botInfo.username} обновлен! Новый PID: ${newBotProcess.pid}`);
+    console.log(`✅ Бот ${botInfo.username} обновлен! Новый PID: ${newBotProcess.pid}`);
 
     res.json({
       success: true,
