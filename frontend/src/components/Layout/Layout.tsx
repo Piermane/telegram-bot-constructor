@@ -6,21 +6,55 @@ import Header from './Header';
 
 const Layout: React.FC = () => {
   return (
-    <Flex minH="100vh" bg="gray.50">
-      {/* Sidebar */}
-      <Sidebar />
-      
-      {/* Main Content */}
-      <Box flex="1" ml={{ base: 0, md: '250px' }}>
-        {/* Header */}
-        <Header />
+    <>
+      {/* STRIPE GRADIENT - НА ВСЮ СТРАНИЦУ! */}
+      <Box
+        position="fixed"
+        top={0}
+        left={0}
+        right={0}
+        bottom={0}
+        zIndex={-1}
+        sx={{
+          background: 'linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 40%, #ff6b9d 60%, #ffc65c 80%, #f6d365 100%)',
+          backgroundSize: '400% 400%',
+          animation: 'stripeGradientFlow 20s ease infinite',
+          '@keyframes stripeGradientFlow': {
+            '0%': {
+              backgroundPosition: '0% 50%',
+            },
+            '25%': {
+              backgroundPosition: '50% 75%',
+            },
+            '50%': {
+              backgroundPosition: '100% 50%',
+            },
+            '75%': {
+              backgroundPosition: '50% 25%',
+            },
+            '100%': {
+              backgroundPosition: '0% 50%',
+            },
+          },
+        }}
+      />
+
+      <Flex minH="100vh" position="relative">
+        {/* Sidebar */}
+        <Sidebar />
         
-        {/* Page Content */}
-        <Box>
-          <Outlet />
+        {/* Main Content */}
+        <Box flex="1" ml={{ base: 0, md: '250px' }}>
+          {/* Header */}
+          <Header />
+          
+          {/* Page Content */}
+          <Box>
+            <Outlet />
+          </Box>
         </Box>
-      </Box>
-    </Flex>
+      </Flex>
+    </>
   );
 };
 

@@ -30,35 +30,38 @@ const Header: React.FC = () => {
 
   const getInitials = (firstName?: string, lastName?: string) => {
     if (!firstName && !lastName) return 'U';
-    return `${firstName?.[0] || ''}${lastName?.[0] || ''}`.toUpperCase();
+    // Берем ТОЛЬКО первую букву имени и первую букву фамилии (не первые 2 буквы каждого!)
+    const firstInitial = firstName?.[0] || '';
+    const lastInitial = lastName?.[0] || '';
+    return `${firstInitial}${lastInitial}`.toUpperCase();
   };
 
   return (
     <Box
       h="16"
-      bg={bg}
+      bg="rgba(255, 255, 255, 0.7)"
+      backdropFilter="blur(20px)"
       borderBottom="1px solid"
-      borderBottomColor={borderColor}
+      borderBottomColor="rgba(255, 255, 255, 0.3)"
       px={6}
       display="flex"
       alignItems="center"
       justifyContent="space-between"
+      boxShadow="0 2px 10px rgba(0, 0, 0, 0.05)"
     >
-      {/* Left side - can add breadcrumbs or page title here */}
-      <Box>
-        <Text fontSize="lg" fontWeight="semibold" color="gray.800">
-          {/* Dynamic page title can go here */}
-        </Text>
-      </Box>
+      {/* Left side */}
+      <Box />
 
-      {/* Right side - user menu */}
+      {/* Right side - user menu (Stripe style) */}
       <HStack spacing={4}>
         {/* Notifications */}
         <IconButton
           aria-label="Notifications"
           icon={<BellIcon />}
           variant="ghost"
-          size="sm"
+          size="md"
+          color="gray.600"
+          _hover={{ bg: 'gray.100' }}
         />
 
         {/* User Menu */}
@@ -66,19 +69,22 @@ const Header: React.FC = () => {
           <MenuButton
             as={Button}
             variant="ghost"
-            size="sm"
+            size="md"
             rightIcon={<ChevronDownIcon />}
+            _hover={{ bg: 'gray.100' }}
+            px={3}
           >
-            <HStack spacing={2}>
+            <HStack spacing={3}>
               <Avatar
                 size="sm"
-                name={`${user?.firstName} ${user?.lastName}`}
-                bg="brand.500"
+                bg="#6772e5"
                 color="white"
+                fontWeight="600"
+                fontSize="sm"
               >
                 {getInitials(user?.firstName, user?.lastName)}
               </Avatar>
-              <Text fontSize="sm" fontWeight="medium">
+              <Text fontSize="sm" fontWeight="500" color="gray.700">
                 {user?.firstName} {user?.lastName}
               </Text>
             </HStack>

@@ -2,57 +2,45 @@ import React from 'react';
 import {
   Box,
   VStack,
-  HStack,
   Text,
-  Icon,
   useColorModeValue,
   Divider,
 } from '@chakra-ui/react';
 import { NavLink, useLocation } from 'react-router-dom';
-import {
-  MdDashboard,
-  MdSmartToy,
-  MdApps,
-  MdAnalytics,
-  MdSettings,
-  MdCode,
-} from 'react-icons/md';
 
 interface NavItemProps {
-  icon: any;
   children: React.ReactNode;
   to: string;
 }
 
-const NavItem: React.FC<NavItemProps> = ({ icon, children, to }) => {
+const NavItem: React.FC<NavItemProps> = ({ children, to }) => {
   const location = useLocation();
   const isActive = location.pathname === to;
 
-  const activeBg = useColorModeValue('brand.50', 'brand.900');
-  const activeColor = useColorModeValue('brand.600', 'brand.200');
-  const hoverBg = useColorModeValue('gray.100', 'gray.700');
+  const activeBg = useColorModeValue('blue.50', 'blue.900');
+  const activeColor = useColorModeValue('#6772e5', 'blue.200');
+  const hoverBg = useColorModeValue('gray.50', 'gray.700');
 
   return (
     <Box
       as={NavLink}
       to={to}
-      p={3}
-      borderRadius="lg"
+      px={4}
+      py={2.5}
+      borderRadius="md"
       bg={isActive ? activeBg : 'transparent'}
       color={isActive ? activeColor : 'gray.600'}
       _hover={{
         bg: isActive ? activeBg : hoverBg,
         textDecoration: 'none',
+        color: isActive ? activeColor : 'gray.800',
       }}
-      transition="all 0.2s"
+      transition="all 0.15s ease"
       w="full"
+      fontWeight={isActive ? '600' : '500'}
+      fontSize="sm"
     >
-      <HStack spacing={3}>
-        <Icon as={icon} boxSize={5} />
-        <Text fontWeight={isActive ? 'semibold' : 'medium'}>
-          {children}
-        </Text>
-      </HStack>
+      {children}
     </Box>
   );
 };
@@ -68,12 +56,14 @@ const Sidebar: React.FC = () => {
       top={0}
       h="100vh"
       w="250px"
-      bg={bg}
+      bg="rgba(255, 255, 255, 0.7)"
+      backdropFilter="blur(20px)"
       borderRight="1px solid"
-      borderRightColor={borderColor}
+      borderRightColor="rgba(255, 255, 255, 0.3)"
       p={4}
       zIndex={1000}
       display={{ base: 'none', md: 'block' }}
+      boxShadow="0 8px 32px rgba(0, 0, 0, 0.1)"
     >
       <VStack spacing={6} align="stretch" h="full">
         {/* Logo */}
@@ -89,20 +79,20 @@ const Sidebar: React.FC = () => {
         <Divider />
 
         {/* Navigation */}
-        <VStack spacing={2} align="stretch" flex={1}>
-          <NavItem icon={MdDashboard} to="/dashboard">
+        <VStack spacing={1} align="stretch" flex={1}>
+          <NavItem to="/dashboard">
             Dashboard
           </NavItem>
-          <NavItem icon={MdSmartToy} to="/bots">
+          <NavItem to="/bots">
             Мои боты
           </NavItem>
-          <NavItem icon={MdApps} to="/templates">
+          <NavItem to="/templates">
             Шаблоны
           </NavItem>
-          <NavItem icon={MdAnalytics} to="/analytics">
+          <NavItem to="/analytics">
             Аналитика
           </NavItem>
-          <NavItem icon={MdSettings} to="/settings">
+          <NavItem to="/settings">
             Настройки
           </NavItem>
         </VStack>
@@ -111,10 +101,9 @@ const Sidebar: React.FC = () => {
 
         {/* Footer */}
         <VStack spacing={2}>
-          <HStack spacing={2} fontSize="xs" color="gray.500">
-            <Icon as={MdCode} />
-            <Text>v1.0.0-dev</Text>
-          </HStack>
+          <Text fontSize="xs" color="gray.400" fontWeight="medium">
+            v1.0.0
+          </Text>
         </VStack>
       </VStack>
     </Box>
