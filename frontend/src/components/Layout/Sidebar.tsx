@@ -25,20 +25,22 @@ const NavItem: React.FC<NavItemProps> = ({ children, to }) => {
     <Box
       as={NavLink}
       to={to}
-      px={4}
-      py={2.5}
-      borderRadius="md"
-      bg={isActive ? activeBg : 'transparent'}
-      color={isActive ? activeColor : 'gray.600'}
+      px={5}
+      py={3}
+      borderRadius="lg"
+      bg={isActive ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.1)'}
+      color={isActive ? 'gray.800' : 'white'}
+      border="1px solid"
+      borderColor={isActive ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.2)'}
       _hover={{
-        bg: isActive ? activeBg : hoverBg,
+        bg: isActive ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.2)',
         textDecoration: 'none',
-        color: isActive ? activeColor : 'gray.800',
+        borderColor: isActive ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.3)',
       }}
-      transition="all 0.15s ease"
+      transition="all 0.2s ease"
       w="full"
       fontWeight={isActive ? '600' : '500'}
-      fontSize="sm"
+      fontSize="md"
     >
       {children}
     </Box>
@@ -56,22 +58,19 @@ const Sidebar: React.FC = () => {
       top={0}
       h="100vh"
       w="250px"
-      bg="rgba(255, 255, 255, 0.15)"
+      bg="rgba(255, 255, 255, 0.12)"
       backdropFilter="blur(12px) saturate(180%)"
-      borderRight="1px solid"
-      borderRightColor="rgba(255, 255, 255, 0.2)"
       p={4}
       zIndex={1000}
       display={{ base: 'none', md: 'block' }}
-      boxShadow="0 8px 32px rgba(0, 0, 0, 0.15)"
     >
       <VStack spacing={6} align="stretch" h="full">
         {/* Logo */}
         <VStack spacing={1} py={4}>
-          <Text fontSize="xl" fontWeight="bold" bgGradient="linear(to-r, purple.600, blue.500)" bgClip="text">
+          <Text fontSize="xl" fontWeight="bold" color="white" textShadow="0 2px 8px rgba(0,0,0,0.3)">
             Bot Constructor
           </Text>
-          <Text fontSize="xs" color="gray.500" textAlign="center" fontWeight="medium">
+          <Text fontSize="xs" color="whiteAlpha.800" textAlign="center" fontWeight="medium">
             Production v1.0
           </Text>
         </VStack>
@@ -101,7 +100,7 @@ const Sidebar: React.FC = () => {
 
         {/* Footer */}
         <VStack spacing={2}>
-          <Text fontSize="xs" color="gray.400" fontWeight="medium">
+          <Text fontSize="xs" color="whiteAlpha.700" fontWeight="medium">
             v1.0.0
           </Text>
         </VStack>
