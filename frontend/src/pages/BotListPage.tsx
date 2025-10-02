@@ -22,13 +22,10 @@ import {
   useToast,
   Box,
   Flex,
-  Icon,
-  Stat,
-  StatLabel,
-  StatNumber
+  Icon
 } from '@chakra-ui/react';
 import { AddIcon, ExternalLinkIcon, EditIcon, DeleteIcon, SettingsIcon } from '@chakra-ui/icons';
-import { FiMoreVertical, FiRefreshCw, FiActivity, FiClock, FiLayers, FiPlay, FiPause, FiAlertCircle, FiBarChart2 } from 'react-icons/fi';
+import { FiMoreVertical, FiRefreshCw, FiPlay, FiPause, FiAlertCircle, FiBarChart2, FiActivity } from 'react-icons/fi';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { BotListSkeleton } from '../components/UI/SkeletonLoader';
@@ -148,15 +145,6 @@ const BotListPage: React.FC = () => {
     }
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'running': return 'green';
-      case 'stopped': return 'gray';
-      case 'error': return 'red';
-      default: return 'gray';
-    }
-  };
-
   const getStatusBadge = (status: string) => {
     switch (status) {
       case 'running': 
@@ -241,10 +229,16 @@ const BotListPage: React.FC = () => {
             gap={4}
           >
             <VStack align="start" spacing={1}>
-              <Heading size="xl" bgGradient="linear(to-r, blue.600, purple.600)" bgClip="text">
-                🤖 Мои боты
+              <Heading 
+                fontSize={{ base: '3xl', md: '4xl' }}
+                fontWeight="extrabold"
+                bgGradient="linear(to-r, blue.600, purple.600)" 
+                bgClip="text"
+                letterSpacing="tight"
+              >
+                Мои боты
               </Heading>
-              <Text color="gray.600" fontSize="md">
+              <Text color="gray.600" fontSize="lg">
                 Управляйте своими Telegram ботами
               </Text>
             </VStack>
@@ -288,19 +282,40 @@ const BotListPage: React.FC = () => {
 
           {/* Список ботов */}
           {bots.length === 0 ? (
-            <Card bg={cardBg} borderColor={borderColor}>
-              <CardBody textAlign="center" py={12}>
-                <VStack spacing={4}>
-                  <Text fontSize="6xl">🤖</Text>
-                  <Heading size="md">У вас пока нет ботов</Heading>
-                  <Text color="gray.600">
-                    Создайте своего первого бота для Telegram
+            <Card 
+              bg={cardBg} 
+              borderColor={borderColor}
+              borderRadius="2xl"
+              boxShadow="lg"
+            >
+              <CardBody textAlign="center" py={16}>
+                <VStack spacing={6}>
+                  <Flex
+                    w={24}
+                    h={24}
+                    borderRadius="full"
+                    bgGradient="linear(to-br, blue.400, purple.600)"
+                    align="center"
+                    justify="center"
+                    mx="auto"
+                  >
+                    <Icon as={FiActivity} boxSize={12} color="white" />
+                  </Flex>
+                  <Heading size="lg" fontWeight="bold">У вас пока нет ботов</Heading>
+                  <Text color="gray.600" fontSize="lg" maxW="md">
+                    Создайте своего первого бота для Telegram за несколько минут
                   </Text>
                   <Button
                     as={RouterLink}
                     to="/templates"
-                    colorScheme="blue"
+                    colorScheme="purple"
+                    size="lg"
                     leftIcon={<AddIcon />}
+                    borderRadius="xl"
+                    px={8}
+                    h="56px"
+                    _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
+                    transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                   >
                     Выбрать шаблон
                   </Button>
@@ -315,10 +330,12 @@ const BotListPage: React.FC = () => {
                   bg={cardBg}
                   borderWidth="1px"
                   borderColor={borderColor}
+                  borderRadius="2xl"
+                  boxShadow="md"
                   _hover={{ 
-                    shadow: 'xl',
-                    transform: 'translateY(-4px)',
-                    borderColor: bot.status === 'running' ? 'green.400' : 'blue.300'
+                    shadow: '0 20px 40px rgba(0,0,0,0.12)',
+                    transform: 'translateY(-6px)',
+                    borderColor: bot.status === 'running' ? 'green.400' : 'purple.400'
                   }}
                   transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                   position="relative"
@@ -362,7 +379,7 @@ const BotListPage: React.FC = () => {
                             icon={<Icon as={FiBarChart2} />}
                             onClick={() => navigate(`/bots/${bot.id}/analytics`)}
                           >
-                            📊 Аналитика
+                            Аналитика
                           </MenuItem>
                           {bot.status === 'running' && (
                             <MenuItem

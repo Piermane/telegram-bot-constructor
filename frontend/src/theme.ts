@@ -344,7 +344,7 @@ const styles = {
         bg: 'gray.400',
       },
     },
-    // Animations
+    // Animations - Stripe-level
     '@keyframes fadeInUp': {
       from: {
         opacity: 0,
@@ -381,6 +381,38 @@ const styles = {
       to: {
         opacity: 1,
         transform: 'scale(1)',
+      },
+    },
+    '@keyframes gradientShift': {
+      '0%, 100%': {
+        backgroundPosition: '0% 50%',
+      },
+      '50%': {
+        backgroundPosition: '100% 50%',
+      },
+    },
+    '@keyframes float': {
+      '0%, 100%': {
+        transform: 'translateY(0px)',
+      },
+      '50%': {
+        transform: 'translateY(-20px)',
+      },
+    },
+    '@keyframes pulse': {
+      '0%, 100%': {
+        opacity: 1,
+      },
+      '50%': {
+        opacity: 0.5,
+      },
+    },
+    '@keyframes shimmer': {
+      '0%': {
+        backgroundPosition: '-1000px 0',
+      },
+      '100%': {
+        backgroundPosition: '1000px 0',
       },
     },
   },

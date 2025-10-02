@@ -12,6 +12,10 @@ WORKDIR /app
 COPY frontend/package*.json ./frontend/
 RUN cd frontend && npm ci
 
+# Force rebuild with timestamp (invalidates Docker cache)
+ARG FRONTEND_BUILD_DATE=2025-10-02
+ENV FRONTEND_BUILD_DATE=${FRONTEND_BUILD_DATE}
+
 COPY frontend/ ./frontend/
 RUN cd frontend && npm run build
 

@@ -49,7 +49,7 @@ import {
 } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { AddIcon, DeleteIcon, CheckIcon, EditIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, EditIcon } from '@chakra-ui/icons';
 import { 
   FiArrowLeft, 
   FiSettings, 
@@ -61,7 +61,6 @@ import {
   FiBarChart2, 
   FiEye,
   FiCpu,
-  FiCheck,
   FiRefreshCw,
   FiSend
 } from 'react-icons/fi';
@@ -564,7 +563,12 @@ const BotBuilderPage: React.FC = () => {
                 isLoading={isDeploying}
                 loadingText={isEditing ? "Обновляем..." : "Запускаем..."}
                 size="lg"
-                fontWeight="semibold"
+                h="56px"
+                px={8}
+                fontWeight="bold"
+                borderRadius="xl"
+                _hover={{ transform: 'translateY(-2px)', shadow: 'xl' }}
+                transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               >
                 {isEditing ? 'Обновить бота' : 'Запустить бота'}
               </Button>

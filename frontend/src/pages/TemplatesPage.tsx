@@ -3,7 +3,6 @@ import {
   Box,
   Card,
   CardBody,
-  CardHeader,
   Heading,
   Text,
   VStack,
@@ -25,10 +24,9 @@ import {
   AlertIcon,
   Flex,
   Stack,
-  Image,
   useBreakpointValue
 } from '@chakra-ui/react';
-import { FiClock, FiUsers, FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiSettings, FiZap, FiCheck, FiArrowRight, FiCalendar, FiActivity } from 'react-icons/fi';
+import { FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiCheck, FiArrowRight, FiCalendar, FiActivity, FiSettings, FiClock, FiUsers, FiZap } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
@@ -54,7 +52,6 @@ const TemplatesPage: React.FC = () => {
 
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const columns = useBreakpointValue({ base: 1, md: 2, lg: 3 });
   const bgGradient = useColorModeValue(
     'linear(to-br, purple.50, blue.50)',
     'linear(to-br, gray.900, gray.800)'
@@ -165,31 +162,34 @@ const TemplatesPage: React.FC = () => {
       </Helmet>
 
       {/* Hero Section */}
-      <Box bgGradient={bgGradient} py={16} px={4}>
+      <Box bgGradient={bgGradient} py={{ base: 16, md: 20 }} px={4}>
         <Container maxW="container.xl">
-          <VStack spacing={6} textAlign="center">
+          <VStack spacing={8} textAlign="center">
             <Badge 
               colorScheme="purple" 
               fontSize="sm" 
-              px={3} 
-              py={1} 
+              px={4} 
+              py={2} 
               borderRadius="full"
               textTransform="uppercase"
               letterSpacing="wide"
+              fontWeight="semibold"
             >
               Готовые решения
             </Badge>
             <Heading 
-              size="2xl" 
-              fontWeight="bold"
+              fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+              fontWeight="extrabold"
               bgGradient="linear(to-r, purple.600, blue.600)"
               bgClip="text"
+              lineHeight="1.1"
+              letterSpacing="tight"
             >
               Шаблоны Telegram ботов
             </Heading>
             <Text 
               color="gray.600" 
-              fontSize="xl" 
+              fontSize={{ base: 'lg', md: 'xl' }}
               maxW="2xl"
               lineHeight="tall"
             >
@@ -199,11 +199,15 @@ const TemplatesPage: React.FC = () => {
             <HStack spacing={4} pt={4}>
               <Button
                 size="lg"
+                h="56px"
+                px={8}
                 colorScheme="purple"
                 rightIcon={<FiArrowRight />}
                 onClick={() => navigate('/bots/new')}
-                _hover={{ transform: 'translateY(-2px)', shadow: 'lg' }}
-                transition="all 0.2s"
+                _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+                transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                borderRadius="xl"
+                fontWeight="bold"
               >
                 Создать с нуля
               </Button>
@@ -245,10 +249,11 @@ const TemplatesPage: React.FC = () => {
                       overflow="hidden"
                       position="relative"
                       cursor="pointer"
+                      boxShadow="md"
                       onClick={() => handleUseTemplate(template)}
                       _hover={{ 
                         transform: 'translateY(-8px)', 
-                        shadow: '2xl',
+                        shadow: '0 25px 50px rgba(0,0,0,0.15)',
                         borderColor: 'purple.400'
                       }}
                       transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"

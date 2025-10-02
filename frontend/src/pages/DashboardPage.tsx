@@ -18,15 +18,12 @@ import {
   Icon,
   useColorModeValue,
   Container,
-  Flex,
-  Stack,
-  Avatar,
-  Progress
+  Flex
 } from '@chakra-ui/react';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
-import { AddIcon, ViewIcon, SettingsIcon, InfoIcon, ChevronRightIcon } from '@chakra-ui/icons';
-import { FiTarget, FiZap, FiShield, FiTrendingUp, FiUsers, FiMessageSquare, FiActivity, FiArrowRight } from 'react-icons/fi';
+import { AddIcon, ViewIcon, SettingsIcon, InfoIcon } from '@chakra-ui/icons';
+import { FiTarget, FiZap, FiShield, FiActivity } from 'react-icons/fi';
 import { DashboardStatsSkeleton } from '../components/UI/SkeletonLoader';
 
 const DashboardPage: React.FC = () => {
@@ -101,10 +98,12 @@ const DashboardPage: React.FC = () => {
         <title>Панель управления - Telegram Bot Constructor</title>
       </Helmet>
 
-      {/* Hero Section */}
+      {/* Hero Section - Stripe Style */}
       <Box 
-        bgGradient="linear(135deg, purple.600 0%, blue.500 100%)"
-        py={16}
+        bgGradient="linear(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%)"
+        bgSize="200% 200%"
+        animation="gradientShift 15s ease infinite"
+        py={{ base: 16, md: 24 }}
         px={4}
         position="relative"
         overflow="hidden"
@@ -112,64 +111,104 @@ const DashboardPage: React.FC = () => {
           content: '""',
           position: 'absolute',
           inset: 0,
-          bgImage: 'radial-gradient(circle at 30% 40%, rgba(255,255,255,0.1) 0%, transparent 50%)',
+          bgImage: 'radial-gradient(circle at 20% 30%, rgba(255,255,255,0.15) 0%, transparent 60%), radial-gradient(circle at 80% 70%, rgba(255,255,255,0.1) 0%, transparent 60%)',
           pointerEvents: 'none'
         }}
       >
         <Container maxW="container.xl" position="relative" zIndex={1}>
-          <VStack spacing={6} align="start" color="white">
-            <Badge 
-              colorScheme="whiteAlpha" 
-              fontSize="sm" 
-              px={3} 
-              py={1} 
-              borderRadius="full"
-              bg="whiteAlpha.300"
-            >
-              Панель управления
-            </Badge>
-            <Heading 
-              size="2xl" 
-              fontWeight="bold"
-              maxW="3xl"
-            >
-              Добро пожаловать 👋
-            </Heading>
-            <Text fontSize="xl" maxW="2xl" color="whiteAlpha.900">
-              Создавайте и управляйте Telegram ботами без программирования.
-              Готово к запуску за несколько минут.
-            </Text>
-            <HStack spacing={4} pt={4}>
-              <Button
-                size="lg"
-                bg="white"
-                color="purple.600"
-                _hover={{ bg: 'whiteAlpha.900', transform: 'translateY(-2px)', shadow: 'xl' }}
-                rightIcon={<AddIcon />}
-                onClick={handleCreateBot}
-                fontWeight="bold"
-                borderRadius="xl"
-                px={8}
-                transition="all 0.2s"
-              >
-                Создать бота
-              </Button>
-              <Button
-                size="lg"
-                variant="outline"
-                borderColor="whiteAlpha.400"
-                color="white"
-                _hover={{ bg: 'whiteAlpha.200', borderColor: 'white' }}
-                rightIcon={<ViewIcon />}
-                onClick={() => navigate('/bots')}
+          <Flex 
+            direction={{ base: 'column', md: 'row' }} 
+            align="center" 
+            justify="space-between"
+            gap={12}
+          >
+            <VStack spacing={8} align="start" color="white" flex={1} maxW={{ base: 'full', md: '600px' }}>
+              <Badge 
+                fontSize="sm" 
+                px={4} 
+                py={2} 
+                borderRadius="full"
+                bg="whiteAlpha.300"
+                backdropFilter="blur(10px)"
                 fontWeight="semibold"
-                borderRadius="xl"
-                px={8}
+                textTransform="none"
               >
-                Мои боты
-              </Button>
-            </HStack>
-          </VStack>
+                Production v1.0
+              </Badge>
+              <Heading 
+                fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
+                fontWeight="extrabold"
+                maxW="full"
+                lineHeight="1.1"
+                letterSpacing="tight"
+              >
+                Создавайте ботов
+                <br />
+                без кода
+              </Heading>
+              <Text fontSize={{ base: 'lg', md: 'xl' }} maxW="2xl" color="whiteAlpha.900" lineHeight="tall">
+                Готовые шаблоны, автоматический деплой и полное управление. 
+                Запустите первого бота за 5 минут.
+              </Text>
+              <HStack spacing={4} pt={2}>
+                <Button
+                  size="lg"
+                  h="56px"
+                  px={8}
+                  bg="white"
+                  color="purple.600"
+                  _hover={{ 
+                    bg: 'whiteAlpha.900', 
+                    transform: 'translateY(-4px)', 
+                    shadow: '0 20px 40px rgba(0,0,0,0.2)' 
+                  }}
+                  rightIcon={<AddIcon />}
+                  onClick={handleCreateBot}
+                  fontWeight="bold"
+                  borderRadius="xl"
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  fontSize="md"
+                >
+                  Создать бота
+                </Button>
+                <Button
+                  size="lg"
+                  h="56px"
+                  px={8}
+                  variant="outline"
+                  borderColor="whiteAlpha.500"
+                  borderWidth="2px"
+                  color="white"
+                  _hover={{ 
+                    bg: 'whiteAlpha.200', 
+                    borderColor: 'white',
+                    transform: 'translateY(-2px)'
+                  }}
+                  rightIcon={<ViewIcon />}
+                  onClick={() => navigate('/bots')}
+                  fontWeight="semibold"
+                  borderRadius="xl"
+                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+                  fontSize="md"
+                >
+                  Мои боты
+                </Button>
+              </HStack>
+            </VStack>
+
+            {/* Floating Icon */}
+            <Box 
+              display={{ base: 'none', md: 'block' }}
+              animation="float 6s ease-in-out infinite"
+              opacity={0.9}
+            >
+              <Icon 
+                as={FiActivity} 
+                boxSize="200px" 
+                color="whiteAlpha.300"
+              />
+            </Box>
+          </Flex>
         </Container>
       </Box>
 
@@ -187,26 +226,32 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               borderRadius="2xl"
               overflow="hidden"
-              transition="all 0.3s"
-              _hover={{ transform: 'translateY(-4px)', shadow: 'xl', borderColor: 'purple.400' }}
+              boxShadow="md"
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+              _hover={{ 
+                transform: 'translateY(-6px)', 
+                shadow: '0 20px 40px rgba(0,0,0,0.12)', 
+                borderColor: 'purple.400' 
+              }}
               cursor="pointer"
               onClick={() => navigate('/bots')}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
                   <Flex
-                    w={12}
-                    h={12}
+                    w={14}
+                    h={14}
                     borderRadius="xl"
                     bgGradient="linear(to-br, purple.400, purple.600)"
                     align="center"
                     justify="center"
+                    boxShadow="0 8px 16px rgba(103, 58, 183, 0.3)"
                   >
-                    <Icon as={FiActivity} boxSize={6} color="white" />
+                    <Icon as={FiActivity} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Всего ботов</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalBots}</StatNumber>
+                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Всего ботов</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="extrabold">{stats.totalBots}</StatNumber>
                   </Stat>
                 </HStack>
               </CardBody>
@@ -218,24 +263,30 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               borderRadius="2xl"
               overflow="hidden"
-              transition="all 0.3s"
-              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+              boxShadow="md"
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+              _hover={{ 
+                transform: 'translateY(-6px)', 
+                shadow: '0 20px 40px rgba(0,0,0,0.12)',
+                borderColor: 'green.400'
+              }}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
                   <Flex
-                    w={12}
-                    h={12}
+                    w={14}
+                    h={14}
                     borderRadius="xl"
                     bgGradient="linear(to-br, green.400, green.600)"
                     align="center"
                     justify="center"
+                    boxShadow="0 8px 16px rgba(72, 187, 120, 0.3)"
                   >
-                    <Icon as={FiZap} boxSize={6} color="white" />
+                    <Icon as={FiZap} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Активных</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold" color="green.500">{stats.activeBots}</StatNumber>
+                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Активных</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="extrabold" color="green.500">{stats.activeBots}</StatNumber>
                   </Stat>
                 </HStack>
               </CardBody>
@@ -247,24 +298,30 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               borderRadius="2xl"
               overflow="hidden"
-              transition="all 0.3s"
-              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+              boxShadow="md"
+              transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
+              _hover={{ 
+                transform: 'translateY(-6px)', 
+                shadow: '0 20px 40px rgba(0,0,0,0.12)',
+                borderColor: 'red.400'
+              }}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
                   <Flex
-                    w={12}
-                    h={12}
+                    w={14}
+                    h={14}
                     borderRadius="xl"
                     bgGradient="linear(to-br, red.400, red.600)"
                     align="center"
                     justify="center"
+                    boxShadow="0 8px 16px rgba(245, 101, 101, 0.3)"
                   >
-                    <Icon as={FiShield} boxSize={6} color="white" />
+                    <Icon as={FiShield} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Остановлено</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold" color="red.500">{stats.stoppedBots}</StatNumber>
+                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Остановлено</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="extrabold" color="red.500">{stats.stoppedBots}</StatNumber>
                   </Stat>
                 </HStack>
               </CardBody>

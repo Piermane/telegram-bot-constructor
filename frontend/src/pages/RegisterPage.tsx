@@ -80,43 +80,57 @@ const RegisterPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bgGradient="linear(to-br, blue.50, purple.50)"
-        position="relative"
-        _before={{
-          content: '""',
-          position: 'absolute',
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          bgImage: 'radial-gradient(circle at 20% 50%, rgba(120, 119, 198, 0.1), transparent 50%), radial-gradient(circle at 80% 80%, rgba(99, 102, 241, 0.1), transparent 50%)',
-          pointerEvents: 'none'
-        }}
+        bg={useColorModeValue('gray.50', 'gray.900')}
         p={4}
       >
         <Box maxW="md" w="full">
-          <VStack spacing={8} align="center">
+          <VStack spacing={8} align="stretch">
             {/* Logo */}
-            <VStack spacing={2}>
-              <Text fontSize="4xl">🤖</Text>
-              <Heading size="lg" textAlign="center">
-                TelegramBot Constructor
+            <VStack spacing={3} textAlign="center">
+              <Box
+                bgGradient="linear(to-br, blue.500, purple.600)"
+                borderRadius="xl"
+                p={4}
+                display="inline-flex"
+                boxShadow="lg"
+              >
+                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
+                  <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+              </Box>
+              <Heading 
+                size="xl" 
+                fontWeight="bold"
+                bgGradient="linear(to-r, blue.600, purple.600)"
+                bgClip="text"
+                letterSpacing="tight"
+              >
+                Bot Constructor
               </Heading>
-              <Text color="gray.600" textAlign="center">
+              <Text color="gray.600" fontSize="md">
                 Создайте аккаунт
               </Text>
             </VStack>
 
             {/* Register Form */}
-            <Card bg={cardBg} w="full" shadow="lg">
+            <Card 
+              bg={cardBg} 
+              w="full" 
+              boxShadow="xl"
+              borderRadius="2xl"
+              borderWidth="1px"
+              borderColor={useColorModeValue('gray.200', 'gray.700')}
+            >
               <CardBody p={8}>
                 <VStack spacing={6}>
-                  <Heading size="md" textAlign="center">
+                  <Heading size="md" fontWeight="semibold">
                     Регистрация
                   </Heading>
 
                   {error && (
-                    <Alert status="error" borderRadius="md">
+                    <Alert status="error" borderRadius="lg">
                       <AlertIcon />
                       {error}
                     </Alert>
@@ -127,74 +141,93 @@ const RegisterPage: React.FC = () => {
                     onSubmit={handleSubmit}
                     w="full"
                   >
-                    <VStack spacing={4}>
+                    <VStack spacing={5}>
                       <HStack spacing={4} w="full">
                         <FormControl>
-                          <FormLabel>Имя</FormLabel>
+                          <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Имя</FormLabel>
                           <Input
                             name="firstName"
                             value={formData.firstName}
                             onChange={handleChange}
                             placeholder="Иван"
+                            size="lg"
+                            borderRadius="lg"
+                            _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
                             required
                           />
                         </FormControl>
 
                         <FormControl>
-                          <FormLabel>Фамилия</FormLabel>
+                          <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Фамилия</FormLabel>
                           <Input
                             name="lastName"
                             value={formData.lastName}
                             onChange={handleChange}
                             placeholder="Иванов"
+                            size="lg"
+                            borderRadius="lg"
+                            _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
                             required
                           />
                         </FormControl>
                       </HStack>
 
                       <FormControl>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Email</FormLabel>
                         <Input
                           name="email"
                           type="email"
                           value={formData.email}
                           onChange={handleChange}
                           placeholder="your@email.com"
+                          size="lg"
+                          borderRadius="lg"
+                          _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
                           required
                         />
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel>Пароль</FormLabel>
+                        <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Пароль</FormLabel>
                         <Input
                           name="password"
                           type="password"
                           value={formData.password}
                           onChange={handleChange}
-                          placeholder="Минимум 6 символов"
+                          placeholder="••••••••"
+                          size="lg"
+                          borderRadius="lg"
+                          _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
                           required
                         />
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel>Подтвердите пароль</FormLabel>
+                        <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Подтвердите пароль</FormLabel>
                         <Input
                           name="confirmPassword"
                           type="password"
                           value={formData.confirmPassword}
                           onChange={handleChange}
-                          placeholder="Повторите пароль"
+                          placeholder="••••••••"
+                          size="lg"
+                          borderRadius="lg"
+                          _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
                           required
                         />
                       </FormControl>
 
                       <Button
                         type="submit"
-                        colorScheme="brand"
+                        colorScheme="purple"
                         size="lg"
                         w="full"
                         isLoading={isLoading}
                         loadingText="Регистрация..."
+                        borderRadius="lg"
+                        fontWeight="semibold"
+                        _hover={{ transform: 'translateY(-1px)', boxShadow: 'lg' }}
+                        transition="all 0.2s"
                       >
                         Зарегистрироваться
                       </Button>
@@ -203,7 +236,7 @@ const RegisterPage: React.FC = () => {
 
                   <Text fontSize="sm" color="gray.600" textAlign="center">
                     Уже есть аккаунт?{' '}
-                    <Link as={RouterLink} to="/login" color="brand.500">
+                    <Link as={RouterLink} to="/login" color="purple.600" fontWeight="medium" _hover={{ color: 'purple.700' }}>
                       Войти
                     </Link>
                   </Text>

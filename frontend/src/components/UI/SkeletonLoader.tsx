@@ -230,13 +230,3 @@ export const BotBuilderSkeleton: React.FC = () => {
   );
 };
 
-export default {
-  BotCardSkeleton,
-  StatCardSkeleton,
-  BotListSkeleton,
-  DashboardStatsSkeleton,
-  TableSkeleton,
-  AnalyticsSkeleton,
-  BotBuilderSkeleton,
-};
-
