@@ -318,8 +318,48 @@ const styles = {
     'html, body': {
       fontFamily: 'body',
       color: 'gray.800',
-      // bg убран - градиент в index.html!
+      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 40%, #ff6b9d 60%, #ffc65c 80%, #f6d365 100%)',
+      backgroundSize: '400% 400%',
+      backgroundAttachment: 'fixed',
+      animation: 'stripeGradientFlow 20s ease infinite',
       lineHeight: 'base',
+      minHeight: '100vh',
+      position: 'relative',
+      overflow: 'hidden',
+    },
+    '#root': {
+      position: 'relative',
+      zIndex: 1,
+      background: 'transparent',
+    },
+    // Blob эффекты через CSS
+    'body::before': {
+      content: '""',
+      position: 'fixed',
+      top: '-50%',
+      left: '-50%',
+      width: '200%',
+      height: '200%',
+      background: 'radial-gradient(circle at 20% 30%, rgba(102, 126, 234, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(255, 107, 157, 0.4) 0%, transparent 50%), radial-gradient(circle at 40% 80%, rgba(240, 147, 251, 0.3) 0%, transparent 50%)',
+      animation: 'blobFloat 15s ease-in-out infinite',
+      zIndex: -2,
+      filter: 'blur(80px)',
+      opacity: 0.7,
+      pointerEvents: 'none',
+    },
+    'body::after': {
+      content: '""',
+      position: 'fixed',
+      top: '-30%',
+      left: '-30%',
+      width: '160%',
+      height: '160%',
+      background: 'radial-gradient(circle at 60% 40%, rgba(118, 75, 162, 0.3) 0%, transparent 50%), radial-gradient(circle at 30% 60%, rgba(255, 198, 92, 0.3) 0%, transparent 50%)',
+      animation: 'blobFloat2 18s ease-in-out infinite reverse',
+      zIndex: -1,
+      filter: 'blur(60px)',
+      opacity: 0.6,
+      pointerEvents: 'none',
     },
     '*::placeholder': {
       color: 'gray.400',
@@ -430,6 +470,29 @@ const styles = {
       },
       '100%': {
         backgroundPosition: '1000px 0',
+      },
+    },
+    // Blob animations для mesh gradient
+    '@keyframes blobFloat': {
+      '0%, 100%': {
+        transform: 'translate(0%, 0%) rotate(0deg) scale(1)',
+      },
+      '33%': {
+        transform: 'translate(5%, -5%) rotate(120deg) scale(1.1)',
+      },
+      '66%': {
+        transform: 'translate(-5%, 5%) rotate(240deg) scale(0.9)',
+      },
+    },
+    '@keyframes blobFloat2': {
+      '0%, 100%': {
+        transform: 'translate(0%, 0%) rotate(0deg) scale(1)',
+      },
+      '33%': {
+        transform: 'translate(-3%, 4%) rotate(-90deg) scale(1.05)',
+      },
+      '66%': {
+        transform: 'translate(4%, -3%) rotate(-180deg) scale(0.95)',
       },
     },
   },

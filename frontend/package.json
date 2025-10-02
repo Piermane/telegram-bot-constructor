@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot-constructor-frontend",
-  "version": "4.0.0",
-  "description": "TelegramBot Constructor",
+  "version": "4.1.0",
+  "description": "TelegramBot Constructor - GRADIENT IN THEME",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
