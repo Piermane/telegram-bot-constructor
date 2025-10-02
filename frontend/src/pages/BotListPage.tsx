@@ -80,31 +80,65 @@ const BotListPage: React.FC = () => {
     }
   };
 
-  const handleStopBot = async (botId: string) => {
+  const handleStartBot = async (botId: string) => {
     setActionLoading(botId);
     try {
-      const response = await fetch(`/api/deploy/stop/${botId}`, {
-        method: 'DELETE'
-      });
-      const data = await response.json();
+      console.log('[BotList] ▶️ Starting bot:', botId);
+      const response = await axios.post(`/api/deploy/start/${botId}`);
       
-      if (data.success) {
+      if (response.data.success) {
         toast({
-          title: 'Бот остановлен',
-          description: data.message,
+          title: 'Бот запущен',
+          description: response.data.message,
           status: 'success',
           duration: 3000,
         });
-        loadBots(); // Перезагружаем список
+        loadBots();
       } else {
         toast({
-          title: 'Ошибка остановки бота',
-          description: data.message || 'Неизвестная ошибка',
+          title: 'Ошибка запуска бота',
+          description: response.data.message || 'Неизвестная ошибка',
           status: 'error',
           duration: 5000,
         });
       }
     } catch (err) {
+      console.error('[BotList] ❌ Start error:', err);
+      toast({
+        title: 'Ошибка',
+        description: 'Не удалось запустить бота',
+        status: 'error',
+        duration: 5000,
+      });
+    } finally {
+      setActionLoading(null);
+    }
+  };
+
+  const handleStopBot = async (botId: string) => {
+    setActionLoading(botId);
+    try {
+      console.log('[BotList] ⏸️ Stopping bot:', botId);
+      const response = await axios.delete(`/api/deploy/stop/${botId}`);
+      
+      if (response.data.success) {
+        toast({
+          title: 'Бот остановлен',
+          description: response.data.message,
+          status: 'success',
+          duration: 3000,
+        });
+        loadBots();
+      } else {
+        toast({
+          title: 'Ошибка остановки бота',
+          description: response.data.message || 'Неизвестная ошибка',
+          status: 'error',
+          duration: 5000,
+        });
+      }
+    } catch (err) {
+      console.error('[BotList] ❌ Stop error:', err);
       toast({
         title: 'Ошибка',
         description: 'Не удалось остановить бота',
@@ -119,26 +153,25 @@ const BotListPage: React.FC = () => {
   const handleDeleteBot = async (botId: string) => {
     setActionLoading(botId);
     try {
-      const response = await fetch(`/api/deploy/delete/${botId}`, {
-        method: 'DELETE'
-      });
-      const data = await response.json();
+      console.log('[BotList] 🗑️ Deleting bot:', botId);
+      const response = await axios.delete(`/api/deploy/delete/${botId}`);
       
-      if (data.success) {
+      if (response.data.success) {
         toast({
           title: 'Бот удален',
-          description: data.message,
+          description: response.data.message,
           status: 'success',
           duration: 3000,
         });
-        loadBots(); // Перезагружаем список
+        loadBots();
       } else {
-        throw new Error(data.message);
+        throw new Error(response.data.message);
       }
     } catch (err) {
+      console.error('[BotList] ❌ Delete error:', err);
       toast({
         title: 'Ошибка',
-        description: err instanceof Error ? err.message : 'Не удалось остановить бота',
+        description: err instanceof Error ? err.message : 'Не удалось удалить бота',
         status: 'error',
         duration: 5000,
       });
@@ -383,12 +416,20 @@ const BotListPage: React.FC = () => {
                           >
                             Аналитика
                           </MenuItem>
-                          {bot.status === 'running' && (
+                          {bot.status === 'running' ? (
                             <MenuItem
                               icon={<Icon as={FiPause} />}
                               onClick={() => handleStopBot(bot.id)}
                             >
                               Остановить
+                            </MenuItem>
+                          ) : (
+                            <MenuItem
+                              icon={<Icon as={FiPlay} />}
+                              onClick={() => handleStartBot(bot.id)}
+                              color="green.500"
+                            >
+                              Запустить
                             </MenuItem>
                           )}
                           <MenuItem

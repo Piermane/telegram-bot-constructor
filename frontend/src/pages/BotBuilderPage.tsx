@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Box,
   Heading,
@@ -450,11 +451,12 @@ const BotBuilderPage: React.FC = () => {
 
   const loadExistingBot = async (botId: string) => {
     try {
-      const response = await fetch(`/api/deploy/${botId}/settings`);
-      const data = await response.json();
+      console.log('[BotBuilder] 🔄 Loading bot settings for:', botId);
+      const response = await axios.get(`/api/deploy/${botId}/settings`);
+      console.log('[BotBuilder] ✅ Got settings:', response.data);
       
-      if (data.success && data.settings) {
-        setBotSettings(data.settings);
+      if (response.data.success && response.data.settings) {
+        setBotSettings(response.data.settings);
       }
     } catch (error) {
       console.error('Ошибка загрузки бота:', error);

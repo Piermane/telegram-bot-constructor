@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import axios from 'axios';
 import {
   Box,
   Heading,
@@ -110,15 +111,17 @@ const BotAnalyticsPage: React.FC = () => {
   const loadAnalytics = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await fetch(`/api/analytics/${botId}`);
-      const data = await response.json();
+      console.log('[Analytics] 🔄 Loading analytics for bot:', botId);
+      const response = await axios.get(`/api/analytics/${botId}`);
+      console.log('[Analytics] ✅ Got data:', response.data);
 
-      if (data.success) {
-        setAnalytics(data.data);
+      if (response.data.success) {
+        setAnalytics(response.data.data);
       } else {
-        throw new Error(data.message);
+        throw new Error(response.data.message);
       }
     } catch (err) {
+      console.error('[Analytics] ❌ Error:', err);
       toast({
         title: 'Ошибка',
         description: 'Не удалось загрузить аналитику',
@@ -136,8 +139,11 @@ const BotAnalyticsPage: React.FC = () => {
 
   const handleExport = async (type: 'users' | 'analytics' | 'webapp' | 'all') => {
     try {
-      const response = await fetch(`/api/analytics/${botId}/export/${type}`);
-      const blob = await response.blob();
+      console.log('[Analytics] 📥 Exporting:', type);
+      const response = await axios.get(`/api/analytics/${botId}/export/${type}`, {
+        responseType: 'blob'
+      });
+      const blob = new Blob([response.data], { type: 'text/csv' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;

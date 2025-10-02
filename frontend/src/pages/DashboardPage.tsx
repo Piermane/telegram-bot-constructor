@@ -17,7 +17,6 @@ import {
   CardBody,
   Badge,
   Icon,
-  useColorModeValue,
   Container,
   Flex
 } from '@chakra-ui/react';
@@ -256,9 +255,10 @@ const DashboardPage: React.FC = () => {
               transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               _hover={{ 
                 transform: 'translateY(-6px)', 
-                shadow: '0 20px 40px rgba(0,0,0,0.12)',
-                borderColor: 'green.400'
+                shadow: '0 20px 40px rgba(0,0,0,0.12)', 
+                borderColor: 'green.400' 
               }}
+              sx={cardStyle}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
@@ -291,9 +291,10 @@ const DashboardPage: React.FC = () => {
               transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
               _hover={{ 
                 transform: 'translateY(-6px)', 
-                shadow: '0 20px 40px rgba(0,0,0,0.12)',
-                borderColor: 'red.400'
+                shadow: '0 20px 40px rgba(0,0,0,0.12)', 
+                borderColor: 'red.400' 
               }}
+              sx={cardStyle}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
@@ -351,7 +352,7 @@ const DashboardPage: React.FC = () => {
           )}
 
           {/* Остальной контент */}
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" borderRadius="2xl">
+          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" borderRadius="2xl" sx={cardStyle}>
             <CardBody>
               <Flex direction={{ base: 'column', lg: 'row' }} align="center" gap={8}>
                 <VStack align="start" spacing={4} flex={1}>
@@ -420,7 +421,7 @@ const DashboardPage: React.FC = () => {
           <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={8}>
             
             {/* Последние боты */}
-            <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
+            <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
               <CardHeader>
                 <HStack justify="space-between">
                   <Heading size="md">Последние боты</Heading>
@@ -458,7 +459,7 @@ const DashboardPage: React.FC = () => {
             </Card>
 
             {/* Возможности платформы */}
-            <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
+            <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
               <CardHeader>
                 <Heading size="md">⚡ Возможности платформы</Heading>
               </CardHeader>
@@ -484,7 +485,7 @@ const DashboardPage: React.FC = () => {
           </SimpleGrid>
 
           {/* Быстрые действия */}
-          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
+          <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
             <CardHeader>
               <Heading size="md">🚀 Быстрые действия</Heading>
             </CardHeader>
