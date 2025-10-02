@@ -176,6 +176,13 @@
         width: 100%;
         height: 100%;
       }
+      
+      /* Performance optimization */
+      .g1, .g2, .g3, .g4, .g5, .interactive {
+        will-change: transform;
+        transform: translateZ(0);
+        backface-visibility: hidden;
+      }
 
       .g1 {
         position: absolute;
@@ -253,9 +260,34 @@
         opacity: 0.7;
       }
 
-      /* Text readability */
-      .chakra-heading, .chakra-text {
-        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.2);
+      /* Text readability - УСИЛЕННАЯ ТЕНЬ */
+      .chakra-heading {
+        text-shadow: 0 2px 8px rgba(0, 0, 0, 0.3), 0 4px 16px rgba(0, 0, 0, 0.2), 0 1px 2px rgba(0, 0, 0, 0.4);
+      }
+      
+      .chakra-text {
+        text-shadow: 0 1px 4px rgba(0, 0, 0, 0.25), 0 2px 8px rgba(0, 0, 0, 0.15);
+      }
+      
+      /* Sidebar & Header text - БЕЛЫЙ ЦВЕТ + ТЕНЬ */
+      #root .chakra-heading,
+      #root .chakra-text,
+      #root button,
+      #root a {
+        color: white !important;
+        text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+      }
+      
+      /* Mobile optimization */
+      @media (max-width: 768px) {
+        .gradient-bg {
+          transform: scale(1.2);
+        }
+        
+        .g1, .g2, .g3, .g4, .g5 {
+          width: calc(var(--circle-size) * 1.5);
+          height: calc(var(--circle-size) * 1.5);
+        }
       }
 
       /* Hide loading screen when React app loads */

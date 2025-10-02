@@ -56,14 +56,14 @@ const Sidebar: React.FC = () => {
       top={0}
       h="100vh"
       w="250px"
-      bg="rgba(255, 255, 255, 0.7)"
-      backdropFilter="blur(20px)"
+      bg="rgba(255, 255, 255, 0.15)"
+      backdropFilter="blur(12px) saturate(180%)"
       borderRight="1px solid"
-      borderRightColor="rgba(255, 255, 255, 0.3)"
+      borderRightColor="rgba(255, 255, 255, 0.2)"
       p={4}
       zIndex={1000}
       display={{ base: 'none', md: 'block' }}
-      boxShadow="0 8px 32px rgba(0, 0, 0, 0.1)"
+      boxShadow="0 8px 32px rgba(0, 0, 0, 0.15)"
     >
       <VStack spacing={6} align="stretch" h="full">
         {/* Logo */}

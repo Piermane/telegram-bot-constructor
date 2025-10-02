@@ -39,15 +39,15 @@ const Header: React.FC = () => {
   return (
     <Box
       h="16"
-      bg="rgba(255, 255, 255, 0.7)"
-      backdropFilter="blur(20px)"
+      bg="rgba(255, 255, 255, 0.15)"
+      backdropFilter="blur(12px) saturate(180%)"
       borderBottom="1px solid"
-      borderBottomColor="rgba(255, 255, 255, 0.3)"
+      borderBottomColor="rgba(255, 255, 255, 0.2)"
       px={6}
       display="flex"
       alignItems="center"
       justifyContent="space-between"
-      boxShadow="0 2px 10px rgba(0, 0, 0, 0.05)"
+      boxShadow="0 2px 10px rgba(0, 0, 0, 0.15)"
     >
       {/* Left side */}
       <Box />
