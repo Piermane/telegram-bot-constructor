@@ -437,17 +437,6 @@ const styles = {
         backgroundPosition: '1000px 0',
       },
     },
-    '@keyframes gradientShift': {
-      '0%': {
-        backgroundPosition: '0% 50%',
-      },
-      '50%': {
-        backgroundPosition: '100% 50%',
-      },
-      '100%': {
-        backgroundPosition: '0% 50%',
-      },
-    },
   },
 };
 
