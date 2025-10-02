@@ -102,7 +102,79 @@
         100% { transform: rotate(360deg); }
       }
       
-      
+      /* Diagonal mesh background like Stripe */
+      .mesh-bg {
+        position: fixed;
+        inset: -20vmax; /* extend to avoid empty edges */
+        z-index: 0;
+        overflow: hidden;
+        transform: rotate(-12deg);
+        transform-origin: center;
+        background: linear-gradient(135deg, #5b77ff 0%, #ff7ac3 100%);
+        background-size: 200% 200%;
+        animation: meshGradient 16s ease-in-out infinite;
+        filter: saturate(115%);
+      }
+
+      .mesh-blob {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(80px);
+        opacity: 0.55;
+        mix-blend-mode: screen;
+      }
+
+      .mesh-blob-1 {
+        width: 55vmax; height: 55vmax;
+        top: -10vmax; left: -8vmax;
+        background: radial-gradient(circle, rgba(99,102,241,0.75) 0%, rgba(99,102,241,0) 70%);
+        animation: blob1 22s ease-in-out infinite;
+      }
+      .mesh-blob-2 {
+        width: 60vmax; height: 60vmax;
+        top: 5vmax; right: -12vmax;
+        background: radial-gradient(circle, rgba(255,122,195,0.7) 0%, rgba(255,122,195,0) 70%);
+        animation: blob2 26s ease-in-out infinite;
+      }
+      .mesh-blob-3 {
+        width: 45vmax; height: 45vmax;
+        bottom: -12vmax; left: 15vmax;
+        background: radial-gradient(circle, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0) 70%);
+        animation: blob3 24s ease-in-out infinite;
+      }
+      .mesh-blob-4 {
+        width: 50vmax; height: 50vmax;
+        bottom: 0; right: 5vmax;
+        background: radial-gradient(circle, rgba(250,204,21,0.6) 0%, rgba(250,204,21,0) 70%);
+        animation: blob4 28s ease-in-out infinite;
+      }
+
+      @keyframes meshGradient {
+        0%, 100% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+      }
+
+      @keyframes blob1 {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33% { transform: translate(5vmax,-4vmax) scale(1.08); }
+        66% { transform: translate(-3vmax,3vmax) scale(0.95); }
+      }
+      @keyframes blob2 {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33% { transform: translate(-6vmax,3vmax) scale(1.1); }
+        66% { transform: translate(4vmax,-3vmax) scale(0.92); }
+      }
+      @keyframes blob3 {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33% { transform: translate(4vmax,2vmax) scale(1.05); }
+        66% { transform: translate(-4vmax,-3vmax) scale(1.12); }
+      }
+      @keyframes blob4 {
+        0%, 100% { transform: translate(0,0) scale(1); }
+        33% { transform: translate(-3vmax,-2vmax) scale(0.98); }
+        66% { transform: translate(3vmax,2vmax) scale(1.07); }
+      }
+
       /* Hide loading screen when React app loads */
       .loaded #loading-screen {
         display: none;
