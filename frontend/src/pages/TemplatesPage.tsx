@@ -23,8 +23,7 @@ import {
   Alert,
   AlertIcon,
   Flex,
-  Stack,
-  useBreakpointValue
+  Stack
 } from '@chakra-ui/react';
 import { FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiCheck, FiArrowRight, FiCalendar, FiActivity, FiSettings, FiClock, FiUsers, FiZap } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
