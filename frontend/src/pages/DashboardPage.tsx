@@ -29,9 +29,13 @@ import { DashboardStatsSkeleton } from '../components/UI/SkeletonLoader';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const statBg = useColorModeValue('gray.50', 'gray.700');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const cardBg = 'rgba(255, 255, 255, 0.8)';
+  const statBg = 'rgba(255, 255, 255, 0.6)';
+  const borderColor = 'rgba(255, 255, 255, 0.3)';
+  const cardStyle = {
+    backdropFilter: 'blur(10px)',
+    WebkitBackdropFilter: 'blur(10px)',
+  };
 
   const [stats, setStats] = useState({
     totalBots: 0,
@@ -219,6 +223,7 @@ const DashboardPage: React.FC = () => {
               }}
               cursor="pointer"
               onClick={() => navigate('/bots')}
+              sx={cardStyle}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>

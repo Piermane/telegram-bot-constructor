@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import {
   Card,
   CardBody,
@@ -62,17 +63,18 @@ const BotListPage: React.FC = () => {
 
   const loadBots = async () => {
     try {
-      const response = await fetch('/api/deploy/list');
-      const data = await response.json();
+      console.log('[BotList] 🔄 Loading bots...');
+      const response = await axios.get('/api/deploy/list');
+      console.log('[BotList] ✅ Got response:', response.data);
       
-      if (data.success) {
-        setBots(data.bots || []);
+      if (response.data.success) {
+        setBots(response.data.bots || []);
       } else {
         setError('Ошибка загрузки ботов');
       }
     } catch (err) {
       setError('Ошибка соединения с сервером');
-      console.error('Ошибка загрузки ботов:', err);
+      console.error('[BotList] ❌ Ошибка загрузки ботов:', err);
     } finally {
       setLoading(false);
     }
