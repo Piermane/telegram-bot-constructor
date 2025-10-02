@@ -65,12 +65,16 @@ pillow==10.1.0`;
           await fs.writeFile(path.join(botDir, 'requirements.txt'), requirements, 'utf-8');
           
           // Регенерируем WebApp
-          await generateWebAppHTML(botSettings, botId);
+          const webAppDir = path.join(botDir, 'webapp');
+          await fs.mkdir(webAppDir, { recursive: true });
+          const webAppHTML = generateWebAppHTML(botSettings, botId);
+          await fs.writeFile(path.join(webAppDir, 'index.html'), webAppHTML);
+          console.log(`📱 WebApp файлы созданы для ${botRecord.name}`);
           
           // Устанавливаем зависимости
           console.log(`📦 Устанавливаем зависимости для ${botRecord.name}...`);
           await new Promise((resolve, reject) => {
-            exec(`cd ${botDir} && pip3 install -r requirements.txt`, (error) => {
+            exec(`cd ${botDir} && pip3 install --break-system-packages -r requirements.txt`, (error) => {
               if (error) {
                 console.error(`⚠️ Ошибка установки зависимостей: ${error.message}`);
                 // Продолжаем даже если не удалось установить (могут быть уже установлены глобально)
@@ -458,7 +462,10 @@ router.put('/:botId/update', authenticate, async (req, res) => {
     // Регенерируем WebApp (если включен)
     if (botSettings.features?.webApp) {
       console.log('📱 Обновляем WebApp...');
-      await generateWebAppHTML(botSettings, botId);
+      const webAppDir = path.join(botInfo.dir, 'webapp');
+      await fs.mkdir(webAppDir, { recursive: true });
+      const webAppHTML = generateWebAppHTML(botSettings, botId);
+      await fs.writeFile(path.join(webAppDir, 'index.html'), webAppHTML);
     }
 
     // Останавливаем старый процесс (если работает)

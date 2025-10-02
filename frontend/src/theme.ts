@@ -318,7 +318,7 @@ const styles = {
     'html, body': {
       fontFamily: 'body',
       color: 'gray.800',
-      bg: 'gray.50',
+      // bg убран - градиент в index.html!
       lineHeight: 'base',
     },
     '*::placeholder': {
