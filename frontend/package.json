@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot-constructor-frontend",
   "version": "2.0.0",
-  "description": "TelegramBot Constructor - Stripe-level Premium UI",
+  "description": "TelegramBot Constructor",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
