@@ -478,29 +478,19 @@ const BotBuilderPage: React.FC = () => {
       
       if (isEditing && id) {
         // Обновление существующего бота
-        response = await fetch(`/api/deploy/${id}/update`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            botSettings: botSettings
-          })
+        console.log('[BotBuilder] 🔄 Updating bot:', id);
+        response = await axios.put(`/api/deploy/${id}/update`, {
+          botSettings: botSettings
         });
       } else {
         // Создание нового бота
-        response = await fetch(`/api/deploy/create`, {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify({
-            botSettings: botSettings
-          })
+        console.log('[BotBuilder] 🚀 Creating bot...');
+        response = await axios.post(`/api/deploy/create`, {
+          botSettings: botSettings
         });
       }
 
-      const result = await response.json();
+      const result = response.data;
       
       if (result.success) {
         setDeployResult(result.bot);

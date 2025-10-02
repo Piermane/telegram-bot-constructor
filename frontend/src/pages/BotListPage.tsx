@@ -427,90 +427,61 @@ const BotListPage: React.FC = () => {
                   </CardHeader>
 
                   <CardBody pt={0}>
-                    <VStack align="start" spacing={4}>
+                    <VStack align="start" spacing={3} w="full">
                       
-                      {/* Статус */}
+                      {/* Статус и инфо */}
                       <HStack w="full" justify="space-between">
-                        <HStack>
-                          {getStatusBadge(bot.status)}
-                          {bot.pid && (
-                            <Text fontSize="xs" color="gray.500">
-                              PID: {bot.pid}
-                            </Text>
-                          )}
-                        </HStack>
-                        
-                        {/* ГЛАВНЫЕ КНОПКИ - ВИДНЫ СРАЗУ! */}
-                        <HStack spacing={2}>
-                          {bot.status === 'running' ? (
-                            <Button
-                              size="sm"
-                              leftIcon={<Icon as={FiPause} />}
-                              colorScheme="red"
-                              variant="outline"
-                              onClick={() => handleStopBot(bot.id)}
-                              isLoading={actionLoading === bot.id}
-                            >
-                              Стоп
-                            </Button>
-                          ) : (
-                            <Button
-                              size="sm"
-                              leftIcon={<Icon as={FiPlay} />}
-                              colorScheme="green"
-                              onClick={() => handleStartBot(bot.id)}
-                              isLoading={actionLoading === bot.id}
-                            >
-                              Пуск
-                            </Button>
-                          )}
-                          <Button
-                            size="sm"
-                            leftIcon={<EditIcon />}
-                            colorScheme="blue"
-                            variant="outline"
-                            onClick={() => navigate(`/bots/edit/${bot.id}`)}
-                          >
-                            Изменить
-                          </Button>
-                        </HStack>
+                        {getStatusBadge(bot.status)}
+                        <Text fontSize="xs" color="gray.500">
+                          {bot.scenes} сценариев
+                        </Text>
                       </HStack>
 
-                      {/* Информация */}
-                      <VStack align="start" spacing={1} fontSize="sm">
-                        <HStack>
-                          <Text color="gray.600">Сценариев:</Text>
-                          <Text fontWeight="bold">{bot.scenes}</Text>
-                        </HStack>
-                        <HStack>
-                          <Text color="gray.600">Запущен:</Text>
-                          <Text>{formatDate(bot.startedAt)}</Text>
-                        </HStack>
-                      </VStack>
+                      {/* Дата запуска */}
+                      <Text fontSize="xs" color="gray.500">
+                        {formatDate(bot.startedAt)}
+                      </Text>
 
-                      {/* Кнопки действий */}
-                      <HStack w="100%" spacing={2}>
+                      {/* ГЛАВНЫЕ КНОПКИ - ОДНА СТРОКА! */}
+                      <SimpleGrid columns={bot.status === 'running' ? 2 : 3} spacing={2} w="full">
+                        {bot.status === 'running' ? (
+                          <Button
+                            size="sm"
+                            colorScheme="red"
+                            onClick={() => handleStopBot(bot.id)}
+                            isLoading={actionLoading === bot.id}
+                          >
+                            Стоп
+                          </Button>
+                        ) : (
+                          <Button
+                            size="sm"
+                            colorScheme="green"
+                            onClick={() => handleStartBot(bot.id)}
+                            isLoading={actionLoading === bot.id}
+                          >
+                            Пуск
+                          </Button>
+                        )}
                         <Button
                           size="sm"
                           colorScheme="blue"
                           variant="outline"
-                          flex={1}
-                          as="a"
-                          href={bot.url}
-                          target="_blank"
-                          leftIcon={<ExternalLinkIcon />}
-                        >
-                          Открыть
-                        </Button>
-                        <IconButton
-                          size="sm"
-                          colorScheme="gray"
-                          variant="outline"
-                          aria-label="Настройки"
-                          icon={<SettingsIcon />}
                           onClick={() => navigate(`/bots/edit/${bot.id}`)}
-                        />
-                      </HStack>
+                        >
+                          Изменить
+                        </Button>
+                        {bot.status !== 'running' && (
+                          <IconButton
+                            size="sm"
+                            colorScheme="gray"
+                            variant="outline"
+                            aria-label="Настройки"
+                            icon={<SettingsIcon />}
+                            onClick={() => navigate(`/bots/edit/${bot.id}`)}
+                          />
+                        )}
+                      </SimpleGrid>
 
                     </VStack>
                   </CardBody>

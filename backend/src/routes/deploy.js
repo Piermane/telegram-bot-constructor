@@ -89,7 +89,7 @@ pillow==10.1.0`;
       
       // Запускаем бота
       console.log(`🤖 Запускаем бота: ${botRecord.name}`);
-      const botProcess = spawn('python3', ['bot.py'], {
+      const botProcess = spawn('/usr/bin/python3', ['bot.py'], {
         cwd: botDir,
         detached: true,
         stdio: ['ignore', 'pipe', 'pipe'],
@@ -244,7 +244,7 @@ router.post('/create', authenticate, async (req, res) => {
 
     // 7. ЗАПУСКАЕМ бота как отдельный процесс
     console.log('🤖 Запускаем бота...');
-    const botProcess = spawn('python3', ['bot.py'], {
+    const botProcess = spawn('/usr/bin/python3', ['bot.py'], {
       cwd: botDir,
       detached: true,
       stdio: ['ignore', 'pipe', 'pipe']
@@ -482,7 +482,7 @@ router.put('/:botId/update', authenticate, async (req, res) => {
     console.log('🚀 Запускаем обновленного бота...');
 
     // Запускаем новый процесс
-    const newBotProcess = spawn('python3', ['bot.py'], {
+    const newBotProcess = spawn('/usr/bin/python3', ['bot.py'], {
       cwd: botInfo.dir,
       detached: true,
       stdio: ['ignore', 'pipe', 'pipe']
@@ -698,7 +698,7 @@ router.post('/start/:botId', authenticate, async (req, res) => {
     console.log('🚀 Запускаем бота:', botRecord.name);
 
     // Запускаем процесс
-    const botProcess = spawn('python3', ['bot.py'], {
+    const botProcess = spawn('/usr/bin/python3', ['bot.py'], {
       cwd: botDir,
       detached: true,
       stdio: ['ignore', 'pipe', 'pipe']

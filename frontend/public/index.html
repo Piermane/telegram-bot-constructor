@@ -102,6 +102,25 @@
         100% { transform: rotate(360deg); }
       }
       
+      /* STRIPE GRADIENT FLOW - ГЛОБАЛЬНАЯ АНИМАЦИЯ! */
+      @keyframes stripeGradientFlow {
+        0% {
+          background-position: 0% 50%;
+        }
+        25% {
+          background-position: 50% 75%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
+        75% {
+          background-position: 50% 25%;
+        }
+        100% {
+          background-position: 0% 50%;
+        }
+      }
+      
       /* Hide loading screen when React app loads */
       .loaded #loading-screen {
         display: none;
