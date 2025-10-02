@@ -102,77 +102,126 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* Diagonal mesh background like Stripe */
+      /* STRIPE ANIMATED MESH GRADIENT - DIAGONAL */
       .mesh-bg {
         position: fixed;
-        inset: -20vmax; /* extend to avoid empty edges */
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
         z-index: 0;
         overflow: hidden;
-        transform: rotate(-12deg);
-        transform-origin: center;
-        background: linear-gradient(135deg, #5b77ff 0%, #ff7ac3 100%);
-        background-size: 200% 200%;
-        animation: meshGradient 16s ease-in-out infinite;
-        filter: saturate(115%);
+        transform: rotate(-15deg);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #00f2fe 100%);
+        background-size: 400% 400%;
+        animation: gradientFlow 18s ease infinite;
       }
 
       .mesh-blob {
         position: absolute;
         border-radius: 50%;
-        filter: blur(80px);
-        opacity: 0.55;
-        mix-blend-mode: screen;
+        filter: blur(120px);
+        opacity: 0.7;
+        mix-blend-mode: overlay;
+        will-change: transform;
       }
 
       .mesh-blob-1 {
-        width: 55vmax; height: 55vmax;
-        top: -10vmax; left: -8vmax;
-        background: radial-gradient(circle, rgba(99,102,241,0.75) 0%, rgba(99,102,241,0) 70%);
-        animation: blob1 22s ease-in-out infinite;
+        width: 800px;
+        height: 800px;
+        top: -200px;
+        left: -200px;
+        background: radial-gradient(circle at center, rgba(102, 126, 234, 0.8) 0%, transparent 70%);
+        animation: float1 25s ease-in-out infinite;
       }
+
       .mesh-blob-2 {
-        width: 60vmax; height: 60vmax;
-        top: 5vmax; right: -12vmax;
-        background: radial-gradient(circle, rgba(255,122,195,0.7) 0%, rgba(255,122,195,0) 70%);
-        animation: blob2 26s ease-in-out infinite;
+        width: 900px;
+        height: 900px;
+        top: 10%;
+        right: -15%;
+        background: radial-gradient(circle at center, rgba(240, 147, 251, 0.8) 0%, transparent 70%);
+        animation: float2 30s ease-in-out infinite reverse;
       }
+
       .mesh-blob-3 {
-        width: 45vmax; height: 45vmax;
-        bottom: -12vmax; left: 15vmax;
-        background: radial-gradient(circle, rgba(56,189,248,0.7) 0%, rgba(56,189,248,0) 70%);
-        animation: blob3 24s ease-in-out infinite;
+        width: 700px;
+        height: 700px;
+        bottom: -10%;
+        left: 20%;
+        background: radial-gradient(circle at center, rgba(79, 172, 254, 0.8) 0%, transparent 70%);
+        animation: float3 28s ease-in-out infinite;
       }
+
       .mesh-blob-4 {
-        width: 50vmax; height: 50vmax;
-        bottom: 0; right: 5vmax;
-        background: radial-gradient(circle, rgba(250,204,21,0.6) 0%, rgba(250,204,21,0) 70%);
-        animation: blob4 28s ease-in-out infinite;
+        width: 750px;
+        height: 750px;
+        bottom: 5%;
+        right: 10%;
+        background: radial-gradient(circle at center, rgba(118, 75, 162, 0.7) 0%, transparent 70%);
+        animation: float4 32s ease-in-out infinite reverse;
       }
 
-      @keyframes meshGradient {
-        0%, 100% { background-position: 0% 50%; }
-        50% { background-position: 100% 50%; }
+      @keyframes gradientFlow {
+        0%, 100% {
+          background-position: 0% 50%;
+        }
+        50% {
+          background-position: 100% 50%;
+        }
       }
 
-      @keyframes blob1 {
-        0%, 100% { transform: translate(0,0) scale(1); }
-        33% { transform: translate(5vmax,-4vmax) scale(1.08); }
-        66% { transform: translate(-3vmax,3vmax) scale(0.95); }
+      @keyframes float1 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        33% {
+          transform: translate(30px, -50px) scale(1.1) rotate(120deg);
+        }
+        66% {
+          transform: translate(-30px, 30px) scale(0.9) rotate(240deg);
+        }
       }
-      @keyframes blob2 {
-        0%, 100% { transform: translate(0,0) scale(1); }
-        33% { transform: translate(-6vmax,3vmax) scale(1.1); }
-        66% { transform: translate(4vmax,-3vmax) scale(0.92); }
+
+      @keyframes float2 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        33% {
+          transform: translate(-50px, 40px) scale(1.15) rotate(-90deg);
+        }
+        66% {
+          transform: translate(40px, -40px) scale(0.95) rotate(-180deg);
+        }
       }
-      @keyframes blob3 {
-        0%, 100% { transform: translate(0,0) scale(1); }
-        33% { transform: translate(4vmax,2vmax) scale(1.05); }
-        66% { transform: translate(-4vmax,-3vmax) scale(1.12); }
+
+      @keyframes float3 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        33% {
+          transform: translate(60px, 30px) scale(1.05) rotate(160deg);
+        }
+        66% {
+          transform: translate(-40px, -50px) scale(1.12) rotate(320deg);
+        }
       }
-      @keyframes blob4 {
-        0%, 100% { transform: translate(0,0) scale(1); }
-        33% { transform: translate(-3vmax,-2vmax) scale(0.98); }
-        66% { transform: translate(3vmax,2vmax) scale(1.07); }
+
+      @keyframes float4 {
+        0%, 100% {
+          transform: translate(0, 0) scale(1) rotate(0deg);
+        }
+        33% {
+          transform: translate(-45px, -35px) scale(0.92) rotate(-120deg);
+        }
+        66% {
+          transform: translate(35px, 45px) scale(1.08) rotate(-240deg);
+        }
+      }
+
+      /* Text readability on gradient */
+      .chakra-heading, .chakra-text {
+        text-shadow: 0 2px 20px rgba(0, 0, 0, 0.15);
       }
 
       /* Hide loading screen when React app loads */
