@@ -49,8 +49,16 @@ const TemplatesPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const cardBg = 'rgba(255, 255, 255, 0.12)';
+  const borderColor = 'rgba(255, 255, 255, 0.25)';
+  const cardStyle = {
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: 'white',
+  };
 
   const categories = [
     { id: 'all', name: 'Все шаблоны', icon: FiSettings },
@@ -277,12 +285,11 @@ const TemplatesPage: React.FC = () => {
                       overflow="hidden"
                       position="relative"
                       cursor="pointer"
-                      boxShadow="md"
                       onClick={() => handleUseTemplate(template)}
                       _hover={{ 
                         transform: 'translateY(-8px)', 
-                        shadow: '0 25px 50px rgba(0,0,0,0.15)',
-                        borderColor: 'purple.400'
+                        shadow: '0 25px 50px rgba(0,0,0,0.2)',
+                        borderColor: 'purple.300'
                       }}
                       transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
                       _before={{
@@ -310,6 +317,7 @@ const TemplatesPage: React.FC = () => {
                         transition: 'opacity 0.3s'
                       }}
                       sx={{
+                        ...cardStyle,
                         '&:hover::before': { opacity: 1 },
                         '&:hover::after': { opacity: 0.5 },
                         animation: `fadeInUp 0.6s ease-out ${index * 0.1}s both`
@@ -358,7 +366,7 @@ const TemplatesPage: React.FC = () => {
                               <Icon as={getCategoryIcon(template.category)} boxSize={6} />
                             </Flex>
                             <VStack align="start" spacing={1} flex={1}>
-                              <Heading size="md" fontWeight="bold">
+                              <Heading size="md" fontWeight="bold" color="white">
                                 {template.name.replace(/[🎪🍕🏥📱💪🤖]/g, '').trim()}
                               </Heading>
                               <Badge 
@@ -373,7 +381,7 @@ const TemplatesPage: React.FC = () => {
 
                           {/* Описание */}
                           <Text 
-                            color="gray.600" 
+                            color="whiteAlpha.800" 
                             fontSize="sm"
                             lineHeight="tall"
                             noOfLines={2}

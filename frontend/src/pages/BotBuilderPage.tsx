@@ -282,8 +282,16 @@ const BotBuilderPage: React.FC = () => {
   const [newButton, setNewButton] = useState<BotButton>({ text: '', action: 'message', value: '' });
   const { isOpen: isSceneModalOpen, onOpen: onSceneModalOpen, onClose: onSceneModalClose } = useDisclosure();
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const cardBg = 'rgba(255, 255, 255, 0.12)';
+  const borderColor = 'rgba(255, 255, 255, 0.25)';
+  const cardStyle = {
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: 'white',
+  };
 
   const botTemplates = {
     business: {

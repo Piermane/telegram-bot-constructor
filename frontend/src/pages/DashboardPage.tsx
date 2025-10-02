@@ -28,13 +28,16 @@ import { DashboardStatsSkeleton } from '../components/UI/SkeletonLoader';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const cardBg = 'rgba(255, 255, 255, 0.95)';
-  const statBg = 'rgba(255, 255, 255, 0.9)';
-  const borderColor = 'rgba(0, 0, 0, 0.08)';
+  const cardBg = 'rgba(255, 255, 255, 0.12)';
+  const statBg = 'rgba(255, 255, 255, 0.15)';
+  const borderColor = 'rgba(255, 255, 255, 0.25)';
   const cardStyle = {
-    backdropFilter: 'blur(10px)',
-    WebkitBackdropFilter: 'blur(10px)',
-    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: 'white',
   };
 
   const [stats, setStats] = useState({
@@ -360,10 +363,10 @@ const DashboardPage: React.FC = () => {
             <CardBody>
               <Flex direction={{ base: 'column', lg: 'row' }} align="center" gap={8}>
                 <VStack align="start" spacing={4} flex={1}>
-                  <Heading size="xl" bgGradient="linear(to-r, blue.600, purple.500)" bgClip="text">
+                  <Heading size="xl" color="white">
                     Telegram Bot Constructor
                   </Heading>
-                  <Text fontSize="lg" color="gray.600">
+                  <Text fontSize="lg" color="whiteAlpha.900">
                     Создавайте Telegram ботов быстро и просто.  
                     Готовые шаблоны, автоматический деплой и полное управление.
                   </Text>
@@ -397,28 +400,56 @@ const DashboardPage: React.FC = () => {
 
           {/* Статистика */}
           <SimpleGrid columns={{ base: 2, md: 4 }} spacing={6}>
-            <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Всего ботов</StatLabel>
-              <StatNumber>{stats.totalBots}</StatNumber>
-              <StatHelpText>Созданных ботов</StatHelpText>
+            <Stat 
+              bg={statBg} 
+              p={4} 
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor={borderColor}
+              sx={cardStyle}
+            >
+              <StatLabel color="whiteAlpha.800">Всего ботов</StatLabel>
+              <StatNumber color="white">{stats.totalBots}</StatNumber>
+              <StatHelpText color="whiteAlpha.700">Созданных ботов</StatHelpText>
             </Stat>
             
-            <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Активные боты</StatLabel>
-              <StatNumber color="green.500">{stats.activeBots}</StatNumber>
-              <StatHelpText>Работают сейчас</StatHelpText>
+            <Stat 
+              bg={statBg} 
+              p={4} 
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor={borderColor}
+              sx={cardStyle}
+            >
+              <StatLabel color="whiteAlpha.800">Активные боты</StatLabel>
+              <StatNumber color="green.300">{stats.activeBots}</StatNumber>
+              <StatHelpText color="whiteAlpha.700">Работают сейчас</StatHelpText>
             </Stat>
             
-            <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Остановленные</StatLabel>
-              <StatNumber color="red.500">{stats.stoppedBots}</StatNumber>
-              <StatHelpText>Не активны</StatHelpText>
+            <Stat 
+              bg={statBg} 
+              p={4} 
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor={borderColor}
+              sx={cardStyle}
+            >
+              <StatLabel color="whiteAlpha.800">Остановленные</StatLabel>
+              <StatNumber color="red.300">{stats.stoppedBots}</StatNumber>
+              <StatHelpText color="whiteAlpha.700">Не активны</StatHelpText>
             </Stat>
             
-            <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Шаблоны</StatLabel>
-              <StatNumber>{stats.templatesAvailable}</StatNumber>
-              <StatHelpText>Доступно</StatHelpText>
+            <Stat 
+              bg={statBg} 
+              p={4} 
+              borderRadius="lg"
+              borderWidth="1px"
+              borderColor={borderColor}
+              sx={cardStyle}
+            >
+              <StatLabel color="whiteAlpha.800">Шаблоны</StatLabel>
+              <StatNumber color="white">{stats.templatesAvailable}</StatNumber>
+              <StatHelpText color="whiteAlpha.700">Доступно</StatHelpText>
             </Stat>
           </SimpleGrid>
 
@@ -428,7 +459,7 @@ const DashboardPage: React.FC = () => {
             <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
               <CardHeader>
                 <HStack justify="space-between">
-                  <Heading size="md">Последние боты</Heading>
+                  <Heading size="md" color="white">Последние боты</Heading>
                   <Button size="sm" variant="ghost" as={RouterLink} to="/bots">
                     Все боты
                   </Button>
@@ -437,7 +468,7 @@ const DashboardPage: React.FC = () => {
               <CardBody pt={0}>
                 {recentBots.length === 0 ? (
                   <VStack py={8} spacing={4}>
-                    <Text color="gray.500">У вас пока нет ботов</Text>
+                    <Text color="whiteAlpha.700">У вас пока нет ботов</Text>
                     <Button size="sm" colorScheme="blue" onClick={handleCreateBot}>
                       Создать первого бота
                     </Button>
@@ -465,17 +496,17 @@ const DashboardPage: React.FC = () => {
             {/* Возможности платформы */}
             <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
               <CardHeader>
-                <Heading size="md">⚡ Возможности платформы</Heading>
+                <Heading size="md" color="white">⚡ Возможности платформы</Heading>
               </CardHeader>
               <CardBody pt={0}>
                 <VStack spacing={4} align="stretch">
                   {features.map((feature, index) => (
                     <Box key={index} p={3} bg={statBg} borderRadius="md">
                       <HStack spacing={3}>
-                        <Icon as={feature.icon} color="blue.500" boxSize={5} />
+                        <Icon as={feature.icon} color="white" boxSize={5} />
                         <VStack align="start" spacing={1}>
-                          <Text fontWeight="bold">{feature.title}</Text>
-                          <Text fontSize="sm" color="gray.600">
+                          <Text fontWeight="bold" color="white">{feature.title}</Text>
+                          <Text fontSize="sm" color="whiteAlpha.800">
                             {feature.description}
                           </Text>
                         </VStack>
@@ -491,7 +522,7 @@ const DashboardPage: React.FC = () => {
           {/* Быстрые действия */}
           <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" sx={cardStyle}>
             <CardHeader>
-              <Heading size="md">🚀 Быстрые действия</Heading>
+              <Heading size="md" color="white">🚀 Быстрые действия</Heading>
             </CardHeader>
             <CardBody pt={0}>
               <SimpleGrid columns={{ base: 2, md: 4 }} spacing={4}>

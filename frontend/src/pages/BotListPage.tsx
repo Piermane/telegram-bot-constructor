@@ -51,8 +51,16 @@ const BotListPage: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [actionLoading, setActionLoading] = useState<string | null>(null);
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.600');
+  const cardBg = 'rgba(255, 255, 255, 0.12)';
+  const borderColor = 'rgba(255, 255, 255, 0.25)';
+  const cardStyle = {
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: 'white',
+  };
 
   useEffect(() => {
     loadBots();
@@ -329,7 +337,8 @@ const BotListPage: React.FC = () => {
               bg={cardBg} 
               borderColor={borderColor}
               borderRadius="2xl"
-              boxShadow="lg"
+              borderWidth="1px"
+              sx={cardStyle}
             >
               <CardBody textAlign="center" py={16}>
                 <VStack spacing={6}>
@@ -344,8 +353,8 @@ const BotListPage: React.FC = () => {
                   >
                     <Icon as={FiActivity} boxSize={12} color="white" />
                   </Flex>
-                  <Heading size="lg" fontWeight="bold">У вас пока нет ботов</Heading>
-                  <Text color="gray.600" fontSize="lg" maxW="md">
+                  <Heading size="lg" fontWeight="bold" color="white">У вас пока нет ботов</Heading>
+                  <Text color="whiteAlpha.800" fontSize="lg" maxW="md">
                     Создайте своего первого бота для Telegram за несколько минут
                   </Text>
                   <Button
@@ -384,14 +393,15 @@ const BotListPage: React.FC = () => {
                   position="relative"
                   overflow="hidden"
                   sx={{
+                    ...cardStyle,
                     animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`
                   }}
                 >
                   <CardHeader pb={2}>
                     <HStack justify="space-between">
                       <VStack align="start" spacing={1}>
-                        <Heading size="md">{bot.name}</Heading>
-                        <Text fontSize="sm" color="gray.500">
+                        <Heading size="md" color="white">{bot.name}</Heading>
+                        <Text fontSize="sm" color="whiteAlpha.700">
                           @{bot.username}
                         </Text>
                       </VStack>
@@ -440,13 +450,13 @@ const BotListPage: React.FC = () => {
                       {/* Статус и инфо */}
                       <HStack w="full" justify="space-between">
                         {getStatusBadge(bot.status)}
-                        <Text fontSize="xs" color="gray.500">
+                        <Text fontSize="xs" color="whiteAlpha.700">
                           {bot.scenes} сценариев
                         </Text>
                       </HStack>
 
                       {/* Дата запуска */}
-                      <Text fontSize="xs" color="gray.500">
+                      <Text fontSize="xs" color="whiteAlpha.700">
                         {formatDate(bot.startedAt)}
                       </Text>
 
