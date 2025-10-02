@@ -6,17 +6,17 @@ import Header from './Header';
 
 const Layout: React.FC = () => {
   return (
-    <>
-      {/* STRIPE MESH GRADIENT - FIXED BACKGROUND */}
-      <div className="stripe-mesh-gradient">
-        <div className="mesh-blob mesh-blob-1"></div>
-        <div className="mesh-blob mesh-blob-2"></div>
-        <div className="mesh-blob mesh-blob-3"></div>
-        <div className="mesh-blob mesh-blob-4"></div>
-      </div>
-
-      {/* CONTENT OVER GRADIENT */}
-      <Flex minH="100vh" position="relative" style={{ zIndex: 1 }}>
+    <Box
+      position="relative"
+      minH="100vh"
+      overflow="hidden"
+      sx={{
+        background: 'linear-gradient(-45deg, #ee7752, #e73c7e, #23a6d5, #23d5ab)',
+        backgroundSize: '400% 400%',
+        animation: 'gradientShift 15s ease infinite',
+      }}
+    >
+      <Flex minH="100vh" position="relative">
         <Sidebar />
         
         <Box flex="1" ml={{ base: 0, md: '250px' }}>
@@ -27,7 +27,7 @@ const Layout: React.FC = () => {
           </Box>
         </Box>
       </Flex>
-    </>
+    </Box>
   );
 };
 

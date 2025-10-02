@@ -437,27 +437,15 @@ const styles = {
         backgroundPosition: '1000px 0',
       },
     },
-    // Blob animations для mesh gradient
-    '@keyframes blobFloat': {
-      '0%, 100%': {
-        transform: 'translate(0%, 0%) rotate(0deg) scale(1)',
+    '@keyframes gradientShift': {
+      '0%': {
+        backgroundPosition: '0% 50%',
       },
-      '33%': {
-        transform: 'translate(5%, -5%) rotate(120deg) scale(1.1)',
+      '50%': {
+        backgroundPosition: '100% 50%',
       },
-      '66%': {
-        transform: 'translate(-5%, 5%) rotate(240deg) scale(0.9)',
-      },
-    },
-    '@keyframes blobFloat2': {
-      '0%, 100%': {
-        transform: 'translate(0%, 0%) rotate(0deg) scale(1)',
-      },
-      '33%': {
-        transform: 'translate(-3%, 4%) rotate(-90deg) scale(1.05)',
-      },
-      '66%': {
-        transform: 'translate(4%, -3%) rotate(-180deg) scale(0.95)',
+      '100%': {
+        backgroundPosition: '0% 50%',
       },
     },
   },

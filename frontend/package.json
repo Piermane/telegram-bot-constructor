@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot-constructor-frontend",
-  "version": "5.0.0",
-  "description": "TelegramBot Constructor - STRIPE MESH",
+  "version": "5.1.0",
+  "description": "TelegramBot Constructor - SIMPLE ANIMATED",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",
