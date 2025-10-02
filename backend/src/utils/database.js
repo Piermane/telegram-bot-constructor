@@ -116,6 +116,29 @@ const db = {
         logger.info('✅ Super Admin created successfully');
       }
 
+      // Migration: Fix old bots without user_id or with orphaned user_id
+      try {
+        // Get super admin ID
+        const adminResult = await this.query('SELECT id FROM users WHERE email = $1', ['admin@botconstructor.local']);
+        if (adminResult.rows.length > 0) {
+          const adminId = adminResult.rows[0].id;
+          
+          // Fix bots with NULL user_id or non-existent user_id
+          const fixedBots = await this.query(`
+            UPDATE bots 
+            SET user_id = $1 
+            WHERE user_id IS NULL 
+              OR user_id NOT IN (SELECT id FROM users)
+          `, [adminId]);
+          
+          if (fixedBots.rowCount > 0) {
+            logger.info(`✅ Migration: Fixed ${fixedBots.rowCount} orphaned bots (assigned to Super Admin)`);
+          }
+        }
+      } catch (error) {
+        logger.debug('Migration note:', error.message);
+      }
+
       logger.info('✅ Database tables initialized successfully');
     } catch (error) {
       logger.error('Failed to initialize database tables:', error);

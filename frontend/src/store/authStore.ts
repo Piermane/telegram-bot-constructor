@@ -41,6 +41,28 @@ const API_URL = process.env.REACT_APP_API_URL || window.location.origin;
 // Configure axios defaults
 axios.defaults.baseURL = API_URL;
 
+// Add axios interceptor to automatically include token in all requests
+axios.interceptors.request.use(
+  (config) => {
+    // Get token from localStorage (zustand persist)
+    const authStorage = localStorage.getItem('auth-storage');
+    if (authStorage) {
+      try {
+        const { state } = JSON.parse(authStorage);
+        if (state?.token) {
+          config.headers.Authorization = `Bearer ${state.token}`;
+        }
+      } catch (error) {
+        console.error('Error parsing auth storage:', error);
+      }
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
 export const useAuthStore = create<AuthState>()(
   persist(
     (set, get) => ({
