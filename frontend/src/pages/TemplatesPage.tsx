@@ -237,9 +237,25 @@ const TemplatesPage: React.FC = () => {
             colorScheme="blue"
             onChange={(index) => setSelectedCategory(categories[index].id)}
           >
-            <TabList justifyContent="center" flexWrap="wrap">
+            <TabList justifyContent="center" flexWrap="wrap" gap={2}>
               {categories.map((category) => (
-                <Tab key={category.id} mr={2} mb={2}>
+                <Tab 
+                  key={category.id}
+                  bg="whiteAlpha.200"
+                  color="white"
+                  fontWeight="600"
+                  borderRadius="lg"
+                  px={5}
+                  py={3}
+                  _selected={{
+                    bg: 'white',
+                    color: 'gray.800',
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+                  }}
+                  _hover={{
+                    bg: 'whiteAlpha.300'
+                  }}
+                >
                   <HStack>
                     <Icon as={category.icon} />
                     <Text>{category.name}</Text>

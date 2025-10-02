@@ -39,8 +39,7 @@ const Header: React.FC = () => {
   return (
     <Box
       h="16"
-      bg="rgba(255, 255, 255, 0.12)"
-      backdropFilter="blur(12px) saturate(180%)"
+      bg="transparent"
       px={6}
       display="flex"
       alignItems="center"

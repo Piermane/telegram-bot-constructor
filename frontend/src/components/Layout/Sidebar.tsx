@@ -58,8 +58,7 @@ const Sidebar: React.FC = () => {
       top={0}
       h="100vh"
       w="250px"
-      bg="rgba(255, 255, 255, 0.12)"
-      backdropFilter="blur(12px) saturate(180%)"
+      bg="transparent"
       p={4}
       zIndex={1000}
       display={{ base: 'none', md: 'block' }}
@@ -74,8 +73,6 @@ const Sidebar: React.FC = () => {
             Production v1.0
           </Text>
         </VStack>
-
-        <Divider opacity={0.2} />
 
         {/* Navigation */}
         <VStack spacing={1} align="stretch" flex={1}>
@@ -95,8 +92,6 @@ const Sidebar: React.FC = () => {
             Настройки
           </NavItem>
         </VStack>
-
-        <Divider opacity={0.2} />
 
         {/* Footer */}
         <VStack spacing={2}>

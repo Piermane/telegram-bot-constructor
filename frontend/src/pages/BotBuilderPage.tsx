@@ -537,10 +537,10 @@ const BotBuilderPage: React.FC = () => {
                 Назад
               </Button>
               <VStack align="start" spacing={0}>
-                <Heading size="lg" bgGradient="linear(to-r, purple.600, blue.500)" bgClip="text">
+                <Heading size="lg" color="white" textShadow="0 2px 8px rgba(0, 0, 0, 0.3)">
                   {isEditing ? 'Редактирование бота' : 'Конструктор ботов'}
                 </Heading>
-                <Text color="gray.600" fontSize="sm">
+                <Text color="white" fontSize="sm" textShadow="0 1px 4px rgba(0, 0, 0, 0.25)">
                   {isEditing ? 'Изменяйте настройки бота и применяйте обновления без остановки' : 'Создавайте ботов с кнопками, сценариями, базой данных и интеграциями'}
                 </Text>
               </VStack>
@@ -608,20 +608,124 @@ const BotBuilderPage: React.FC = () => {
 
         <Tabs colorScheme="purple" variant="soft-rounded">
           <TabList flexWrap="wrap" gap={2}>
-            <Tab gap={2}><FiSettings /> Основные</Tab>
-            <Tab gap={2}><FiLayers /> Сценарии</Tab>
-            <Tab gap={2}><FiSmartphone /> WebApp</Tab>
-            <Tab gap={2}><FiShoppingBag /> Контент</Tab>
-            <Tab gap={2}><FiDatabase /> База данных</Tab>
-            <Tab gap={2}><FiLink /> Интеграции</Tab>
-            <Tab gap={2}><FiBarChart2 /> Функции</Tab>
-            <Tab gap={2}><FiEye /> Предпросмотр</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiSettings /> Основные</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiLayers /> Сценарии</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiSmartphone /> WebApp</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiShoppingBag /> Контент</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiDatabase /> База данных</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiLink /> Интеграции</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiBarChart2 /> Функции</Tab>
+            <Tab 
+              gap={2}
+              bg="whiteAlpha.200"
+              color="white"
+              fontWeight="600"
+              _selected={{
+                bg: 'white',
+                color: 'gray.800',
+                boxShadow: '0 4px 12px rgba(0,0,0,0.15)'
+              }}
+              _hover={{
+                bg: 'whiteAlpha.300'
+              }}
+            ><FiEye /> Предпросмотр</Tab>
           </TabList>
 
           <TabPanels>
             {/* Основные настройки */}
             <TabPanel>
-              <Grid templateColumns="1fr 1fr" gap={6}>
+              <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
                   <Card bg={cardBg} border="1px" borderColor={borderColor} borderRadius="xl">
                     <CardHeader>
@@ -2017,7 +2121,7 @@ const BotBuilderPage: React.FC = () => {
 
             {/* Предпросмотр */}
             <TabPanel>
-              <Grid templateColumns="1fr 1fr" gap={6}>
+              <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
                   <Card bg={cardBg} border="1px" borderColor={borderColor}>
                     <CardHeader>
@@ -2166,7 +2270,7 @@ const BotBuilderPage: React.FC = () => {
           <ModalBody>
             {selectedScene && (
               <VStack spacing={4} align="stretch">
-                <Grid templateColumns="1fr 1fr" gap={4}>
+                <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={4}>
                   <FormControl>
                     <FormLabel>Название сценария</FormLabel>
                     <Input
@@ -2216,7 +2320,7 @@ const BotBuilderPage: React.FC = () => {
                   <Card bg="gray.50" p={3}>
                     <VStack spacing={3} align="stretch">
                       <Text fontSize="sm" fontWeight="bold">Добавить кнопку:</Text>
-                      <Grid templateColumns="2fr 1fr 1fr 1fr" gap={2} alignItems="end">
+                      <Grid templateColumns={{ base: '1fr', md: '2fr 1fr 1fr 1fr' }} gap={2} alignItems="end">
                         <FormControl>
                           <FormLabel fontSize="xs">Текст кнопки</FormLabel>
                           <Input
