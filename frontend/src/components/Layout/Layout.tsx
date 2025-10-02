@@ -6,6 +6,9 @@ import Header from './Header';
 
 const Layout: React.FC = () => {
   useEffect(() => {
+    // Отключаем на мобилках и слабых устройствах
+    if (window.innerWidth <= 1024) return;
+    
     const interBubble = document.querySelector<HTMLDivElement>('.interactive');
     if (!interBubble) return;
     
@@ -13,6 +16,7 @@ const Layout: React.FC = () => {
     let curY = 0;
     let tgX = 0;
     let tgY = 0;
+    let animationId: number;
 
     function move() {
       curX += (tgX - curX) / 20;
@@ -20,7 +24,7 @@ const Layout: React.FC = () => {
       if (interBubble) {
         interBubble.style.transform = `translate(${Math.round(curX)}px, ${Math.round(curY)}px)`;
       }
-      requestAnimationFrame(move);
+      animationId = requestAnimationFrame(move);
     }
 
     const handleMouseMove = (event: MouseEvent) => {
@@ -33,6 +37,7 @@ const Layout: React.FC = () => {
 
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      cancelAnimationFrame(animationId);
     };
   }, []);
 

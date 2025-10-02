@@ -28,12 +28,13 @@ import { DashboardStatsSkeleton } from '../components/UI/SkeletonLoader';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
-  const cardBg = 'rgba(255, 255, 255, 0.8)';
-  const statBg = 'rgba(255, 255, 255, 0.6)';
-  const borderColor = 'rgba(255, 255, 255, 0.3)';
+  const cardBg = 'rgba(255, 255, 255, 0.95)';
+  const statBg = 'rgba(255, 255, 255, 0.9)';
+  const borderColor = 'rgba(0, 0, 0, 0.08)';
   const cardStyle = {
     backdropFilter: 'blur(10px)',
     WebkitBackdropFilter: 'blur(10px)',
+    boxShadow: '0 4px 20px rgba(0, 0, 0, 0.08)',
   };
 
   const [stats, setStats] = useState({
@@ -135,6 +136,8 @@ const DashboardPage: React.FC = () => {
               lineHeight="1"
               letterSpacing="-0.025em"
               maxW="1000px"
+              color="white"
+              textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
             >
               Создавайте ботов
               <br />
@@ -143,9 +146,10 @@ const DashboardPage: React.FC = () => {
             <Text 
               fontSize={{ base: 'xl', md: '2xl' }} 
               maxW="700px" 
-              color="rgba(255, 255, 255, 0.92)" 
+              color="white"
               lineHeight="1.5"
               fontWeight="400"
+              textShadow="0 1px 4px rgba(0, 0, 0, 0.25)"
             >
               Готовые шаблоны, автоматический деплой и полное управление. 
               Запустите первого бота за 5 минут.

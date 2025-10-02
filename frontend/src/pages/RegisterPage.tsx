@@ -240,9 +240,9 @@ const RegisterPage: React.FC = () => {
                     </VStack>
                   </Box>
 
-                  <Text fontSize="sm" color="gray.600" textAlign="center">
+                  <Text fontSize="sm" color="#6b7c93" textAlign="center" fontWeight="500">
                     Уже есть аккаунт?{' '}
-                    <Link as={RouterLink} to="/login" color="purple.600" fontWeight="medium" _hover={{ color: 'purple.700' }}>
+                    <Link as={RouterLink} to="/login" color="#6772e5" fontWeight="500" _hover={{ color: '#5469d4' }} transition="color 0.15s ease">
                       Войти
                     </Link>
                   </Text>

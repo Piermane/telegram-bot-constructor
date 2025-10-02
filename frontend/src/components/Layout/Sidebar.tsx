@@ -25,17 +25,17 @@ const NavItem: React.FC<NavItemProps> = ({ children, to }) => {
     <Box
       as={NavLink}
       to={to}
-      px={5}
+      px={4}
       py={3}
-      borderRadius="lg"
-      bg={isActive ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.1)'}
-      color={isActive ? 'gray.800' : 'white'}
-      border="1px solid"
-      borderColor={isActive ? 'rgba(0, 0, 0, 0.1)' : 'rgba(255, 255, 255, 0.2)'}
+      borderRadius="md"
+      bg={isActive ? 'whiteAlpha.200' : 'transparent'}
+      color="white"
+      borderLeft="3px solid"
+      borderLeftColor={isActive ? 'white' : 'transparent'}
       _hover={{
-        bg: isActive ? 'rgba(255, 255, 255, 0.95)' : 'rgba(255, 255, 255, 0.2)',
+        bg: 'whiteAlpha.100',
+        borderLeftColor: 'whiteAlpha.600',
         textDecoration: 'none',
-        borderColor: isActive ? 'rgba(0, 0, 0, 0.15)' : 'rgba(255, 255, 255, 0.3)',
       }}
       transition="all 0.2s ease"
       w="full"
@@ -75,7 +75,7 @@ const Sidebar: React.FC = () => {
           </Text>
         </VStack>
 
-        <Divider />
+        <Divider opacity={0.2} />
 
         {/* Navigation */}
         <VStack spacing={1} align="stretch" flex={1}>
@@ -96,7 +96,7 @@ const Sidebar: React.FC = () => {
           </NavItem>
         </VStack>
 
-        <Divider />
+        <Divider opacity={0.2} />
 
         {/* Footer */}
         <VStack spacing={2}>

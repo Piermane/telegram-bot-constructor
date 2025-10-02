@@ -185,13 +185,15 @@ const TemplatesPage: React.FC = () => {
               fontSize={{ base: '5xl', md: '6xl', lg: '8xl' }}
               fontWeight="700"
               color="white"
+              textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
               lineHeight="1"
               letterSpacing="-0.025em"
             >
               Шаблоны Telegram ботов
             </Heading>
             <Text 
-              color="rgba(255, 255, 255, 0.92)" 
+              color="white"
+              textShadow="0 1px 4px rgba(0, 0, 0, 0.25)"
               fontSize={{ base: 'xl', md: '2xl' }}
               maxW="700px"
               lineHeight="1.5"

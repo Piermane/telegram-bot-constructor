@@ -267,13 +267,13 @@ const BotListPage: React.FC = () => {
               <Heading 
                 fontSize={{ base: '3xl', md: '4xl' }}
                 fontWeight="extrabold"
-                bgGradient="linear(to-r, blue.600, purple.600)" 
-                bgClip="text"
+                color="white"
                 letterSpacing="tight"
+                textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
               >
                 Мои боты
               </Heading>
-              <Text color="gray.600" fontSize="lg">
+              <Text color="white" fontSize="lg" textShadow="0 1px 4px rgba(0, 0, 0, 0.25)">
                 Управляйте своими Telegram ботами
               </Text>
             </VStack>
@@ -281,11 +281,19 @@ const BotListPage: React.FC = () => {
             <HStack spacing={3}>
               <Button
                 size="lg"
-                variant="outline"
+                variant="solid"
                 leftIcon={<Icon as={FiRefreshCw} />}
                 onClick={loadBots}
                 isLoading={loading}
-                colorScheme="gray"
+                bg="whiteAlpha.900"
+                color="gray.800"
+                fontWeight="600"
+                _hover={{
+                  bg: 'white',
+                  transform: 'translateY(-2px)',
+                  boxShadow: '0 10px 20px rgba(0,0,0,0.15)'
+                }}
+                boxShadow="0 4px 12px rgba(0,0,0,0.1)"
               >
                 Обновить
               </Button>
