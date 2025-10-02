@@ -51,10 +51,6 @@ const TemplatesPage: React.FC = () => {
 
   const cardBg = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.600');
-  const bgGradient = useColorModeValue(
-    'linear(to-br, purple.50, blue.50)',
-    'linear(to-br, gray.900, gray.800)'
-  );
 
   const categories = [
     { id: 'all', name: 'Все шаблоны', icon: FiSettings },
@@ -160,41 +156,39 @@ const TemplatesPage: React.FC = () => {
         <title>Шаблоны ботов - Telegram Bot Constructor</title>
       </Helmet>
 
-      {/* Hero Section - ANIMATED GRADIENT как у Stripe */}
+      {/* Hero Section - НАСТОЯЩИЙ Stripe: розовый → оранжевый → синий */}
       <Box 
-        py={{ base: 16, md: 20 }} 
+        py={{ base: 20, md: 28 }} 
         px={4}
         position="relative"
         overflow="hidden"
-        bg="#000"
+        bgGradient="linear(135deg, #667eea 0%, #764ba2 35%, #f093fb 70%, #4facfe 100%)"
         sx={{
           '&::before': {
             content: '""',
             position: 'absolute',
-            top: '-50%',
-            left: '-50%',
-            width: '200%',
-            height: '200%',
-            background: 'radial-gradient(circle at 30% 50%, #667eea 0%, transparent 50%), radial-gradient(circle at 70% 50%, #f093fb 0%, transparent 50%), radial-gradient(circle at 50% 50%, #764ba2 0%, transparent 50%)',
-            animation: 'gradientRotate 20s ease infinite',
-            filter: 'blur(40px)',
-            opacity: 0.9,
+            top: '-10%',
+            left: '-10%',
+            width: '120%',
+            height: '120%',
+            background: 'radial-gradient(circle at 35% 45%, rgba(102, 126, 234, 0.4) 0%, transparent 50%), radial-gradient(circle at 65% 55%, rgba(240, 147, 251, 0.4) 0%, transparent 50%)',
+            animation: 'gradientWave 14s ease-in-out infinite',
+            filter: 'blur(70px)',
           },
-          '@keyframes gradientRotate': {
+          '@keyframes gradientWave': {
             '0%, 100%': {
-              transform: 'translate(0, 0) rotate(0deg)',
+              opacity: 0.7,
+              transform: 'translateX(0) scale(1)',
             },
-            '33%': {
-              transform: 'translate(10%, -10%) rotate(120deg)',
-            },
-            '66%': {
-              transform: 'translate(-10%, 10%) rotate(240deg)',
+            '50%': {
+              opacity: 0.9,
+              transform: 'translateX(3%) scale(1.03)',
             },
           },
         }}
       >
         <Container maxW="container.xl" position="relative" zIndex={1}>
-          <VStack spacing={8} textAlign="center">
+          <VStack spacing={10} textAlign="center">
             <Badge 
               fontSize="sm" 
               px={4} 
@@ -202,32 +196,31 @@ const TemplatesPage: React.FC = () => {
               borderRadius="full"
               textTransform="uppercase"
               letterSpacing="wide"
-              fontWeight="semibold"
-              bg="rgba(255, 255, 255, 0.1)"
-              backdropFilter="blur(20px)"
+              fontWeight="600"
+              bg="rgba(255, 255, 255, 0.12)"
+              backdropFilter="blur(12px)"
               color="white"
               borderWidth="1px"
-              borderColor="whiteAlpha.300"
-              boxShadow="0 8px 32px rgba(0,0,0,0.2)"
+              borderColor="rgba(255, 255, 255, 0.2)"
+              boxShadow="0 2px 12px rgba(0,0,0,0.1)"
             >
               Готовые решения
             </Badge>
             <Heading 
-              fontSize={{ base: '4xl', md: '5xl', lg: '7xl' }}
-              fontWeight="900"
+              fontSize={{ base: '5xl', md: '6xl', lg: '8xl' }}
+              fontWeight="700"
               color="white"
               lineHeight="1"
-              letterSpacing="-0.02em"
-              textShadow="0 2px 40px rgba(0,0,0,0.3)"
+              letterSpacing="-0.025em"
             >
               Шаблоны Telegram ботов
             </Heading>
             <Text 
-              color="rgba(255, 255, 255, 0.9)" 
-              fontSize={{ base: 'lg', md: 'xl' }}
-              maxW="2xl"
-              lineHeight="tall"
-              fontWeight="normal"
+              color="rgba(255, 255, 255, 0.92)" 
+              fontSize={{ base: 'xl', md: '2xl' }}
+              maxW="700px"
+              lineHeight="1.5"
+              fontWeight="400"
             >
               Готовые решения для бизнеса, запуск за минуты.
               Выберите шаблон и адаптируйте под свои задачи.
@@ -235,21 +228,21 @@ const TemplatesPage: React.FC = () => {
             <HStack spacing={4} pt={4}>
               <Button
                 size="lg"
-                h="60px"
-                px={10}
+                h="56px"
+                px={8}
                 bg="white"
-                color="#000"
+                color="#764ba2"
                 rightIcon={<FiArrowRight />}
                 onClick={() => navigate('/bots/new')}
                 _hover={{ 
-                  transform: 'translateY(-4px)', 
-                  shadow: '0 20px 60px rgba(255,255,255,0.3)',
-                  bg: '#fff'
+                  transform: 'translateY(-2px)', 
+                  shadow: '0 12px 24px rgba(255,255,255,0.35)',
                 }}
-                transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                borderRadius="full"
-                fontWeight="bold"
-                boxShadow="0 10px 40px rgba(255,255,255,0.2)"
+                transition="all 0.2s ease"
+                borderRadius="lg"
+                fontWeight="600"
+                fontSize="lg"
+                boxShadow="0 6px 20px rgba(255,255,255,0.25)"
               >
                 Создать с нуля
               </Button>

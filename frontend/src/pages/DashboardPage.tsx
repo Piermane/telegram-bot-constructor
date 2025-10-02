@@ -98,162 +98,123 @@ const DashboardPage: React.FC = () => {
         <title>Панель управления - Telegram Bot Constructor</title>
       </Helmet>
 
-      {/* Hero Section - REAL Stripe Style with CSS Animation */}
+      {/* Hero Section - НАСТОЯЩИЙ Stripe: розовый → оранжевый → фиолетовый */}
       <Box 
-        py={{ base: 16, md: 24 }}
+        py={{ base: 20, md: 32 }}
         px={4}
         position="relative"
         overflow="hidden"
-        bg="#000"
+        bgGradient="linear(135deg, #ff6b6b 0%, #ee5a6f 25%, #c44569 50%, #973a86 75%, #462446 100%)"
         sx={{
           '&::before': {
             content: '""',
             position: 'absolute',
-            top: '-50%',
-            left: '-50%',
-            width: '200%',
-            height: '200%',
-            background: 'radial-gradient(circle at 20% 50%, #667eea 0%, transparent 50%), radial-gradient(circle at 80% 50%, #764ba2 0%, transparent 50%), radial-gradient(circle at 50% 50%, #f093fb 0%, transparent 50%)',
-            animation: 'gradientRotate 20s ease infinite',
-            filter: 'blur(40px)',
-            opacity: 0.9,
+            top: '-10%',
+            left: '-10%',
+            width: '120%',
+            height: '120%',
+            background: 'radial-gradient(circle at 30% 40%, rgba(255, 107, 107, 0.4) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(151, 58, 134, 0.4) 0%, transparent 50%)',
+            animation: 'gradientPulse 12s ease-in-out infinite',
+            filter: 'blur(80px)',
           },
-          '@keyframes gradientRotate': {
+          '@keyframes gradientPulse': {
             '0%, 100%': {
-              transform: 'translate(0, 0) rotate(0deg)',
+              opacity: 0.6,
+              transform: 'scale(1)',
             },
-            '33%': {
-              transform: 'translate(10%, -10%) rotate(120deg)',
-            },
-            '66%': {
-              transform: 'translate(-10%, 10%) rotate(240deg)',
+            '50%': {
+              opacity: 0.8,
+              transform: 'scale(1.05)',
             },
           },
         }}
       >
         <Container maxW="container.xl" position="relative" zIndex={1}>
-          <Flex 
-            direction={{ base: 'column', md: 'row' }} 
-            align="center" 
-            justify="space-between"
-            gap={12}
-          >
-            <VStack spacing={8} align="start" color="white" flex={1} maxW={{ base: 'full', md: '600px' }}>
-              <Badge 
-                fontSize="sm" 
-                px={4} 
-                py={2} 
-                borderRadius="full"
-                bg="rgba(255, 255, 255, 0.1)"
-                backdropFilter="blur(20px)"
-                fontWeight="semibold"
-                textTransform="none"
-                color="white"
-                borderWidth="1px"
-                borderColor="whiteAlpha.300"
-                boxShadow="0 8px 32px rgba(0,0,0,0.2)"
-              >
-                Production v2.0
-              </Badge>
-              <Heading 
-                fontSize={{ base: '4xl', md: '5xl', lg: '7xl' }}
-                fontWeight="900"
-                maxW="full"
-                lineHeight="1"
-                letterSpacing="-0.02em"
-                textShadow="0 2px 40px rgba(0,0,0,0.3)"
-              >
-                Создавайте ботов
-                <br />
-                без кода
-              </Heading>
-              <Text 
-                fontSize={{ base: 'lg', md: 'xl' }} 
-                maxW="2xl" 
-                color="rgba(255, 255, 255, 0.9)" 
-                lineHeight="tall"
-                fontWeight="normal"
-              >
-                Готовые шаблоны, автоматический деплой и полное управление. 
-                Запустите первого бота за 5 минут.
-              </Text>
-              <HStack spacing={4} pt={4}>
-                <Button
-                  size="lg"
-                  h="60px"
-                  px={10}
-                  bg="white"
-                  color="#000"
-                  _hover={{ 
-                    transform: 'translateY(-4px)', 
-                    shadow: '0 20px 60px rgba(255,255,255,0.3)',
-                    bg: '#fff'
-                  }}
-                  rightIcon={<AddIcon />}
-                  onClick={handleCreateBot}
-                  fontWeight="bold"
-                  borderRadius="full"
-                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                  fontSize="md"
-                  boxShadow="0 10px 40px rgba(255,255,255,0.2)"
-                >
-                  Создать бота
-                </Button>
-                <Button
-                  size="lg"
-                  h="60px"
-                  px={10}
-                  bg="rgba(255, 255, 255, 0.1)"
-                  backdropFilter="blur(20px)"
-                  borderWidth="1px"
-                  borderColor="whiteAlpha.300"
-                  color="white"
-                  _hover={{ 
-                    bg: 'rgba(255, 255, 255, 0.2)',
-                    borderColor: 'white',
-                    transform: 'translateY(-2px)',
-                    shadow: '0 10px 40px rgba(255,255,255,0.2)'
-                  }}
-                  rightIcon={<ViewIcon />}
-                  onClick={() => navigate('/bots')}
-                  fontWeight="semibold"
-                  borderRadius="full"
-                  transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                  fontSize="md"
-                >
-                  Мои боты
-                </Button>
-              </HStack>
-            </VStack>
-
-            {/* Floating Icon with Glow */}
-            <Box 
-              display={{ base: 'none', md: 'flex' }}
-              animation="float 6s ease-in-out infinite"
-              w="300px"
-              h="300px"
-              position="relative"
-              alignItems="center"
-              justifyContent="center"
+          <VStack spacing={10} align="center" textAlign="center" color="white">
+            <Badge 
+              fontSize="sm" 
+              px={4} 
+              py={2} 
+              borderRadius="full"
+              bg="rgba(255, 255, 255, 0.12)"
+              backdropFilter="blur(12px)"
+              fontWeight="600"
+              textTransform="none"
+              color="white"
+              borderWidth="1px"
+              borderColor="rgba(255, 255, 255, 0.2)"
+              boxShadow="0 2px 12px rgba(0,0,0,0.1)"
             >
-              <Box
-                position="absolute"
-                w="100%"
-                h="100%"
-                borderRadius="full"
-                bg="rgba(255, 255, 255, 0.05)"
-                filter="blur(60px)"
-                animation="pulse 4s ease-in-out infinite"
-              />
-              <Icon 
-                as={FiActivity} 
-                boxSize="120px" 
+              Production v2.0
+            </Badge>
+            <Heading 
+              as="h1"
+              fontSize={{ base: '5xl', md: '6xl', lg: '8xl' }}
+              fontWeight="700"
+              lineHeight="1"
+              letterSpacing="-0.025em"
+              maxW="1000px"
+            >
+              Создавайте ботов
+              <br />
+              без кода
+            </Heading>
+            <Text 
+              fontSize={{ base: 'xl', md: '2xl' }} 
+              maxW="700px" 
+              color="rgba(255, 255, 255, 0.92)" 
+              lineHeight="1.5"
+              fontWeight="400"
+            >
+              Готовые шаблоны, автоматический деплой и полное управление. 
+              Запустите первого бота за 5 минут.
+            </Text>
+            <HStack spacing={4} pt={4}>
+              <Button
+                size="lg"
+                h="56px"
+                px={8}
+                bg="white"
+                color="#c44569"
+                _hover={{ 
+                  transform: 'translateY(-2px)', 
+                  shadow: '0 12px 24px rgba(255,255,255,0.35)',
+                }}
+                rightIcon={<AddIcon />}
+                onClick={handleCreateBot}
+                fontWeight="600"
+                borderRadius="lg"
+                transition="all 0.2s ease"
+                fontSize="lg"
+                boxShadow="0 6px 20px rgba(255,255,255,0.25)"
+              >
+                Создать бота
+              </Button>
+              <Button
+                size="lg"
+                h="56px"
+                px={8}
+                bg="rgba(255, 255, 255, 0.08)"
+                backdropFilter="blur(8px)"
+                borderWidth="1px"
+                borderColor="rgba(255, 255, 255, 0.2)"
                 color="white"
-                opacity={0.4}
-                filter="drop-shadow(0 0 30px rgba(255,255,255,0.5))"
-              />
-            </Box>
-          </Flex>
+                _hover={{ 
+                  bg: 'rgba(255, 255, 255, 0.15)',
+                  borderColor: 'rgba(255, 255, 255, 0.3)',
+                  transform: 'translateY(-2px)',
+                }}
+                rightIcon={<ViewIcon />}
+                onClick={() => navigate('/bots')}
+                fontWeight="600"
+                borderRadius="lg"
+                transition="all 0.2s ease"
+                fontSize="lg"
+              >
+                Мои боты
+              </Button>
+            </HStack>
+          </VStack>
         </Container>
       </Box>
 

@@ -80,54 +80,60 @@ const RegisterPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg={useColorModeValue('gray.50', 'gray.900')}
+        position="relative"
+        overflow="hidden"
+        bgGradient="linear(135deg, #80d0ff 0%, #a0b4ff 25%, #c79fff 50%, #ff9acd 75%, #ffb380 100%)"
         p={4}
+        sx={{
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '-10%',
+            left: '-10%',
+            width: '120%',
+            height: '120%',
+            background: 'radial-gradient(circle at 30% 40%, rgba(128, 208, 255, 0.5) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(255, 179, 128, 0.5) 0%, transparent 50%)',
+            animation: 'loginGradient 16s ease-in-out infinite',
+            filter: 'blur(60px)',
+          },
+          '@keyframes loginGradient': {
+            '0%, 100%': {
+              opacity: 0.6,
+              transform: 'translate(0, 0) scale(1)',
+            },
+            '50%': {
+              opacity: 0.8,
+              transform: 'translate(2%, 2%) scale(1.05)',
+            },
+          },
+        }}
       >
-        <Box maxW="md" w="full">
+        <Box maxW="md" w="full" position="relative" zIndex={1}>
           <VStack spacing={8} align="stretch">
             {/* Logo */}
             <VStack spacing={3} textAlign="center">
-              <Box
-                bgGradient="linear(to-br, blue.500, purple.600)"
-                borderRadius="xl"
-                p={4}
-                display="inline-flex"
-                boxShadow="lg"
-              >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
-                  <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Box>
               <Heading 
-                size="xl" 
-                fontWeight="bold"
-                bgGradient="linear(to-r, blue.600, purple.600)"
-                bgClip="text"
-                letterSpacing="tight"
+                fontSize="2xl"
+                fontWeight="600"
+                color="white"
+                letterSpacing="-0.01em"
               >
                 Bot Constructor
               </Heading>
-              <Text color="gray.600" fontSize="md">
-                Создайте аккаунт
+              <Text color="rgba(255, 255, 255, 0.9)" fontSize="md" fontWeight="normal">
+                Создайте новый аккаунт
               </Text>
             </VStack>
 
-            {/* Register Form */}
             <Card 
-              bg={cardBg} 
+              bg="white"
               w="full" 
-              boxShadow="xl"
-              borderRadius="2xl"
-              borderWidth="1px"
-              borderColor={useColorModeValue('gray.200', 'gray.700')}
+              boxShadow="0 20px 50px rgba(0,0,0,0.15)"
+              borderRadius="lg"
+              borderWidth="0"
             >
-              <CardBody p={8}>
+              <CardBody p={10}>
                 <VStack spacing={6}>
-                  <Heading size="md" fontWeight="semibold">
-                    Регистрация
-                  </Heading>
 
                   {error && (
                     <Alert status="error" borderRadius="lg">

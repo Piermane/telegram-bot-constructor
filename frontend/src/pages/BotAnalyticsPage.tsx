@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   Box,
   Heading,
@@ -107,11 +107,7 @@ const BotAnalyticsPage: React.FC = () => {
   const bgColor = useColorModeValue('white', 'gray.800');
   const borderColor = useColorModeValue('gray.200', 'gray.700');
 
-  useEffect(() => {
-    loadAnalytics();
-  }, [botId]);
-
-  const loadAnalytics = async () => {
+  const loadAnalytics = useCallback(async () => {
     setLoading(true);
     try {
       const response = await fetch(`/api/analytics/${botId}`);
@@ -132,7 +128,11 @@ const BotAnalyticsPage: React.FC = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [botId, toast]);
+
+  useEffect(() => {
+    loadAnalytics();
+  }, [loadAnalytics]);
 
   const handleExport = async (type: 'users' | 'analytics' | 'webapp' | 'all') => {
     try {

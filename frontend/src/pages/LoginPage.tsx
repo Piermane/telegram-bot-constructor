@@ -28,8 +28,6 @@ const LoginPage: React.FC = () => {
   const { login } = useAuthStore();
   const navigate = useNavigate();
 
-  const cardBg = useColorModeValue('white', 'gray.800');
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
@@ -56,22 +54,47 @@ const LoginPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg="#f6f9fc"
+        position="relative"
+        overflow="hidden"
+        bgGradient="linear(135deg, #80d0ff 0%, #a0b4ff 25%, #c79fff 50%, #ff9acd 75%, #ffb380 100%)"
         p={4}
+        sx={{
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '-10%',
+            left: '-10%',
+            width: '120%',
+            height: '120%',
+            background: 'radial-gradient(circle at 30% 40%, rgba(128, 208, 255, 0.5) 0%, transparent 50%), radial-gradient(circle at 70% 60%, rgba(255, 179, 128, 0.5) 0%, transparent 50%)',
+            animation: 'loginGradient 16s ease-in-out infinite',
+            filter: 'blur(60px)',
+          },
+          '@keyframes loginGradient': {
+            '0%, 100%': {
+              opacity: 0.6,
+              transform: 'translate(0, 0) scale(1)',
+            },
+            '50%': {
+              opacity: 0.8,
+              transform: 'translate(2%, 2%) scale(1.05)',
+            },
+          },
+        }}
       >
-        <Box maxW="440px" w="full">
-          <VStack spacing={10} align="stretch">
+        <Box maxW="440px" w="full" position="relative" zIndex={1}>
+          <VStack spacing={8} align="stretch">
             {/* Logo */}
-            <VStack spacing={4} textAlign="center">
+            <VStack spacing={3} textAlign="center">
               <Heading 
                 fontSize="2xl"
                 fontWeight="600"
-                color="#32325d"
+                color="white"
                 letterSpacing="-0.01em"
               >
                 Bot Constructor
               </Heading>
-              <Text color="#8898aa" fontSize="lg" fontWeight="normal">
+              <Text color="rgba(255, 255, 255, 0.9)" fontSize="md" fontWeight="normal">
                 Войдите в свой аккаунт
               </Text>
             </VStack>
@@ -80,10 +103,9 @@ const LoginPage: React.FC = () => {
             <Card 
               bg="white"
               w="full" 
-              boxShadow="0 30px 60px rgba(0,0,0,0.12)"
-              borderRadius="xl"
-              borderWidth="1px"
-              borderColor="#e6ebf1"
+              boxShadow="0 20px 50px rgba(0,0,0,0.15)"
+              borderRadius="lg"
+              borderWidth="0"
             >
               <CardBody p={10}>
                 <VStack spacing={6}>

@@ -63,15 +63,15 @@ export const useAuthStore = create<AuthState>()(
           const { user, token } = response.data.data;
           console.log('[Auth] Login successful, token received');
 
-          // Set authorization header for future requests
-          axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-
           set({
             user,
             token,
             isAuthenticated: true,
             isLoading: false,
           });
+          
+          // Wait for Zustand persist to save token to localStorage
+          await new Promise(resolve => setTimeout(resolve, 50));
 
           toast.success('Добро пожаловать!');
         } catch (error: any) {
