@@ -102,47 +102,16 @@
         100% { transform: rotate(360deg); }
       }
       
-      /* STRIPE GRADIENT FLOW - ГЛОБАЛЬНАЯ АНИМАЦИЯ! */
+      /* STRIPE MESH GRADIENT - КАК В ПРИМЕРЕ GOOGLE! */
       @keyframes stripeGradientFlow {
         0% {
           background-position: 0% 50%;
         }
-        25% {
-          background-position: 50% 75%;
-        }
         50% {
           background-position: 100% 50%;
         }
-        75% {
-          background-position: 50% 25%;
-        }
         100% {
           background-position: 0% 50%;
-        }
-      }
-      
-      /* BLOB ANIMATIONS - ДЛЯ MESH GRADIENT! */
-      @keyframes blobFloat {
-        0%, 100% {
-          transform: translate(0%, 0%) rotate(0deg) scale(1);
-        }
-        33% {
-          transform: translate(5%, -5%) rotate(120deg) scale(1.1);
-        }
-        66% {
-          transform: translate(-5%, 5%) rotate(240deg) scale(0.9);
-        }
-      }
-      
-      @keyframes blobFloat2 {
-        0%, 100% {
-          transform: translate(0%, 0%) rotate(0deg) scale(1);
-        }
-        33% {
-          transform: translate(-3%, 4%) rotate(-90deg) scale(1.05);
-        }
-        66% {
-          transform: translate(4%, -3%) rotate(-180deg) scale(0.95);
         }
       }
       
