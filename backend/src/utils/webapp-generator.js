@@ -6,17 +6,19 @@
 function generateWebAppHTML(botSettings, botId) {
   const { name, description, category, webAppContent = {}, features } = botSettings;
   
-  // Определяем цветовую схему в зависимости от категории
-  const themes = {
-    events_conference: { primary: '#8b5cf6', secondary: '#ec4899', accent: '#f59e0b' },
-    ecommerce: { primary: '#3b82f6', secondary: '#10b981', accent: '#06b6d4' },
-    healthcare: { primary: '#14b8a6', secondary: '#0ea5e9', accent: '#8b5cf6' },
-    education: { primary: '#6366f1', secondary: '#a855f7', accent: '#ec4899' },
-    support: { primary: '#f97316', secondary: '#eab308', accent: '#84cc16' },
-    default: { primary: '#6366f1', secondary: '#8b5cf6', accent: '#ec4899' }
+  // Определяем цветовую схему из настроек пользователя или по категории
+  const colorThemes = {
+    purple: { primary: '#8b5cf6', secondary: '#a78bfa', accent: '#c084fc', name: 'Фиолетовый' },
+    blue: { primary: '#3b82f6', secondary: '#60a5fa', accent: '#93c5fd', name: 'Синий' },
+    green: { primary: '#10b981', secondary: '#34d399', accent: '#6ee7b7', name: 'Зеленый' },
+    orange: { primary: '#f97316', secondary: '#fb923c', accent: '#fdba74', name: 'Оранжевый' },
+    pink: { primary: '#ec4899', secondary: '#f472b6', accent: '#f9a8d4', name: 'Розовый' },
+    dark: { primary: '#1f2937', secondary: '#374151', accent: '#6b7280', name: 'Темный' }
   };
   
-  const theme = themes[category] || themes.default;
+  // Выбираем тему: сначала из настроек пользователя, потом по категории, потом default
+  const userTheme = webAppContent.theme || '';
+  const theme = colorThemes[userTheme] || colorThemes['purple'];
   
   return `<!DOCTYPE html>
 <html lang="ru">
@@ -685,6 +687,62 @@ function generateWebAppHTML(botSettings, botId) {
     }
     
     // Actions
+    function registerForActivity(activityId) {
+      const activity = appData?.webAppContent?.activities?.find(a => a.id === activityId);
+      if (!activity) return;
+      
+      tg.showPopup({
+        title: 'Регистрация на активность',
+        message: \`Вы хотите зарегистрироваться на "\${activity.name}"?\`,
+        buttons: [
+          { id: 'confirm', type: 'default', text: 'Зарегистрироваться' },
+          { type: 'cancel' }
+        ]
+      }, (buttonId) => {
+        if (buttonId === 'confirm') {
+          // Отправляем данные боту
+          tg.sendData(JSON.stringify({
+            action: 'register_activity',
+            activityId: activityId,
+            activityName: activity.name
+          }));
+          
+          tg.showAlert(\`✅ Вы успешно зарегистрированы на "\${activity.name}"! Вы получите \${activity.points} баллов после участия.\`);
+          
+          // Track analytics
+          trackAction('register_activity', { activityId, activityName: activity.name });
+        }
+      });
+    }
+    
+    function openSurvey(surveyId) {
+      const survey = appData?.webAppContent?.surveys?.find(s => s.id === surveyId);
+      if (!survey) return;
+      
+      tg.showPopup({
+        title: survey.title,
+        message: survey.description || 'Пожалуйста, пройдите опрос',
+        buttons: [
+          { id: 'start', type: 'default', text: 'Начать опрос' },
+          { type: 'cancel' }
+        ]
+      }, (buttonId) => {
+        if (buttonId === 'start') {
+          // Отправляем данные боту для начала опроса
+          tg.sendData(JSON.stringify({
+            action: 'start_survey',
+            surveyId: surveyId,
+            surveyTitle: survey.title
+          }));
+          
+          tg.showAlert(\`Опрос "\${survey.title}" начат! Ответьте на вопросы в чате с ботом.\`);
+          
+          // Track analytics
+          trackAction('start_survey', { surveyId, surveyTitle: survey.title });
+        }
+      });
+    }
+    
     function addToCart(id, name, price) {
       cart.push({ id, name, price });
       updateCartBadge();

@@ -30,7 +30,7 @@ import {
   StatNumber
 } from '@chakra-ui/react';
 import { AddIcon, ExternalLinkIcon, EditIcon, DeleteIcon, SettingsIcon } from '@chakra-ui/icons';
-import { FiMoreVertical, FiRefreshCw, FiActivity, FiClock, FiLayers, FiPlay, FiPause, FiAlertCircle } from 'react-icons/fi';
+import { FiMoreVertical, FiRefreshCw, FiActivity, FiClock, FiLayers, FiPlay, FiPause, FiAlertCircle, FiBarChart2 } from 'react-icons/fi';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 
@@ -352,6 +352,12 @@ const BotListPage: React.FC = () => {
                             onClick={() => navigate(`/bots/edit/${bot.id}`)}
                           >
                             Редактировать
+                          </MenuItem>
+                          <MenuItem
+                            icon={<Icon as={FiBarChart2} />}
+                            onClick={() => navigate(`/bots/${bot.id}/analytics`)}
+                          >
+                            📊 Аналитика
                           </MenuItem>
                           {bot.status === 'running' && (
                             <MenuItem

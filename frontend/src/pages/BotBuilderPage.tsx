@@ -133,7 +133,9 @@ interface BotSettings {
     qrCodes: boolean;
   };
   webAppUrl?: string;
+  adminUsers?: number[];  // Telegram IDs администраторов
   webAppContent?: {
+    theme?: string;  // Цветовая схема WebApp
     products?: Array<{
       id: string;
       name: string;
@@ -1496,6 +1498,80 @@ const BotBuilderPage: React.FC = () => {
                         </VStack>
                       </FormControl>
 
+                      <FormControl mb={6}>
+                        <FormLabel>🎨 Цветовая схема WebApp</FormLabel>
+                        <Text fontSize="sm" color="gray.600" mb={3}>
+                          Выберите стиль оформления вашего WebApp
+                        </Text>
+                        <Select
+                          value={botSettings.webAppContent?.theme || 'purple'}
+                          onChange={(e) => setBotSettings(prev => ({
+                            ...prev,
+                            webAppContent: {
+                              ...prev.webAppContent,
+                              theme: e.target.value
+                            }
+                          }))}
+                        >
+                          <option value="purple">💜 Фиолетовый (по умолчанию)</option>
+                          <option value="blue">💙 Синий</option>
+                          <option value="green">💚 Зеленый</option>
+                          <option value="orange">🧡 Оранжевый</option>
+                          <option value="pink">💗 Розовый</option>
+                          <option value="dark">🖤 Темный</option>
+                        </Select>
+                      </FormControl>
+
+                      <FormControl mb={6}>
+                        <FormLabel>👨‍💼 Администраторы бота</FormLabel>
+                        <Text fontSize="sm" color="gray.600" mb={3}>
+                          Укажите Telegram ID пользователей, которые будут иметь доступ к команде /admin
+                          <br />
+                          <Text as="span" fontSize="xs" color="blue.500">
+                            💡 Чтобы узнать свой Telegram ID, напишите боту @userinfobot
+                          </Text>
+                        </Text>
+                        <Input
+                          placeholder="Например: 123456789, 987654321"
+                          value={(botSettings.adminUsers || []).join(', ')}
+                          onChange={(e) => {
+                            const ids = e.target.value
+                              .split(',')
+                              .map(id => parseInt(id.trim()))
+                              .filter(id => !isNaN(id));
+                            setBotSettings(prev => ({
+                              ...prev,
+                              adminUsers: ids
+                            }));
+                          }}
+                        />
+                        {botSettings.adminUsers && botSettings.adminUsers.length > 0 && (
+                          <HStack mt={2} spacing={2} flexWrap="wrap">
+                            {botSettings.adminUsers.map((id, index) => (
+                              <Badge key={index} colorScheme="purple" px={3} py={1} borderRadius="full">
+                                🆔 {id}
+                                <IconButton
+                                  aria-label="Удалить"
+                                  icon={<DeleteIcon />}
+                                  size="xs"
+                                  ml={2}
+                                  colorScheme="red"
+                                  variant="ghost"
+                                  onClick={() => {
+                                    const newAdmins = [...(botSettings.adminUsers || [])];
+                                    newAdmins.splice(index, 1);
+                                    setBotSettings(prev => ({
+                                      ...prev,
+                                      adminUsers: newAdmins
+                                    }));
+                                  }}
+                                />
+                              </Badge>
+                            ))}
+                          </HStack>
+                        )}
+                      </FormControl>
+                      
                       <FormControl>
                         <FormLabel>⚙️ Настройки страниц WebApp</FormLabel>
                         <Text fontSize="sm" color="gray.600" mb={3}>

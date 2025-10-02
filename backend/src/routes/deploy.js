@@ -7,6 +7,7 @@ const https = require('https');
 const { generateAdvancedPythonBot } = require('../utils/advanced-bot-generator');
 const { generateWebAppHTML } = require('../utils/webapp-generator');
 const db = require('../utils/database');
+const { authenticate } = require('../middleware/auth');
 
 // Хранилище запущенных процессов ботов (только для runtime, данные в БД)
 const runningBots = new Map();
@@ -117,8 +118,9 @@ async function validateBotToken(token) {
 
 /**
  * Создание и развертывание бота с сохранением в БД
+ * Требует аутентификации - каждый пользователь создает свои боты!
  */
-router.post('/create', async (req, res) => {
+router.post('/create', authenticate, async (req, res) => {
   try {
     const { botSettings } = req.body;
 
@@ -143,12 +145,13 @@ router.post('/create', async (req, res) => {
     const botInfo = tokenValidation.botInfo;
     console.log('✅ Токен валиден! Бот:', botInfo.username);
 
-    // 2. СОХРАНЯЕМ в базу данных
+    // 2. СОХРАНЯЕМ в базу данных (привязываем к текущему пользователю!)
+    const userId = req.userId || 1; // Временный fallback для совместимости
     const dbResult = await db.query(
       `INSERT INTO bots (user_id, name, token, description, config, status, telegram_username)
        VALUES ($1, $2, $3, $4, $5, $6, $7)
        RETURNING id`,
-      [1, botSettings.name, botSettings.token, botSettings.description || '', JSON.stringify(botSettings), 'running', botInfo.username]
+      [userId, botSettings.name, botSettings.token, botSettings.description || '', JSON.stringify(botSettings), 'running', botInfo.username]
     );
     
     const dbId = dbResult.rows[0].id;
@@ -163,7 +166,13 @@ router.post('/create', async (req, res) => {
     await fs.writeFile(path.join(botDir, 'bot.py'), pythonCode);
 
     // 5. СОЗДАЕМ requirements.txt
-    await fs.writeFile(path.join(botDir, 'requirements.txt'), 'python-telegram-bot==20.7');
+    // 5. Создаем requirements.txt с необходимыми библиотеками
+    const requirements = [
+      'python-telegram-bot==20.7',
+      'qrcode==7.4.2',  // Для генерации QR кодов
+      'pillow==10.1.0'  // Для работы с изображениями (требуется для qrcode)
+    ];
+    await fs.writeFile(path.join(botDir, 'requirements.txt'), requirements.join('\n'));
 
     // 6. ГЕНЕРИРУЕМ WebApp для бота (если включен WebApp функционал)
     if (botSettings.features && botSettings.features.webApp) {
@@ -252,13 +261,16 @@ router.post('/create', async (req, res) => {
 });
 
 /**
- * Список всех ботов из БД
+ * Список всех ботов из БД (только свои!)
+ * Требует аутентификации
  */
-router.get('/list', async (req, res) => {
+router.get('/list', authenticate, async (req, res) => {
   try {
-    // Получаем все боты из БД
+    // Получаем ТОЛЬКО боты текущего пользователя!
+    const userId = req.userId || 1; // Временный fallback
     const result = await db.query(
-      'SELECT id, name, telegram_username, description, status, config, created_at, started_at FROM bots ORDER BY created_at DESC'
+      'SELECT id, name, telegram_username, description, status, config, created_at, started_at FROM bots WHERE user_id = $1 ORDER BY created_at DESC',
+      [userId]
     );
     
     const botsList = result.rows.map(bot => {
@@ -297,22 +309,29 @@ router.get('/list', async (req, res) => {
 
 /**
  * Получение настроек конкретного бота
+ * Требует аутентификации + ownership!
  */
-router.get('/:botId/settings', async (req, res) => {
+router.get('/:botId/settings', authenticate, async (req, res) => {
   try {
     const { botId } = req.params;
-    const botInfo = runningBots.get(botId);
-
-    if (!botInfo) {
+    const userId = req.userId;
+    const dbId = parseInt(botId.replace('bot_', ''));
+    
+    // Проверяем ownership через БД
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1 AND user_id = $2', [dbId, userId]);
+    if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден'
+        message: 'Бот не найден или у вас нет прав доступа'
       });
     }
 
+    const botInfo = runningBots.get(botId);
+    const settings = botInfo ? botInfo.settings : botRecord.rows[0].config;
+
     res.json({
       success: true,
-      settings: botInfo.settings
+      settings: settings
     });
   } catch (error) {
     console.error('Ошибка получения настроек бота:', error);
@@ -325,21 +344,23 @@ router.get('/:botId/settings', async (req, res) => {
 
 /**
  * Обновление бота с сохранением в БД (Hot Reload)
+ * Требует аутентификации + проверка ownership!
  */
-router.put('/:botId/update', async (req, res) => {
+router.put('/:botId/update', authenticate, async (req, res) => {
   try {
     const { botId } = req.params;
     const { botSettings } = req.body;
+    const userId = req.userId;
     
     // Извлекаем DB ID из botId
     const dbId = parseInt(botId.replace('bot_', ''));
     
-    // Проверяем существование в БД (главный источник истины!)
-    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    // Проверяем существование в БД + ownership (только СВОЙ бот!)
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1 AND user_id = $2', [dbId, userId]);
     if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден в базе данных'
+        message: 'Бот не найден или у вас нет прав доступа'
       });
     }
     
@@ -472,18 +493,20 @@ router.put('/:botId/update', async (req, res) => {
 
 /**
  * Остановка бота (обновление статуса в БД)
+ * Требует аутентификации + ownership!
  */
-router.delete('/stop/:botId', async (req, res) => {
+router.delete('/stop/:botId', authenticate, async (req, res) => {
   try {
     const { botId } = req.params;
+    const userId = req.userId;
     const dbId = parseInt(botId.replace('bot_', ''));
     
-    // Проверяем существование в БД
-    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    // Проверяем существование в БД + ownership
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1 AND user_id = $2', [dbId, userId]);
     if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден в базе данных'
+        message: 'Бот не найден или у вас нет прав доступа'
       });
     }
     
@@ -528,18 +551,20 @@ router.delete('/stop/:botId', async (req, res) => {
 
 /**
  * Удаление бота (полное удаление из БД и файловой системы)
+ * Требует аутентификации + ownership!
  */
-router.delete('/delete/:botId', async (req, res) => {
+router.delete('/delete/:botId', authenticate, async (req, res) => {
   try {
     const { botId } = req.params;
+    const userId = req.userId;
     const dbId = parseInt(botId.replace('bot_', ''));
     
-    // Проверяем существование в БД
-    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1', [dbId]);
+    // Проверяем существование в БД + ownership
+    const botRecord = await db.query('SELECT * FROM bots WHERE id = $1 AND user_id = $2', [dbId, userId]);
     if (botRecord.rows.length === 0) {
       return res.status(404).json({
         success: false,
-        message: 'Бот не найден в базе данных'
+        message: 'Бот не найден или у вас нет прав доступа'
       });
     }
 
@@ -587,10 +612,12 @@ router.delete('/delete/:botId', async (req, res) => {
 
 /**
  * Повторный запуск остановленного бота
+ * Требует аутентификации + ownership!
  */
-router.post('/start/:botId', async (req, res) => {
+router.post('/start/:botId', authenticate, async (req, res) => {
   try {
     const { botId } = req.params;
+    const userId = req.userId;
     const dbId = parseInt(botId.replace('bot_', ''));
     
     // Проверяем, не запущен ли уже
@@ -601,10 +628,10 @@ router.post('/start/:botId', async (req, res) => {
       });
     }
 
-    // Получаем данные из БД
+    // Получаем данные из БД + ownership
     const result = await db.query(
-      'SELECT id, name, token, config, telegram_username FROM bots WHERE id = $1',
-      [dbId]
+      'SELECT id, name, token, config, telegram_username FROM bots WHERE id = $1 AND user_id = $2',
+      [dbId, userId]
     );
     
     if (result.rows.length === 0) {

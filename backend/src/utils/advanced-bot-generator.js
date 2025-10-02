@@ -83,6 +83,18 @@ BOT_NAME = "${botSettings.name}"
 BOT_USERNAME = "${botInfo.username}"
 CATEGORY = "${botSettings.category}"
 
+# WebApp контент для команд (доступ к реальным данным)
+WEBAPP_CONTENT = {
+    'schedule': ${JSON.stringify(webAppSchedule)},
+    'products': ${JSON.stringify(webAppProducts)},
+    'activities': ${JSON.stringify(webAppActivities)},
+    'surveys': ${JSON.stringify(webAppSurveys)},
+    'pages': ${JSON.stringify(botSettings.webAppContent?.pages || {})}
+}
+
+# Администраторы бота (доступ к админке)
+ADMIN_USERS = ${JSON.stringify(botSettings.adminUsers || [])}  # Telegram ID администраторов
+
 # Настройки платежей
 ${hasPayments ? `
 PAYMENT_PROVIDER_TOKEN = "${botSettings.integrations.payment.token}"
@@ -639,6 +651,13 @@ ${
         .filter(scene => scene.trigger && scene.trigger.startsWith('/') && scene.trigger !== '/start')
         .map(scene => {
           const commandName = scene.trigger.slice(1); // убираем /
+          
+          // Определяем тип команды для умной обработки
+          const isSchedule = commandName.includes('schedule') || scene.id.includes('schedule');
+          const isShop = commandName.includes('shop') || scene.id.includes('shop');
+          const isActivities = commandName.includes('activit') || scene.id.includes('activit');
+          const isQR = commandName.includes('qr') || scene.id.includes('qr');
+          
           return `
 async def ${commandName}_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Обработчик команды ${scene.trigger}"""
@@ -649,7 +668,122 @@ async def ${commandName}_command(update: Update, context: ContextTypes.DEFAULT_T
     AnalyticsManager.log_event("command_used", user.id, "${scene.id}", {"command": "${scene.trigger}"})
     ` : ''}
     
+    ${isSchedule ? `
+    # Показываем реальное расписание
+    schedule_items = WEBAPP_CONTENT.get('schedule', [])
+    if schedule_items:
+        message = "📅 <b>Расписание мероприятия</b>\\n\\n"
+        for item in schedule_items:
+            message += f"🎤 <b>{item.get('title', item.get('name', 'Событие'))}</b>\\n"
+            if item.get('time'):
+                message += f"⏰ {item['time']}\\n"
+            if item.get('location'):
+                message += f"📍 {item['location']}\\n"
+            if item.get('description'):
+                message += f"📝 {item['description']}\\n"
+            message += "\\n"
+        
+        await update.message.reply_text(message, parse_mode='HTML')
+    else:
+        await send_scene(update, context, "${scene.id}")
+    ` : isShop ? `
+    # Показываем товары из магазина
+    products = WEBAPP_CONTENT.get('products', [])
+    if products:
+        message = "🛒 <b>Наш магазин</b>\\n\\n"
+        for product in products[:10]:  # Показываем первые 10
+            message += f"{product.get('emoji', '🎁')} <b>{product.get('name', 'Товар')}</b>\\n"
+            message += f"💰 {product.get('price', 0)} ₽\\n"
+            if product.get('description'):
+                message += f"📝 {product['description']}\\n"
+            message += "\\n"
+        
+        # Кнопка для открытия WebApp с полным каталогом
+        keyboard = [[InlineKeyboardButton(
+            "🌐 Открыть каталог",
+            web_app=WebAppInfo(url=WEBAPP_URL)
+        )]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(
+            message,
+            parse_mode='HTML',
+            reply_markup=reply_markup
+        )
+    else:
+        await send_scene(update, context, "${scene.id}")
+    ` : isActivities ? `
+    # Показываем активности
+    activities = WEBAPP_CONTENT.get('activities', [])
+    if activities:
+        message = "🎯 <b>Доступные активности</b>\\n\\n"
+        for activity in activities:
+            message += f"{activity.get('emoji', '✨')} <b>{activity.get('name', 'Активность')}</b>\\n"
+            message += f"🏆 {activity.get('points', 0)} баллов\\n"
+            if activity.get('description'):
+                message += f"📝 {activity['description']}\\n"
+            message += "\\n"
+        
+        # Кнопка для WebApp
+        keyboard = [[InlineKeyboardButton(
+            "🌐 Зарегистрироваться",
+            web_app=WebAppInfo(url=WEBAPP_URL)
+        )]]
+        reply_markup = InlineKeyboardMarkup(keyboard)
+        
+        await update.message.reply_text(
+            message,
+            parse_mode='HTML',
+            reply_markup=reply_markup
+        )
+    else:
+        await send_scene(update, context, "${scene.id}")
+    ` : isQR ? `
+    # Генерируем QR код пользователя
+    try:
+        import qrcode
+        from io import BytesIO
+        
+        # Генерируем уникальный QR для пользователя
+        qr_data = f"BOT:{BOT_USERNAME}:USER:{user.id}:NAME:{user.first_name}"
+        
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=2,
+        )
+        qr.add_data(qr_data)
+        qr.make(fit=True)
+        
+        img = qr.make_image(fill_color="#8b5cf6", back_color="white")
+        
+        # Сохраняем в BytesIO
+        bio = BytesIO()
+        img.save(bio, 'PNG')
+        bio.seek(0)
+        
+        await update.message.reply_photo(
+            photo=bio,
+            caption=f"📱 <b>Ваш персональный QR код</b>\\n\\n"
+                    f"👤 {user.first_name}\\n"
+                    f"🆔 ID: {user.id}\\n\\n"
+                    f"Покажите этот QR код для регистрации на мероприятиях!",
+            parse_mode='HTML'
+        )
+    except ImportError:
+        # Если qrcode не установлен, отправляем текстовую версию
+        await update.message.reply_text(
+            f"📱 <b>Ваш персональный код</b>\\n\\n"
+            f"👤 {user.first_name}\\n"
+            f"🆔 ID: <code>{user.id}</code>\\n\\n"
+            f"Назовите этот ID при регистрации на мероприятиях!",
+            parse_mode='HTML'
+        )
+    ` : `
+    # Стандартная обработка через сцену
     await send_scene(update, context, "${scene.id}")
+    `}
 `;
         })
         .join('\n')
@@ -680,12 +814,74 @@ ${botSettings.integrations.notifications.adminChat ? `Обратитесь к а
     
     await update.message.reply_text(help_text, parse_mode='HTML')
 
+# ==================== АДМИНКА ====================
+
+async def admin_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+    """Быстрая статистика для админов (подробная аналитика в конструкторе!)"""
+    user_id = update.effective_user.id
+    
+    # Проверка прав доступа
+    if user_id not in ADMIN_USERS:
+        await update.message.reply_text(
+            "⛔ <b>Доступ запрещен</b>\\n\\n"
+            "У вас нет прав для доступа к админ-панели.\\n"
+            "Обратитесь к владельцу бота.",
+            parse_mode='HTML'
+        )
+        return
+    
+    # Получаем ТОЛЬКО быструю статистику
+    total_users = len(db.fetch_all('SELECT id FROM users'))
+    
+    ${botSettings.features.analytics ? `
+    total_events = len(db.fetch_all('SELECT id FROM analytics_events'))
+    ` : 'total_events = 0'}
+    
+    total_webapp = len(db.fetch_all('SELECT id FROM webapp_data')) if db.table_exists('webapp_data') else 0
+    
+    # МИНИМАЛЬНОЕ меню для СРОЧНЫХ действий
+    keyboard = [
+        [
+            InlineKeyboardButton("📨 Рассылка", callback_data="admin_broadcast")
+        ],
+        [
+            InlineKeyboardButton("🌐 Открыть аналитику", url=f"{os.getenv('SERVER_URL', 'http://localhost:5555')}/bots/{BOT_USERNAME.replace('@', '')}/analytics")
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    
+    admin_text = f"""🔧 <b>Админ-панель</b>
+
+👨‍💼 {update.effective_user.first_name}
+🆔 ID: <code>{user_id}</code>
+
+📊 <b>Быстрая статистика:</b>
+👥 Пользователей: {total_users}
+📈 События: {total_events}
+📱 WebApp действий: {total_webapp}
+
+💡 <b>Для подробной аналитики:</b>
+Откройте конструктор → выберите бота → "📊 Аналитика"
+Там вы найдете:
+• 📈 Графики активности
+• 👥 Таблицы пользователей
+• 📥 Экспорт в CSV
+• 🎯 Популярные команды
+• 📱 Данные WebApp
+"""
+    
+    await update.message.reply_text(
+        admin_text,
+        parse_mode='HTML',
+        reply_markup=reply_markup
+    )
+
 ${botSettings.features.analytics ? `
 async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
     """Статистика (только для админов)"""
-    user_id = str(update.effective_user.id)
+    user_id = update.effective_user.id
     
-    if user_id != ADMIN_CHAT_ID:
+    if user_id not in ADMIN_USERS:
         await update.message.reply_text("🚫 У вас нет прав для просмотра статистики")
         return
     
@@ -706,6 +902,29 @@ async def stats_command(update: Update, context: ContextTypes.DEFAULT_TYPE) -> N
     await update.message.reply_text(stats_text, parse_mode='HTML')
 ` : ''}
 
+# ==================== ОБРАБОТЧИКИ АДМИНКИ ====================
+
+async def handle_admin_callback(query, context, callback_data: str):
+    """Обработка кнопок админ-панели (минимальный функционал)"""
+    user_id = query.from_user.id
+    
+    # Проверка прав доступа
+    if user_id not in ADMIN_USERS:
+        await query.answer("⛔ Доступ запрещен", show_alert=True)
+        return
+    
+    if callback_data == 'admin_broadcast':
+        # Рассылка (единственная срочная функция в боте)
+        await query.edit_message_text(
+            "📨 <b>Рассылка сообщений</b>\\n\\n"
+            "Для запуска рассылки отправьте текст сообщения в следующем формате:\\n\\n"
+            "<code>/broadcast Текст вашего сообщения</code>\\n\\n"
+            "⚠️ Рассылка будет отправлена ВСЕМ пользователям бота!\\n\\n"
+            "💡 Для подробной аналитики, экспорта данных и управления пользователями используйте конструктор.",
+            parse_mode='HTML'
+        )
+        await query.answer()
+
 # ==================== ОБРАБОТЧИКИ CALLBACK ====================
 
 async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
@@ -723,7 +942,10 @@ async def button_callback(update: Update, context: ContextTypes.DEFAULT_TYPE) ->
     logger.info(f"🖱️ Пользователь {user_id} нажал кнопку: {callback_data}")
     
     # Обработка специальных команд
-    if callback_data.startswith('pay_'):
+    if callback_data.startswith('admin_'):
+        # Обработка кнопок админки
+        await handle_admin_callback(query, context, callback_data)
+    elif callback_data.startswith('pay_'):
         await handle_payment_request(query, context, callback_data[4:])
     elif callback_data in SCENES:
         # Переход к сцене - отправляем новое сообщение
@@ -1065,6 +1287,7 @@ def main() -> None:
         commands = [
             BotCommand("start", "🏠 Главное меню"),
             BotCommand("help", "❓ Помощь"),
+${botSettings.adminUsers && botSettings.adminUsers.length > 0 ? `            BotCommand("admin", "🔧 Админ-панель"),` : ''}
 ${botSettings.features.analytics ? `            BotCommand("stats", "📊 Статистика"),` : ''}
 ${
   botSettings.scenes && botSettings.scenes.length > 0
@@ -1089,6 +1312,7 @@ ${
     # Регистрация обработчиков команд
     application.add_handler(CommandHandler("start", start))
     application.add_handler(CommandHandler("help", help_command))
+    application.add_handler(CommandHandler("admin", admin_command))  # Админ-панель
     ${botSettings.features.analytics ? `application.add_handler(CommandHandler("stats", stats_command))` : ''}
 ${
       // Регистрируем все команды из сцен
@@ -1119,6 +1343,91 @@ ${
 
     # Обработчик текстовых сообщений
     application.add_handler(MessageHandler(filters.TEXT & ~filters.COMMAND, handle_message))
+    
+    ${hasWebApp ? `
+    # Обработчик данных от WebApp
+    async def handle_webapp_data(update: Update, context: ContextTypes.DEFAULT_TYPE) -> None:
+        """Обработка данных отправленных из WebApp через tg.sendData()"""
+        user = update.effective_user
+        web_app_data = update.message.web_app_data.data
+        
+        try:
+            data = json.loads(web_app_data)
+            action = data.get('action')
+            
+            logger.info(f"📱 WebApp data от {user.first_name}: {action}")
+            
+            if action == 'register_activity':
+                # Регистрация на активность
+                activity_id = data.get('activityId')
+                activity_name = data.get('activityName')
+                
+                # Сохраняем в БД
+                db.execute_query('''
+                    INSERT INTO webapp_data (user_id, action, data)
+                    VALUES (?, ?, ?)
+                ''', (user.id, 'register_activity', web_app_data))
+                
+                await update.message.reply_text(
+                    f"✅ Отлично, {user.first_name}!\\n\\n"
+                    f"Вы зарегистрированы на активность:\\n"
+                    f"🎯 <b>{activity_name}</b>\\n\\n"
+                    f"Мы отправим вам напоминание перед началом!",
+                    parse_mode='HTML'
+                )
+                
+                ${botSettings.features.analytics ? `
+                AnalyticsManager.log_event("activity_registration", user.id, activity_id, {"activity_name": activity_name})
+                ` : ''}
+                
+            elif action == 'start_survey':
+                # Начало опроса
+                survey_id = data.get('surveyId')
+                survey_title = data.get('surveyTitle')
+                
+                # Сохраняем в БД
+                db.execute_query('''
+                    INSERT INTO webapp_data (user_id, action, data)
+                    VALUES (?, ?, ?)
+                ''', (user.id, 'start_survey', web_app_data))
+                
+                await update.message.reply_text(
+                    f"📊 Начинаем опрос: <b>{survey_title}</b>\\n\\n"
+                    f"Пожалуйста, ответьте на следующие вопросы:",
+                    parse_mode='HTML'
+                )
+                
+                ${botSettings.features.analytics ? `
+                AnalyticsManager.log_event("survey_started", user.id, survey_id, {"survey_title": survey_title})
+                ` : ''}
+                
+            elif action == 'purchase':
+                # Покупка товара
+                cart = data.get('cart', [])
+                total = sum(item.get('price', 0) * item.get('quantity', 1) for item in cart)
+                
+                await update.message.reply_text(
+                    f"🛒 <b>Ваш заказ:</b>\\n\\n" + 
+                    "\\n".join([f"• {item['name']} x{item.get('quantity', 1)} = {item['price'] * item.get('quantity', 1)}₽" for item in cart]) +
+                    f"\\n\\n💰 <b>Итого: {total}₽</b>\\n\\n" +
+                    f"Для оплаты используйте команду /pay",
+                    parse_mode='HTML'
+                )
+                
+                ${botSettings.features.analytics ? `
+                AnalyticsManager.log_event("cart_checkout", user.id, "checkout", {"total": total, "items_count": len(cart)})
+                ` : ''}
+            
+            else:
+                logger.warning(f"⚠️ Неизвестное действие от WebApp: {action}")
+                
+        except json.JSONDecodeError:
+            logger.error(f"❌ Ошибка парсинга WebApp data: {web_app_data}")
+        except Exception as e:
+            logger.error(f"❌ Ошибка обработки WebApp data: {e}")
+    
+    application.add_handler(MessageHandler(filters.StatusUpdate.WEB_APP_DATA, handle_webapp_data))
+    ` : ''}
 
     # Обработчик ошибок
     application.add_error_handler(error_handler)

@@ -14,6 +14,7 @@ import RegisterPage from './pages/RegisterPage';
 import DashboardPage from './pages/DashboardPage';
 import BotBuilderPage from './pages/BotBuilderPage';
 import BotListPage from './pages/BotListPage';
+import BotAnalyticsPage from './pages/BotAnalyticsPage';
 import TemplatesPage from './pages/TemplatesPage';
 import AnalyticsPage from './pages/AnalyticsPage';
 import SettingsPage from './pages/SettingsPage';
@@ -111,6 +112,7 @@ function App() {
                   <Route path="bots/new" element={<BotBuilderPage />} />
                   <Route path="bots/edit/:id" element={<BotBuilderPage />} />
                   <Route path="bots/:id/builder" element={<BotBuilderPage />} />
+                  <Route path="bots/:botId/analytics" element={<BotAnalyticsPage />} />
                   <Route path="templates" element={<TemplatesPage />} />
                   <Route path="analytics" element={<AnalyticsPage />} />
                   <Route path="settings" element={<SettingsPage />} />
