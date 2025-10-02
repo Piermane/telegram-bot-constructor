@@ -61,7 +61,7 @@ export const useAuthStore = create<AuthState>()(
           });
 
           const { user, token } = response.data.data;
-          console.log('[Auth] Login successful, token received');
+          console.log('[Auth] ✅ Login successful, token received:', token.substring(0, 20) + '...');
 
           set({
             user,
@@ -70,8 +70,13 @@ export const useAuthStore = create<AuthState>()(
             isLoading: false,
           });
           
-          // Wait for Zustand persist to save token to localStorage
-          await new Promise(resolve => setTimeout(resolve, 50));
+          // КРИТИЧНО: Ждем пока Zustand persist сохранит в localStorage
+          await new Promise(resolve => setTimeout(resolve, 200));
+          
+          // Проверяем что токен реально сохранился
+          const savedToken = useAuthStore.getState().token;
+          console.log('[Auth] 🔍 Token after save:', savedToken ? savedToken.substring(0, 20) + '...' : 'MISSING!');
+          console.log('[Auth] 🔍 localStorage:', localStorage.getItem('auth-storage'));
 
           toast.success('Добро пожаловать!');
         } catch (error: any) {
@@ -178,15 +183,23 @@ export const useAuthStore = create<AuthState>()(
 axios.interceptors.request.use(
   (config) => {
     const token = useAuthStore.getState().token;
+    
+    // КРИТИЧНО: Убедиться что headers существует!
+    if (!config.headers) {
+      config.headers = {} as any;
+    }
+    
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
-      console.log('[Auth] Request with token to:', config.url);
+      console.log('[Auth] ✅ Request WITH token to:', config.url, 'Token:', token.substring(0, 20) + '...');
     } else {
-      console.warn('[Auth] No token for request to:', config.url);
+      console.warn('[Auth] ❌ NO TOKEN for request to:', config.url);
+      console.log('[Auth] Current store state:', useAuthStore.getState());
     }
     return config;
   },
   (error) => {
+    console.error('[Auth] Request interceptor error:', error);
     return Promise.reject(error);
   }
 );
