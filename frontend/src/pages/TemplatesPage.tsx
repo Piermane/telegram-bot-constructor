@@ -160,12 +160,42 @@ const TemplatesPage: React.FC = () => {
         <title>Шаблоны ботов - Telegram Bot Constructor</title>
       </Helmet>
 
-      {/* Hero Section */}
-      <Box bgGradient={bgGradient} py={{ base: 16, md: 20 }} px={4}>
-        <Container maxW="container.xl">
+      {/* Hero Section - ANIMATED GRADIENT как у Stripe */}
+      <Box 
+        py={{ base: 16, md: 20 }} 
+        px={4}
+        position="relative"
+        overflow="hidden"
+        bg="#000"
+        sx={{
+          '&::before': {
+            content: '""',
+            position: 'absolute',
+            top: '-50%',
+            left: '-50%',
+            width: '200%',
+            height: '200%',
+            background: 'radial-gradient(circle at 30% 50%, #667eea 0%, transparent 50%), radial-gradient(circle at 70% 50%, #f093fb 0%, transparent 50%), radial-gradient(circle at 50% 50%, #764ba2 0%, transparent 50%)',
+            animation: 'gradientRotate 20s ease infinite',
+            filter: 'blur(40px)',
+            opacity: 0.9,
+          },
+          '@keyframes gradientRotate': {
+            '0%, 100%': {
+              transform: 'translate(0, 0) rotate(0deg)',
+            },
+            '33%': {
+              transform: 'translate(10%, -10%) rotate(120deg)',
+            },
+            '66%': {
+              transform: 'translate(-10%, 10%) rotate(240deg)',
+            },
+          },
+        }}
+      >
+        <Container maxW="container.xl" position="relative" zIndex={1}>
           <VStack spacing={8} textAlign="center">
             <Badge 
-              colorScheme="purple" 
               fontSize="sm" 
               px={4} 
               py={2} 
@@ -173,24 +203,31 @@ const TemplatesPage: React.FC = () => {
               textTransform="uppercase"
               letterSpacing="wide"
               fontWeight="semibold"
+              bg="rgba(255, 255, 255, 0.1)"
+              backdropFilter="blur(20px)"
+              color="white"
+              borderWidth="1px"
+              borderColor="whiteAlpha.300"
+              boxShadow="0 8px 32px rgba(0,0,0,0.2)"
             >
               Готовые решения
             </Badge>
             <Heading 
-              fontSize={{ base: '4xl', md: '5xl', lg: '6xl' }}
-              fontWeight="extrabold"
-              bgGradient="linear(to-r, purple.600, blue.600)"
-              bgClip="text"
-              lineHeight="1.1"
-              letterSpacing="tight"
+              fontSize={{ base: '4xl', md: '5xl', lg: '7xl' }}
+              fontWeight="900"
+              color="white"
+              lineHeight="1"
+              letterSpacing="-0.02em"
+              textShadow="0 2px 40px rgba(0,0,0,0.3)"
             >
               Шаблоны Telegram ботов
             </Heading>
             <Text 
-              color="gray.600" 
+              color="rgba(255, 255, 255, 0.9)" 
               fontSize={{ base: 'lg', md: 'xl' }}
               maxW="2xl"
               lineHeight="tall"
+              fontWeight="normal"
             >
               Готовые решения для бизнеса, запуск за минуты.
               Выберите шаблон и адаптируйте под свои задачи.
@@ -198,15 +235,21 @@ const TemplatesPage: React.FC = () => {
             <HStack spacing={4} pt={4}>
               <Button
                 size="lg"
-                h="56px"
-                px={8}
-                colorScheme="purple"
+                h="60px"
+                px={10}
+                bg="white"
+                color="#000"
                 rightIcon={<FiArrowRight />}
                 onClick={() => navigate('/bots/new')}
-                _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+                _hover={{ 
+                  transform: 'translateY(-4px)', 
+                  shadow: '0 20px 60px rgba(255,255,255,0.3)',
+                  bg: '#fff'
+                }}
                 transition="all 0.3s cubic-bezier(0.4, 0, 0.2, 1)"
-                borderRadius="xl"
+                borderRadius="full"
                 fontWeight="bold"
+                boxShadow="0 10px 40px rgba(255,255,255,0.2)"
               >
                 Создать с нуля
               </Button>

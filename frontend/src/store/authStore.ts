@@ -54,12 +54,14 @@ export const useAuthStore = create<AuthState>()(
 
       login: async (email: string, password: string) => {
         try {
+          console.log('[Auth] Login attempt for:', email);
           const response = await axios.post('/api/auth/login', {
             email,
             password,
           });
 
           const { user, token } = response.data.data;
+          console.log('[Auth] Login successful, token received');
 
           // Set authorization header for future requests
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
@@ -73,6 +75,7 @@ export const useAuthStore = create<AuthState>()(
 
           toast.success('Добро пожаловать!');
         } catch (error: any) {
+          console.error('[Auth] Login failed:', error);
           const message = error.response?.data?.error?.message || 'Ошибка входа';
           toast.error(message);
           throw error;
@@ -135,23 +138,27 @@ export const useAuthStore = create<AuthState>()(
         const { token } = get();
         
         if (!token) {
+          console.log('[Auth] checkAuth: No token found');
           set({ isLoading: false });
           return;
         }
 
         try {
+          console.log('[Auth] checkAuth: Validating token...');
           // Set authorization header
           axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
 
           const response = await axios.get('/api/auth/me');
           const { user } = response.data.data;
 
+          console.log('[Auth] checkAuth: Token valid, user:', user.email);
           set({
             user,
             isAuthenticated: true,
             isLoading: false,
           });
         } catch (error) {
+          console.error('[Auth] checkAuth: Token invalid, clearing auth');
           // Token is invalid, clear auth
           get().clearAuth();
         }
@@ -173,6 +180,9 @@ axios.interceptors.request.use(
     const token = useAuthStore.getState().token;
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
+      console.log('[Auth] Request with token to:', config.url);
+    } else {
+      console.warn('[Auth] No token for request to:', config.url);
     }
     return config;
   },
@@ -188,10 +198,20 @@ axios.interceptors.response.use(
     if (error.response?.status === 401) {
       // Token expired or invalid, clear auth
       useAuthStore.getState().clearAuth();
+      // Redirect to login
+      window.location.href = '/login';
     }
     return Promise.reject(error);
   }
 );
 
-// Initialize auth check on app start
-useAuthStore.getState().checkAuth();
+// Wait for Zustand persist to restore state, then check auth
+setTimeout(() => {
+  const { token } = useAuthStore.getState();
+  console.log('[Auth] Initializing with token:', token ? 'EXISTS' : 'MISSING');
+  if (token) {
+    useAuthStore.getState().checkAuth();
+  } else {
+    useAuthStore.setState({ isLoading: false });
+  }
+}, 100);

@@ -56,54 +56,37 @@ const LoginPage: React.FC = () => {
         display="flex"
         alignItems="center"
         justifyContent="center"
-        bg={useColorModeValue('gray.50', 'gray.900')}
+        bg="#f6f9fc"
         p={4}
       >
-        <Box maxW="md" w="full">
-          <VStack spacing={8} align="stretch">
+        <Box maxW="440px" w="full">
+          <VStack spacing={10} align="stretch">
             {/* Logo */}
-            <VStack spacing={3} textAlign="center">
-              <Box
-                bgGradient="linear(to-br, blue.500, purple.600)"
-                borderRadius="xl"
-                p={4}
-                display="inline-flex"
-                boxShadow="lg"
-              >
-                <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M12 2L2 7L12 12L22 7L12 2Z" fill="white" opacity="0.9"/>
-                  <path d="M2 17L12 22L22 17" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                  <path d="M2 12L12 17L22 12" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-              </Box>
+            <VStack spacing={4} textAlign="center">
               <Heading 
-                size="xl" 
-                fontWeight="bold"
-                bgGradient="linear(to-r, blue.600, purple.600)"
-                bgClip="text"
-                letterSpacing="tight"
+                fontSize="2xl"
+                fontWeight="600"
+                color="#32325d"
+                letterSpacing="-0.01em"
               >
                 Bot Constructor
               </Heading>
-              <Text color="gray.600" fontSize="md">
-                Создавайте ботов без кода
+              <Text color="#8898aa" fontSize="lg" fontWeight="normal">
+                Войдите в свой аккаунт
               </Text>
             </VStack>
 
             {/* Login Form */}
             <Card 
-              bg={cardBg} 
+              bg="white"
               w="full" 
-              boxShadow="xl"
-              borderRadius="2xl"
+              boxShadow="0 30px 60px rgba(0,0,0,0.12)"
+              borderRadius="xl"
               borderWidth="1px"
-              borderColor={useColorModeValue('gray.200', 'gray.700')}
+              borderColor="#e6ebf1"
             >
-              <CardBody p={8}>
+              <CardBody p={10}>
                 <VStack spacing={6}>
-                  <Heading size="md" fontWeight="semibold">
-                    Вход в систему
-                  </Heading>
 
                   {error && (
                     <Alert status="error" borderRadius="md">
@@ -119,53 +102,90 @@ const LoginPage: React.FC = () => {
                   >
                     <VStack spacing={5}>
                       <FormControl>
-                        <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Email</FormLabel>
+                        <FormLabel fontWeight="500" fontSize="sm" color="#6b7c93" mb={2}>Email</FormLabel>
                         <Input
                           type="email"
                           value={email}
                           onChange={(e) => setEmail(e.target.value)}
                           placeholder="dev@example.com"
-                          size="lg"
-                          borderRadius="lg"
-                          _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
+                          h="44px"
+                          fontSize="md"
+                          bg="white"
+                          borderRadius="md"
+                          borderWidth="1px"
+                          borderColor="#e6ebf1"
+                          color="#32325d"
+                          _hover={{ borderColor: '#c2cbd6' }}
+                          _focus={{ 
+                            borderColor: '#6772e5', 
+                            boxShadow: '0 0 0 1px #6772e5',
+                            outline: 'none'
+                          }}
+                          _placeholder={{ color: '#8898aa' }}
                           required
                         />
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel fontWeight="medium" fontSize="sm" color="gray.700">Пароль</FormLabel>
+                        <FormLabel fontWeight="500" fontSize="sm" color="#6b7c93" mb={2}>Пароль</FormLabel>
                         <Input
                           type="password"
                           value={password}
                           onChange={(e) => setPassword(e.target.value)}
                           placeholder="••••••••"
-                          size="lg"
-                          borderRadius="lg"
-                          _focus={{ borderColor: 'purple.500', boxShadow: '0 0 0 1px var(--chakra-colors-purple-500)' }}
+                          h="44px"
+                          fontSize="md"
+                          bg="white"
+                          borderRadius="md"
+                          borderWidth="1px"
+                          borderColor="#e6ebf1"
+                          color="#32325d"
+                          _hover={{ borderColor: '#c2cbd6' }}
+                          _focus={{ 
+                            borderColor: '#6772e5', 
+                            boxShadow: '0 0 0 1px #6772e5',
+                            outline: 'none'
+                          }}
+                          _placeholder={{ color: '#8898aa' }}
                           required
                         />
                       </FormControl>
 
                       <Button
                         type="submit"
-                        colorScheme="purple"
-                        size="lg"
                         w="full"
+                        h="44px"
                         isLoading={isLoading}
                         loadingText="Вход..."
-                        borderRadius="lg"
-                        fontWeight="semibold"
-                        _hover={{ transform: 'translateY(-1px)', boxShadow: 'lg' }}
-                        transition="all 0.2s"
+                        bg="#6772e5"
+                        color="white"
+                        fontSize="md"
+                        fontWeight="600"
+                        borderRadius="md"
+                        _hover={{ 
+                          bg: '#5469d4',
+                          transform: 'translateY(-1px)', 
+                          boxShadow: '0 7px 14px rgba(50,50,93,.1), 0 3px 6px rgba(0,0,0,.08)'
+                        }}
+                        _active={{ transform: 'translateY(0)', bg: '#5469d4' }}
+                        transition="all 0.15s ease"
+                        boxShadow="0 4px 6px rgba(50,50,93,.11), 0 1px 3px rgba(0,0,0,.08)"
                       >
                         Войти
                       </Button>
                     </VStack>
                   </Box>
 
-                  <Text fontSize="sm" color="gray.600" textAlign="center">
+                  <Text fontSize="sm" color="#8898aa" textAlign="center">
                     Нет аккаунта?{' '}
-                    <Link as={RouterLink} to="/register" color="purple.600" fontWeight="medium" _hover={{ color: 'purple.700' }}>
+                    <Link 
+                      as={RouterLink} 
+                      to="/register" 
+                      color="#6772e5" 
+                      fontWeight="500"
+                      _hover={{ color: '#5469d4' }}
+                      transition="color 0.15s ease"
+                    >
                       Зарегистрироваться
                     </Link>
                   </Text>
@@ -173,16 +193,16 @@ const LoginPage: React.FC = () => {
                   {/* Dev credentials info */}
                   <Box
                     p={4}
-                    bg={useColorModeValue('blue.50', 'blue.900')}
-                    borderRadius="lg"
+                    bg="#f6f9fc"
+                    borderRadius="md"
                     borderWidth="1px"
-                    borderColor={useColorModeValue('blue.200', 'blue.700')}
+                    borderColor="#e6ebf1"
                     w="full"
                   >
-                    <Text fontWeight="semibold" color={useColorModeValue('blue.900', 'blue.100')} fontSize="sm" mb={1}>
+                    <Text fontWeight="500" color="#6b7c93" fontSize="sm" mb={1}>
                       Система для администраторов
                     </Text>
-                    <Text color={useColorModeValue('blue.700', 'blue.300')} fontSize="sm">
+                    <Text color="#8898aa" fontSize="xs">
                       Доступ только по приглашению
                     </Text>
                   </Box>
