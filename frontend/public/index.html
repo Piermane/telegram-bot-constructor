@@ -125,6 +125,16 @@
       .loaded #loading-screen {
         display: none;
       }
+      
+      /* STRIPE GRADIENT - НА ВЕСЬ BODY! */
+      body {
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 20%, #f093fb 40%, #ff6b9d 60%, #ffc65c 80%, #f6d365 100%);
+        background-size: 400% 400%;
+        animation: stripeGradientFlow 20s ease infinite;
+        min-height: 100vh;
+        margin: 0;
+        padding: 0;
+      }
     </style>
   </head>
   <body>

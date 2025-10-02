@@ -588,7 +588,7 @@ router.delete('/stop/:botId', authenticate, async (req, res) => {
 
     res.json({
       success: true,
-      message: `Бот ${botInfo.username} успешно остановлен`
+      message: `Бот ${botData.telegram_username || botData.name || botId} успешно остановлен`
     });
 
   } catch (error) {
