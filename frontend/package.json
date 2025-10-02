@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot-constructor-frontend",
-  "version": "3.2.0",
-  "description": "TelegramBot Constructor - FINAL FIX",
+  "version": "3.3.0",
+  "description": "TelegramBot Constructor - UX FIX + Gradient",
   "private": true,
   "dependencies": {
     "@chakra-ui/icons": "^2.0.19",

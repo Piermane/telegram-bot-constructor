@@ -405,33 +405,11 @@ const BotListPage: React.FC = () => {
                             Открыть в Telegram
                           </MenuItem>
                           <MenuItem
-                            icon={<EditIcon />}
-                            onClick={() => navigate(`/bots/edit/${bot.id}`)}
-                          >
-                            Редактировать
-                          </MenuItem>
-                          <MenuItem
                             icon={<Icon as={FiBarChart2} />}
                             onClick={() => navigate(`/bots/${bot.id}/analytics`)}
                           >
                             Аналитика
                           </MenuItem>
-                          {bot.status === 'running' ? (
-                            <MenuItem
-                              icon={<Icon as={FiPause} />}
-                              onClick={() => handleStopBot(bot.id)}
-                            >
-                              Остановить
-                            </MenuItem>
-                          ) : (
-                            <MenuItem
-                              icon={<Icon as={FiPlay} />}
-                              onClick={() => handleStartBot(bot.id)}
-                              color="green.500"
-                            >
-                              Запустить
-                            </MenuItem>
-                          )}
                           <MenuItem
                             icon={<DeleteIcon />}
                             color="red.500"
@@ -449,16 +427,53 @@ const BotListPage: React.FC = () => {
                   </CardHeader>
 
                   <CardBody pt={0}>
-                    <VStack align="start" spacing={3}>
+                    <VStack align="start" spacing={4}>
                       
                       {/* Статус */}
-                      <HStack>
-                        {getStatusBadge(bot.status)}
-                        {bot.pid && (
-                          <Text fontSize="xs" color="gray.500">
-                            PID: {bot.pid}
-                          </Text>
-                        )}
+                      <HStack w="full" justify="space-between">
+                        <HStack>
+                          {getStatusBadge(bot.status)}
+                          {bot.pid && (
+                            <Text fontSize="xs" color="gray.500">
+                              PID: {bot.pid}
+                            </Text>
+                          )}
+                        </HStack>
+                        
+                        {/* ГЛАВНЫЕ КНОПКИ - ВИДНЫ СРАЗУ! */}
+                        <HStack spacing={2}>
+                          {bot.status === 'running' ? (
+                            <Button
+                              size="sm"
+                              leftIcon={<Icon as={FiPause} />}
+                              colorScheme="red"
+                              variant="outline"
+                              onClick={() => handleStopBot(bot.id)}
+                              isLoading={actionLoading === bot.id}
+                            >
+                              Стоп
+                            </Button>
+                          ) : (
+                            <Button
+                              size="sm"
+                              leftIcon={<Icon as={FiPlay} />}
+                              colorScheme="green"
+                              onClick={() => handleStartBot(bot.id)}
+                              isLoading={actionLoading === bot.id}
+                            >
+                              Пуск
+                            </Button>
+                          )}
+                          <Button
+                            size="sm"
+                            leftIcon={<EditIcon />}
+                            colorScheme="blue"
+                            variant="outline"
+                            onClick={() => navigate(`/bots/edit/${bot.id}`)}
+                          >
+                            Изменить
+                          </Button>
+                        </HStack>
                       </HStack>
 
                       {/* Информация */}

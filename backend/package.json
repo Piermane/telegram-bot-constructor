@@ -1,7 +1,7 @@
 {
   "name": "telegram-bot-constructor-backend",
-  "version": "1.1.0",
-  "description": "TelegramBot Constructor - Backend API for DEV environment",
+  "version": "1.2.0",
+  "description": "TelegramBot Constructor",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js",

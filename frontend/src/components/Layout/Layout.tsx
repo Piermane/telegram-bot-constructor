@@ -20,7 +20,7 @@ const Layout: React.FC = () => {
           backgroundSize: '400% 400%',
           animation: 'stripeGradientFlow 20s ease infinite',
         }}
-      />
+      ></div>
 
       <Flex minH="100vh" position="relative">
         {/* Sidebar */}
