@@ -78,15 +78,11 @@ const Sidebar: React.FC = () => {
       <VStack spacing={6} align="stretch" h="full">
         {/* Logo */}
         <VStack spacing={1} py={4}>
-          <Text fontSize="2xl">🤖</Text>
-          <Text fontWeight="bold" fontSize="lg" textAlign="center">
-            TelegramBot
+          <Text fontSize="xl" fontWeight="bold" bgGradient="linear(to-r, purple.600, blue.500)" bgClip="text">
+            Bot Constructor
           </Text>
-          <Text fontWeight="bold" fontSize="lg" textAlign="center" mt="-1">
-            Constructor
-          </Text>
-          <Text fontSize="xs" color="gray.500" textAlign="center">
-            DEV Environment
+          <Text fontSize="xs" color="gray.500" textAlign="center" fontWeight="medium">
+            Production v1.0
           </Text>
         </VStack>
 

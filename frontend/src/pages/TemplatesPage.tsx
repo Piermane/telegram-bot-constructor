@@ -28,7 +28,7 @@ import {
   Image,
   useBreakpointValue
 } from '@chakra-ui/react';
-import { FiClock, FiUsers, FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiSettings, FiZap, FiCheck, FiArrowRight } from 'react-icons/fi';
+import { FiClock, FiUsers, FiShoppingBag, FiHeadphones, FiBookOpen, FiBriefcase, FiSettings, FiZap, FiCheck, FiArrowRight, FiCalendar, FiActivity } from 'react-icons/fi';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate } from 'react-router-dom';
 
@@ -112,6 +112,18 @@ const TemplatesPage: React.FC = () => {
       other: 'gray'
     };
     return colors[category] || 'gray';
+  };
+
+  const getCategoryIcon = (category: string) => {
+    const icons: Record<string, any> = {
+      events: FiCalendar,
+      ecommerce: FiShoppingBag,
+      support: FiHeadphones,
+      education: FiBookOpen,
+      business: FiBriefcase,
+      other: FiActivity
+    };
+    return icons[category] || FiActivity;
   };
 
   if (loading) {
@@ -308,12 +320,13 @@ const TemplatesPage: React.FC = () => {
                               justify="center"
                               fontSize="2xl"
                               flexShrink={0}
+                              color="white"
                             >
-                              {template.name.match(/[🎪🍕🏥📱💪]/)?.[0] || '🤖'}
+                              <Icon as={getCategoryIcon(template.category)} boxSize={6} />
                             </Flex>
                             <VStack align="start" spacing={1} flex={1}>
                               <Heading size="md" fontWeight="bold">
-                                {template.name.replace(/[🎪🍕🏥📱💪]/g, '').trim()}
+                                {template.name.replace(/[🎪🍕🏥📱💪🤖]/g, '').trim()}
                               </Heading>
                               <Badge 
                                 colorScheme={getCategoryColor(template.category)}

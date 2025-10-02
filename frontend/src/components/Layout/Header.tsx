@@ -85,19 +85,19 @@ const Header: React.FC = () => {
           </MenuButton>
           <MenuList>
             <MenuItem onClick={() => navigate('/settings')}>
-              ⚙️ Настройки
+              Настройки
             </MenuItem>
             <MenuItem onClick={() => navigate('/profile')}>
-              👤 Профиль
+              Профиль
             </MenuItem>
             <MenuItem>
-              📚 Документация
+              Документация
             </MenuItem>
             <MenuItem>
-              🆘 Поддержка
+              Поддержка
             </MenuItem>
-            <MenuItem onClick={handleLogout} color="red.500">
-              🚪 Выйти
+            <MenuItem onClick={handleLogout} color="red.500" fontWeight="medium">
+              Выйти
             </MenuItem>
           </MenuList>
         </Menu>

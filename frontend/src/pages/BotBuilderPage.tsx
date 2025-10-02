@@ -49,7 +49,22 @@ import {
 } from '@chakra-ui/react';
 import { Helmet } from 'react-helmet-async';
 import { useNavigate, useParams, useSearchParams } from 'react-router-dom';
-import { ArrowBackIcon, AddIcon, DeleteIcon, CheckIcon, EditIcon } from '@chakra-ui/icons';
+import { AddIcon, DeleteIcon, CheckIcon, EditIcon } from '@chakra-ui/icons';
+import { 
+  FiArrowLeft, 
+  FiSettings, 
+  FiLayers, 
+  FiSmartphone, 
+  FiShoppingBag, 
+  FiDatabase, 
+  FiLink, 
+  FiBarChart2, 
+  FiEye,
+  FiCpu,
+  FiCheck,
+  FiRefreshCw,
+  FiSend
+} from 'react-icons/fi';
 
 interface BotButton {
   text: string;
@@ -524,18 +539,18 @@ const BotBuilderPage: React.FC = () => {
           <HStack spacing={4} w="full" justify="space-between">
             <HStack spacing={4}>
               <Button
-                leftIcon={<ArrowBackIcon />}
+                leftIcon={<FiArrowLeft />}
                 variant="ghost"
                 onClick={() => navigate('/bots')}
               >
-                ← Назад
+                Назад
               </Button>
               <VStack align="start" spacing={0}>
-                <Heading size="lg" color="purple.600">
-                  {isEditing ? '✏️ Редактирование бота' : '🚀 Конструктор Telegram ботов'}
+                <Heading size="lg" bgGradient="linear(to-r, purple.600, blue.500)" bgClip="text">
+                  {isEditing ? 'Редактирование бота' : 'Конструктор ботов'}
                 </Heading>
                 <Text color="gray.600" fontSize="sm">
-                  {isEditing ? 'Изменяйте настройки бота и применяйте обновления без остановки!' : 'Создавайте ботов с кнопками, сценариями, базой данных и интеграциями!'}
+                  {isEditing ? 'Изменяйте настройки бота и применяйте обновления без остановки' : 'Создавайте ботов с кнопками, сценариями, базой данных и интеграциями'}
                 </Text>
               </VStack>
             </HStack>
@@ -544,48 +559,49 @@ const BotBuilderPage: React.FC = () => {
               <Button
                 onClick={handleSaveBot}
                 colorScheme="purple"
-                leftIcon={<CheckIcon />}
+                leftIcon={isEditing ? <FiRefreshCw /> : <FiSend />}
                 isDisabled={!botSettings.name || !botSettings.token}
                 isLoading={isDeploying}
-                loadingText={isEditing ? "Обновляем бота..." : "Создаем и запускаем бота..."}
+                loadingText={isEditing ? "Обновляем..." : "Запускаем..."}
                 size="lg"
+                fontWeight="semibold"
               >
-                {isEditing ? '🔄 Обновить бота' : '🚀 Запустить бота в Telegram!'}
+                {isEditing ? 'Обновить бота' : 'Запустить бота'}
               </Button>
             </HStack>
           </HStack>
 
-          <Alert status="success" borderRadius="lg">
-            <AlertIcon />
+          <Alert status="info" borderRadius="xl" borderWidth="1px" bg="blue.50" borderColor="blue.200">
+            <AlertIcon color="blue.500" />
             <Box>
-              <AlertTitle>🎯 Конструктор Telegram ботов:</AlertTitle>
-              <AlertDescription>
-                Создавайте ботов для мероприятий, бизнеса, магазинов с полным функционалом: кнопки, база данных, аналитика, интеграции!
+              <AlertTitle fontWeight="semibold">Конструктор Telegram ботов</AlertTitle>
+              <AlertDescription fontSize="sm" color="gray.700">
+                Создавайте ботов для мероприятий, бизнеса, магазинов с полным функционалом: кнопки, база данных, аналитика, интеграции
               </AlertDescription>
             </Box>
           </Alert>
 
           {deployResult && (
-            <Alert status="success" borderRadius="lg">
-              <AlertIcon />
+            <Alert status="success" borderRadius="xl" borderWidth="1px" bg="green.50" borderColor="green.200">
+              <AlertIcon color="green.500" />
               <Box w="full">
-                <AlertTitle>🎉 Бот успешно запущен!</AlertTitle>
+                <AlertTitle fontWeight="semibold">Бот успешно запущен</AlertTitle>
                 <AlertDescription>
                   <VStack align="start" spacing={2} mt={2}>
                     <HStack>
-                      <Text fontWeight="bold">Название:</Text>
-                      <Text>{deployResult.name}</Text>
+                      <Text fontWeight="medium" fontSize="sm">Название:</Text>
+                      <Text fontSize="sm">{deployResult.name}</Text>
                     </HStack>
                     <HStack>
-                      <Text fontWeight="bold">Статус:</Text>
+                      <Text fontWeight="medium" fontSize="sm">Статус:</Text>
                       <Badge colorScheme="green">{deployResult.status}</Badge>
                     </HStack>
                     <HStack>
-                      <Text fontWeight="bold">Ссылка:</Text>
-                      <Text color="blue.500">{deployResult.url}</Text>
+                      <Text fontWeight="medium" fontSize="sm">Ссылка:</Text>
+                      <Text color="blue.600" fontSize="sm">{deployResult.url}</Text>
                     </HStack>
                     <Text fontSize="sm" color="gray.600">
-                      Ваш бот работает и принимает сообщения в Telegram!
+                      Ваш бот работает и принимает сообщения в Telegram
                     </Text>
                   </VStack>
                 </AlertDescription>
@@ -594,16 +610,16 @@ const BotBuilderPage: React.FC = () => {
           )}
         </VStack>
 
-        <Tabs colorScheme="purple" variant="enclosed">
-          <TabList>
-            <Tab>⚙️ Основные настройки</Tab>
-            <Tab>🎭 Сценарии и кнопки</Tab>
-            <Tab>📱 WebApp конструктор</Tab>
-            <Tab>🛒 Контент WebApp</Tab>
-            <Tab>💾 База данных</Tab>
-            <Tab>🔗 Интеграции</Tab>
-            <Tab>📊 Функции</Tab>
-            <Tab>👁️ Предпросмотр</Tab>
+        <Tabs colorScheme="purple" variant="soft-rounded">
+          <TabList flexWrap="wrap" gap={2}>
+            <Tab gap={2}><FiSettings /> Основные</Tab>
+            <Tab gap={2}><FiLayers /> Сценарии</Tab>
+            <Tab gap={2}><FiSmartphone /> WebApp</Tab>
+            <Tab gap={2}><FiShoppingBag /> Контент</Tab>
+            <Tab gap={2}><FiDatabase /> База данных</Tab>
+            <Tab gap={2}><FiLink /> Интеграции</Tab>
+            <Tab gap={2}><FiBarChart2 /> Функции</Tab>
+            <Tab gap={2}><FiEye /> Предпросмотр</Tab>
           </TabList>
 
           <TabPanels>
@@ -611,9 +627,12 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Grid templateColumns="1fr 1fr" gap={6}>
                 <GridItem>
-                  <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                  <Card bg={cardBg} border="1px" borderColor={borderColor} borderRadius="xl">
                     <CardHeader>
-                      <Heading size="md">🤖 Информация о боте</Heading>
+                      <HStack>
+                        <FiCpu />
+                        <Heading size="md">Информация о боте</Heading>
+                      </HStack>
                     </CardHeader>
                     <CardBody>
                       <VStack spacing={4} align="stretch">
@@ -659,19 +678,20 @@ const BotBuilderPage: React.FC = () => {
 
                 <GridItem>
                   <VStack spacing={4} align="stretch">
-                    <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                    <Card bg={cardBg} border="1px" borderColor={borderColor} borderRadius="xl">
                       <CardHeader>
-                        <Heading size="md">🔑 Токен бота</Heading>
+                        <Heading size="md">Токен бота</Heading>
                       </CardHeader>
                       <CardBody>
                         <FormControl isRequired>
-                          <FormLabel>Bot Token от @BotFather</FormLabel>
+                          <FormLabel fontWeight="medium">Bot Token от @BotFather</FormLabel>
                           <Input
                             value={botSettings.token}
                             onChange={(e) => setBotSettings(prev => ({ ...prev, token: e.target.value }))}
                             placeholder="123456789:ABCdefGHIjklMNOpqrsTUVwxyz"
                             type="password"
                             size="lg"
+                            borderRadius="lg"
                           />
                         </FormControl>
                       </CardBody>
@@ -679,7 +699,7 @@ const BotBuilderPage: React.FC = () => {
 
                     <Card bg={cardBg} border="1px" borderColor={borderColor}>
                       <CardHeader>
-                        <Heading size="md">🎯 Быстрый старт</Heading>
+                        <Heading size="md">Быстрый старт</Heading>
                       </CardHeader>
                       <CardBody>
                         <Text fontSize="sm" mb={3}>Загрузить готовый шаблон:</Text>
@@ -705,7 +725,7 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <VStack spacing={6} align="stretch">
                 <HStack justify="space-between">
-                  <Heading size="md">🎭 Сценарии бота</Heading>
+                  <Heading size="md">Сценарии бота</Heading>
                   <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={addScene}>
                     Добавить сценарий
                   </Button>
@@ -774,7 +794,7 @@ const BotBuilderPage: React.FC = () => {
                 <Card bg={cardBg} border="1px" borderColor={borderColor}>
                   <CardHeader>
                     <HStack justify="space-between">
-                      <Heading size="md">📱 WebApp конструктор</Heading>
+                      <Heading size="md">WebApp конструктор</Heading>
                       <Badge colorScheme={botSettings.features.webApp ? 'green' : 'gray'}>
                         {botSettings.features.webApp ? 'Включен' : 'Отключен'}
                       </Badge>
@@ -916,12 +936,12 @@ const BotBuilderPage: React.FC = () => {
               <VStack spacing={6} align="stretch">
                 <Card bg={cardBg} border="1px" borderColor={borderColor}>
                   <CardHeader>
-                    <Heading size="md">🛒 Управление контентом WebApp</Heading>
+                    <Heading size="md">Управление контентом WebApp</Heading>
                   </CardHeader>
                   <CardBody>
                     <VStack spacing={6} align="stretch">
                       <FormControl>
-                        <FormLabel>🛍️ Товары/Услуги</FormLabel>
+                        <FormLabel fontWeight="semibold">Товары/Услуги</FormLabel>
                         <Text fontSize="sm" color="gray.600" mb={3}>
                           Добавьте товары или услуги для вашего WebApp магазина
                         </Text>
@@ -1131,7 +1151,7 @@ const BotBuilderPage: React.FC = () => {
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel>🎯 Активности и задания</FormLabel>
+                        <FormLabel fontWeight="semibold">Активности и задания</FormLabel>
                         <Text fontSize="sm" color="gray.600" mb={3}>
                           Создайте задания с баллами за выполнение
                         </Text>
@@ -1236,7 +1256,7 @@ const BotBuilderPage: React.FC = () => {
                       </FormControl>
 
                       <FormControl>
-                        <FormLabel>📅 Расписание и мероприятия</FormLabel>
+                        <FormLabel fontWeight="semibold">Расписание и мероприятия</FormLabel>
                         <Text fontSize="sm" color="gray.600" mb={3}>
                           Добавьте лекции, встречи и события
                         </Text>
@@ -1573,7 +1593,7 @@ const BotBuilderPage: React.FC = () => {
                       </FormControl>
                       
                       <FormControl>
-                        <FormLabel>⚙️ Настройки страниц WebApp</FormLabel>
+                        <FormLabel fontWeight="semibold">Настройки страниц WebApp</FormLabel>
                         <Text fontSize="sm" color="gray.600" mb={3}>
                           Выберите какие страницы показывать в WebApp
                         </Text>
@@ -1710,7 +1730,7 @@ const BotBuilderPage: React.FC = () => {
               <VStack spacing={6} align="stretch">
                 <Card bg={cardBg} border="1px" borderColor={borderColor}>
                   <CardHeader>
-                    <Heading size="md">💾 Настройки базы данных</Heading>
+                    <Heading size="md">Настройки базы данных</Heading>
                   </CardHeader>
                   <CardBody>
                     <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
@@ -1770,7 +1790,7 @@ const BotBuilderPage: React.FC = () => {
 
                 <Card bg={cardBg} border="1px" borderColor={borderColor}>
                   <CardHeader>
-                    <Heading size="md">📋 Пользовательские поля</Heading>
+                    <Heading size="md">Пользовательские поля</Heading>
                   </CardHeader>
                   <CardBody>
                     <TableContainer>
@@ -1809,7 +1829,7 @@ const BotBuilderPage: React.FC = () => {
               <SimpleGrid columns={1} spacing={4}>
                 <Card bg={cardBg} border="1px" borderColor={borderColor}>
                   <CardHeader>
-                    <Heading size="md">🔔 Уведомления администратору</Heading>
+                    <Heading size="md">Уведомления администратору</Heading>
                   </CardHeader>
                   <CardBody>
                     <VStack spacing={4} align="stretch">
@@ -1893,7 +1913,7 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Card bg={cardBg} border="1px" borderColor={borderColor}>
                 <CardHeader>
-                  <Heading size="md">🔧 Дополнительные функции</Heading>
+                  <Heading size="md">Дополнительные функции</Heading>
                 </CardHeader>
                 <CardBody>
                   <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
@@ -2005,7 +2025,7 @@ const BotBuilderPage: React.FC = () => {
                 <GridItem>
                   <Card bg={cardBg} border="1px" borderColor={borderColor}>
                     <CardHeader>
-                      <Heading size="md">📱 Предпросмотр бота</Heading>
+                      <Heading size="md">Предпросмотр бота</Heading>
                     </CardHeader>
                     <CardBody>
                       <Box
@@ -2065,7 +2085,7 @@ const BotBuilderPage: React.FC = () => {
                 <GridItem>
                   <Card bg={cardBg} border="1px" borderColor={borderColor}>
                     <CardHeader>
-                      <Heading size="md">📊 Статистика проекта</Heading>
+                      <Heading size="md">Статистика проекта</Heading>
                     </CardHeader>
                     <CardBody>
                       <VStack spacing={4} align="stretch">

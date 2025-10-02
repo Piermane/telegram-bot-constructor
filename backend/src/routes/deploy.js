@@ -14,6 +14,7 @@ const runningBots = new Map();
 
 /**
  * Восстановление всех запущенных ботов при старте сервера
+ * Регенерирует файлы из БД если они были удалены при редеплое
  */
 async function restoreRunningBots() {
   try {
@@ -21,21 +22,69 @@ async function restoreRunningBots() {
     
     // Получаем всех ботов со статусом 'running'
     const result = await db.query(
-      "SELECT id, name, token, config, status FROM bots WHERE status = 'running'"
+      "SELECT id, name, token, config, telegram_username FROM bots WHERE status = 'running'"
     );
+    
+    let restored = 0;
     
     for (const botRecord of result.rows) {
       const botId = `bot_${botRecord.id}`;
       const botDir = path.join(__dirname, '../../deployed_bots', botId);
+      const botFilePath = path.join(botDir, 'bot.py');
       
-      // Проверяем, существует ли директория бота
+      // Проверяем, существует ли файл бота
+      let needsRegeneration = false;
       try {
-        await fs.access(botDir);
+        await fs.access(botFilePath);
       } catch {
-        console.log(`⚠️ Директория бота ${botRecord.name} не найдена, пропускаем`);
-        // Обновляем статус в БД
-        await db.query('UPDATE bots SET status = $1 WHERE id = $2', ['stopped', botRecord.id]);
-        continue;
+        needsRegeneration = true;
+      }
+      
+      // Если файлов нет - регенерируем из config в БД
+      if (needsRegeneration) {
+        console.log(`🔧 Регенерируем файлы для бота ${botRecord.name}...`);
+        
+        try {
+          // Создаём директорию
+          await fs.mkdir(botDir, { recursive: true });
+          
+          // Регенерируем bot.py из config
+          const botSettings = botRecord.config;
+          const botInfo = {
+            username: botRecord.telegram_username || botRecord.name,
+            first_name: botRecord.name
+          };
+          
+          const botCode = generateAdvancedPythonBot(botSettings, botInfo, botId);
+          await fs.writeFile(botFilePath, botCode, 'utf-8');
+          
+          // Регенерируем requirements.txt
+          const requirements = `python-telegram-bot==20.7
+qrcode==7.4.2
+pillow==10.1.0`;
+          await fs.writeFile(path.join(botDir, 'requirements.txt'), requirements, 'utf-8');
+          
+          // Регенерируем WebApp
+          await generateWebAppHTML(botSettings, botId);
+          
+          // Устанавливаем зависимости
+          console.log(`📦 Устанавливаем зависимости для ${botRecord.name}...`);
+          await new Promise((resolve, reject) => {
+            exec(`cd ${botDir} && pip3 install -r requirements.txt`, (error) => {
+              if (error) {
+                console.error(`⚠️ Ошибка установки зависимостей: ${error.message}`);
+                // Продолжаем даже если не удалось установить (могут быть уже установлены глобально)
+              }
+              resolve();
+            });
+          });
+          
+          console.log(`✅ Файлы регенерированы для ${botRecord.name}`);
+        } catch (error) {
+          console.error(`❌ Ошибка регенерации файлов для ${botRecord.name}:`, error);
+          await db.query('UPDATE bots SET status = $1 WHERE id = $2', ['stopped', botRecord.id]);
+          continue;
+        }
       }
       
       // Запускаем бота
@@ -43,7 +92,8 @@ async function restoreRunningBots() {
       const botProcess = spawn('python3', ['bot.py'], {
         cwd: botDir,
         detached: true,
-        stdio: ['ignore', 'pipe', 'pipe']
+        stdio: ['ignore', 'pipe', 'pipe'],
+        env: { ...process.env, BOT_TOKEN: botRecord.token }
       });
       
       botProcess.stdout.on('data', (data) => {
@@ -74,9 +124,10 @@ async function restoreRunningBots() {
       botProcess.unref();
       
       console.log(`✅ Бот ${botRecord.name} восстановлен! PID: ${botProcess.pid}`);
+      restored++;
     }
     
-    console.log(`✅ Восстановлено ботов: ${result.rows.length}`);
+    console.log(`✅ Восстановлено ботов: ${restored} из ${result.rows.length}`);
   } catch (error) {
     console.error('❌ Ошибка восстановления ботов:', error);
   }

@@ -27,6 +27,7 @@ import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
 import { AddIcon, ViewIcon, SettingsIcon, InfoIcon, ChevronRightIcon } from '@chakra-ui/icons';
 import { FiTarget, FiZap, FiShield, FiTrendingUp, FiUsers, FiMessageSquare, FiActivity, FiArrowRight } from 'react-icons/fi';
+import { DashboardStatsSkeleton } from '../components/UI/SkeletonLoader';
 
 const DashboardPage: React.FC = () => {
   const navigate = useNavigate();
@@ -37,11 +38,12 @@ const DashboardPage: React.FC = () => {
   const [stats, setStats] = useState({
     totalBots: 0,
     activeBots: 0,
-    totalUsers: 0,
-    totalMessages: 0
+    stoppedBots: 0,
+    templatesAvailable: 7 // Статичное значение
   });
 
   const [recentBots, setRecentBots] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     loadDashboardData();
@@ -49,6 +51,7 @@ const DashboardPage: React.FC = () => {
 
   const loadDashboardData = async () => {
     try {
+      setLoading(true);
       // Загружаем список ботов
       const response = await fetch('/api/deploy/list');
       const data = await response.json();
@@ -58,13 +61,15 @@ const DashboardPage: React.FC = () => {
         setStats({
           totalBots: bots.length,
           activeBots: bots.filter((bot: any) => bot.status === 'running').length,
-          totalUsers: bots.reduce((sum: number, bot: any) => sum + (bot.users || 0), 0),
-          totalMessages: bots.reduce((sum: number, bot: any) => sum + (bot.messages || 0), 0)
+          stoppedBots: bots.filter((bot: any) => bot.status === 'stopped').length,
+          templatesAvailable: 7
         });
         setRecentBots(bots.slice(0, 3));
       }
     } catch (error) {
       console.error('Ошибка загрузки данных:', error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -172,6 +177,9 @@ const DashboardPage: React.FC = () => {
         <VStack spacing={12} align="stretch">
           
           {/* Статистика */}
+          {loading ? (
+            <DashboardStatsSkeleton />
+          ) : (
           <SimpleGrid columns={{ base: 1, md: 2, lg: 4 }} spacing={6}>
             <Card 
               bg={cardBg} 
@@ -248,15 +256,15 @@ const DashboardPage: React.FC = () => {
                     w={12}
                     h={12}
                     borderRadius="xl"
-                    bgGradient="linear(to-br, blue.400, blue.600)"
+                    bgGradient="linear(to-br, red.400, red.600)"
                     align="center"
                     justify="center"
                   >
-                    <Icon as={FiUsers} boxSize={6} color="white" />
+                    <Icon as={FiShield} boxSize={6} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Пользователей</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalUsers}</StatNumber>
+                    <StatLabel color="gray.600" fontSize="sm">Остановлено</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold" color="red.500">{stats.stoppedBots}</StatNumber>
                   </Stat>
                 </HStack>
               </CardBody>
@@ -269,7 +277,9 @@ const DashboardPage: React.FC = () => {
               borderRadius="2xl"
               overflow="hidden"
               transition="all 0.3s"
-              _hover={{ transform: 'translateY(-4px)', shadow: 'xl' }}
+              _hover={{ transform: 'translateY(-4px)', shadow: 'xl', borderColor: 'blue.400' }}
+              cursor="pointer"
+              onClick={() => navigate('/templates')}
             >
               <CardBody p={6}>
                 <HStack spacing={4}>
@@ -277,31 +287,33 @@ const DashboardPage: React.FC = () => {
                     w={12}
                     h={12}
                     borderRadius="xl"
-                    bgGradient="linear(to-br, orange.400, orange.600)"
+                    bgGradient="linear(to-br, blue.400, blue.600)"
                     align="center"
                     justify="center"
                   >
-                    <Icon as={FiMessageSquare} boxSize={6} color="white" />
+                    <Icon as={FiTarget} boxSize={6} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Сообщений</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.totalMessages}</StatNumber>
+                    <StatLabel color="gray.600" fontSize="sm">Шаблонов</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.templatesAvailable}</StatNumber>
+                    <StatHelpText fontSize="xs" color="gray.500">Доступно для запуска</StatHelpText>
                   </Stat>
                 </HStack>
               </CardBody>
             </Card>
           </SimpleGrid>
+          )}
 
           {/* Остальной контент */}
           <Card bg={cardBg} borderColor={borderColor} borderWidth="1px" borderRadius="2xl">
             <CardBody>
               <Flex direction={{ base: 'column', lg: 'row' }} align="center" gap={8}>
                 <VStack align="start" spacing={4} flex={1}>
-                  <Heading size="xl" color="blue.500">
-                    🤖 Telegram Bot Constructor
+                  <Heading size="xl" bgGradient="linear(to-r, blue.600, purple.500)" bgClip="text">
+                    Telegram Bot Constructor
                   </Heading>
                   <Text fontSize="lg" color="gray.600">
-                    Создавайте Telegram ботов быстро и просто. 
+                    Создавайте Telegram ботов быстро и просто.  
                     Готовые шаблоны, автоматический деплой и полное управление.
                   </Text>
                   <HStack spacing={4}>
@@ -325,8 +337,8 @@ const DashboardPage: React.FC = () => {
                   </HStack>
                 </VStack>
                 
-                <Box fontSize="8xl" opacity={0.1}>
-                  🤖
+                <Box fontSize="8xl" opacity={0.05} color="purple.500">
+                  <Icon as={FiActivity} boxSize="150px" />
                 </Box>
               </Flex>
             </CardBody>
@@ -347,15 +359,15 @@ const DashboardPage: React.FC = () => {
             </Stat>
             
             <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Пользователи</StatLabel>
-              <StatNumber>{stats.totalUsers}</StatNumber>
-              <StatHelpText>Общее количество</StatHelpText>
+              <StatLabel>Остановленные</StatLabel>
+              <StatNumber color="red.500">{stats.stoppedBots}</StatNumber>
+              <StatHelpText>Не активны</StatHelpText>
             </Stat>
             
             <Stat bg={statBg} p={4} borderRadius="lg">
-              <StatLabel>Сообщения</StatLabel>
-              <StatNumber>{stats.totalMessages}</StatNumber>
-              <StatHelpText>Обработано</StatHelpText>
+              <StatLabel>Шаблоны</StatLabel>
+              <StatNumber>{stats.templatesAvailable}</StatNumber>
+              <StatHelpText>Доступно</StatHelpText>
             </Stat>
           </SimpleGrid>
 
@@ -365,7 +377,7 @@ const DashboardPage: React.FC = () => {
             <Card bg={cardBg} borderColor={borderColor} borderWidth="1px">
               <CardHeader>
                 <HStack justify="space-between">
-                  <Heading size="md">🤖 Последние боты</Heading>
+                  <Heading size="md">Последние боты</Heading>
                   <Button size="sm" variant="ghost" as={RouterLink} to="/bots">
                     Все боты
                   </Button>

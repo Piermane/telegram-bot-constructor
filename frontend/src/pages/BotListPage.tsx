@@ -11,8 +11,6 @@ import {
   Badge,
   SimpleGrid,
   Container,
-  Spinner,
-  Center,
   Alert,
   AlertIcon,
   useColorModeValue,
@@ -33,6 +31,7 @@ import { AddIcon, ExternalLinkIcon, EditIcon, DeleteIcon, SettingsIcon } from '@
 import { FiMoreVertical, FiRefreshCw, FiActivity, FiClock, FiLayers, FiPlay, FiPause, FiAlertCircle, FiBarChart2 } from 'react-icons/fi';
 import { Link as RouterLink, useNavigate } from 'react-router-dom';
 import { Helmet } from 'react-helmet-async';
+import { BotListSkeleton } from '../components/UI/SkeletonLoader';
 
 interface Bot {
   id: string;
@@ -209,12 +208,18 @@ const BotListPage: React.FC = () => {
         <Helmet>
           <title>Мои боты - TelegramBot Constructor</title>
         </Helmet>
-        <Center h="400px">
-          <VStack>
-            <Spinner size="xl" color="blue.500" />
-            <Text>Загружаем ваших ботов...</Text>
+        <Container maxW="container.xl" py={8}>
+          <VStack spacing={8} align="stretch">
+            {/* Header Skeleton */}
+            <Box>
+              <Heading size="xl" mb={2}>Мои боты</Heading>
+              <Text color="gray.600">Управление вашими Telegram ботами</Text>
+            </Box>
+            
+            {/* Loading Skeleton */}
+            <BotListSkeleton count={6} />
           </VStack>
-        </Center>
+        </Container>
       </>
     );
   }

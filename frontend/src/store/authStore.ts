@@ -41,27 +41,8 @@ const API_URL = process.env.REACT_APP_API_URL || window.location.origin;
 // Configure axios defaults
 axios.defaults.baseURL = API_URL;
 
-// Add axios interceptor to automatically include token in all requests
-axios.interceptors.request.use(
-  (config) => {
-    // Get token from localStorage (zustand persist)
-    const authStorage = localStorage.getItem('auth-storage');
-    if (authStorage) {
-      try {
-        const { state } = JSON.parse(authStorage);
-        if (state?.token) {
-          config.headers.Authorization = `Bearer ${state.token}`;
-        }
-      } catch (error) {
-        console.error('Error parsing auth storage:', error);
-      }
-    }
-    return config;
-  },
-  (error) => {
-    return Promise.reject(error);
-  }
-);
+// Axios interceptor will be set up AFTER store initialization
+// to avoid race conditions with Zustand persist
 
 export const useAuthStore = create<AuthState>()(
   persist(
@@ -184,6 +165,32 @@ export const useAuthStore = create<AuthState>()(
       }),
     }
   )
+);
+
+// Set up axios interceptor to use current token from store
+axios.interceptors.request.use(
+  (config) => {
+    const token = useAuthStore.getState().token;
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`;
+    }
+    return config;
+  },
+  (error) => {
+    return Promise.reject(error);
+  }
+);
+
+// Set up axios response interceptor to handle 401 errors
+axios.interceptors.response.use(
+  (response) => response,
+  (error) => {
+    if (error.response?.status === 401) {
+      // Token expired or invalid, clear auth
+      useAuthStore.getState().clearAuth();
+    }
+    return Promise.reject(error);
+  }
 );
 
 // Initialize auth check on app start
