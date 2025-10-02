@@ -391,6 +391,23 @@ const styles = {
         backgroundPosition: '100% 50%',
       },
     },
+    '@keyframes stripeGradientFlow': {
+      '0%': {
+        backgroundPosition: '0% 50%',
+      },
+      '25%': {
+        backgroundPosition: '50% 75%',
+      },
+      '50%': {
+        backgroundPosition: '100% 50%',
+      },
+      '75%': {
+        backgroundPosition: '50% 25%',
+      },
+      '100%': {
+        backgroundPosition: '0% 50%',
+      },
+    },
     '@keyframes float': {
       '0%, 100%': {
         transform: 'translateY(0px)',
