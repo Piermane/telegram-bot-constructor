@@ -559,7 +559,7 @@ const BotBuilderPage: React.FC = () => {
             <HStack spacing={3}>
               <Button
                 onClick={handleSaveBot}
-                colorScheme="purple"
+                bg="whiteAlpha.300" color="white"
                 leftIcon={isEditing ? <FiRefreshCw /> : <FiSend />}
                 isDisabled={!botSettings.name || !botSettings.token}
                 isLoading={isDeploying}
@@ -577,36 +577,36 @@ const BotBuilderPage: React.FC = () => {
             </HStack>
           </HStack>
 
-          <Alert status="info" borderRadius="xl" borderWidth="1px" bg="blue.50" borderColor="blue.200">
-            <AlertIcon color="blue.500" />
+          <Alert status="info" borderRadius="xl" borderWidth="1px" bg="rgba(255, 255, 255, 0.12)" borderColor="rgba(255, 255, 255, 0.25)" sx={{ backdropFilter: 'blur(20px) saturate(180%)' }}>
+            <AlertIcon color="white" />
             <Box>
-              <AlertTitle fontWeight="semibold">Конструктор Telegram ботов</AlertTitle>
-              <AlertDescription fontSize="sm" color="whiteAlpha.700">
+              <AlertTitle fontWeight="semibold" color="white">Конструктор Telegram ботов</AlertTitle>
+              <AlertDescription fontSize="sm" color="white">
                 Создавайте ботов для мероприятий, бизнеса, магазинов с полным функционалом: кнопки, база данных, аналитика, интеграции
               </AlertDescription>
             </Box>
           </Alert>
 
           {deployResult && (
-            <Alert status="success" borderRadius="xl" borderWidth="1px" bg="green.50" borderColor="green.200">
-              <AlertIcon color="green.500" />
+            <Alert status="success" borderRadius="xl" borderWidth="1px" bg="rgba(255, 255, 255, 0.12)" borderColor="rgba(255, 255, 255, 0.25)" sx={{ backdropFilter: 'blur(20px) saturate(180%)' }}>
+              <AlertIcon color="white" />
               <Box w="full">
-                <AlertTitle fontWeight="semibold">Бот успешно запущен</AlertTitle>
+                <AlertTitle fontWeight="semibold" color="white">Бот успешно запущен</AlertTitle>
                 <AlertDescription>
                   <VStack align="start" spacing={2} mt={2}>
                     <HStack>
-                      <Text fontWeight="medium" fontSize="sm">Название:</Text>
-                      <Text fontSize="sm">{deployResult.name}</Text>
+                      <Text fontWeight="medium" fontSize="sm" color="white">Название:</Text>
+                      <Text fontSize="sm" color="white">{deployResult.name}</Text>
                     </HStack>
                     <HStack>
-                      <Text fontWeight="medium" fontSize="sm">Статус:</Text>
-                      <Badge colorScheme="green">{deployResult.status}</Badge>
+                      <Text fontWeight="medium" fontSize="sm" color="white">Статус:</Text>
+                      <Badge bg="whiteAlpha.300" color="white">{deployResult.status}</Badge>
                     </HStack>
                     <HStack>
-                      <Text fontWeight="medium" fontSize="sm">Ссылка:</Text>
-                      <Text color="blue.600" fontSize="sm">{deployResult.url}</Text>
+                      <Text fontWeight="medium" fontSize="sm" color="white">Ссылка:</Text>
+                      <Text color="white" fontSize="sm">{deployResult.url}</Text>
                     </HStack>
-                    <Text fontSize="sm" color="whiteAlpha.600">
+                    <Text fontSize="sm" color="white">
                       Ваш бот работает и принимает сообщения в Telegram
                     </Text>
                   </VStack>
@@ -616,7 +616,7 @@ const BotBuilderPage: React.FC = () => {
           )}
         </VStack>
 
-        <Tabs colorScheme="purple" variant="soft-rounded">
+        <Tabs bg="whiteAlpha.300" color="white" variant="soft-rounded">
           <TabList flexWrap="wrap" gap={2}>
             <Tab 
               gap={2}
@@ -850,7 +850,7 @@ const BotBuilderPage: React.FC = () => {
                             <HStack>
                               <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}>#{index + 1}</Badge>
                               <Heading size="sm">{scene.name}</Heading>
-                              <Badge variant="outline">{scene.trigger}</Badge>
+                              <Badge bg="whiteAlpha.300" color="white" borderColor="whiteAlpha.400">{scene.trigger}</Badge>
                             </HStack>
                             <Text fontSize="xs" color="whiteAlpha.600">
                               {scene.buttons.length} кнопок
@@ -870,7 +870,7 @@ const BotBuilderPage: React.FC = () => {
                                 icon={<DeleteIcon />}
                                 size="sm"
                                 variant="ghost"
-                                colorScheme="red"
+                                bg="whiteAlpha.300" color="white"
                                 aria-label="Удалить"
                                 onClick={() => deleteScene(scene.id)}
                               />
@@ -879,13 +879,13 @@ const BotBuilderPage: React.FC = () => {
                         </HStack>
                       </CardHeader>
                       <CardBody pt={0}>
-                        <Text fontSize="sm" noOfLines={2} mb={3}>
+                        <Text fontSize="sm" noOfLines={2} mb={3} color="white">
                           {scene.message}
                         </Text>
                         {scene.buttons.length > 0 && (
                           <HStack spacing={2} flexWrap="wrap">
                             {scene.buttons.map((button, btnIndex) => (
-                              <Badge key={btnIndex} colorScheme="green" fontSize="xs">
+                              <Badge key={btnIndex} bg="whiteAlpha.300" color="white" fontSize="xs">
                                 {button.text}
                               </Badge>
                             ))}
@@ -943,7 +943,7 @@ const BotBuilderPage: React.FC = () => {
                           <FormControl>
                             <FormLabel>
                               🌐 URL WebApp сервера 
-                              <Badge ml={2} colorScheme="green" fontSize="xs">Автоматически</Badge>
+                              <Badge ml={2} bg="whiteAlpha.300" color="white" fontSize="xs">Автоматически</Badge>
                             </FormLabel>
                             <Input
                               placeholder="Оставьте пустым для автоопределения"
@@ -961,31 +961,31 @@ const BotBuilderPage: React.FC = () => {
                           </FormControl>
                           
                           <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
-                          <Card bg="blue.50" p={4}>
+                          <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle} p={4}>
                             <VStack align="start" spacing={3}>
-                              <Heading size="sm">🎨 Дизайн WebApp</Heading>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Heading size="sm" color="white">Дизайн WebApp</Heading>
+                              <Text fontSize="sm" color="white">
                                 ✅ Адаптивный дизайн под мобильные устройства
                               </Text>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Text fontSize="sm" color="white">
                                 ✅ Telegram тема (светлая/темная)
                               </Text>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Text fontSize="sm" color="white">
                                 ✅ Интерактивные элементы и анимации
                               </Text>
                             </VStack>
                           </Card>
 
-                          <Card bg="green.50" p={4}>
+                          <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle} p={4}>
                             <VStack align="start" spacing={3}>
-                              <Heading size="sm">⚡ Функционал</Heading>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Heading size="sm" color="white">Функционал</Heading>
+                              <Text fontSize="sm" color="white">
                                 ✅ Корзина с подсчетом суммы
                               </Text>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Text fontSize="sm" color="white">
                                 ✅ Каталог товаров/услуг
                               </Text>
-                              <Text fontSize="sm" color="whiteAlpha.600">
+                              <Text fontSize="sm" color="white">
                                 ✅ Обратная связь с ботом
                               </Text>
                             </VStack>
@@ -996,19 +996,20 @@ const BotBuilderPage: React.FC = () => {
 
                       {botSettings.features.webApp && (
                         <Box>
-                          <Heading size="sm" mb={3}>📋 Предпросмотр WebApp</Heading>
+                          <Heading size="sm" mb={3} color="white">Предпросмотр WebApp</Heading>
                           <Box
-                            bg="gray.100"
+                            bg={cardBg}
                             p={4}
                             borderRadius="lg"
-                            border="2px dashed"
-                            borderColor="gray.300"
+                            borderWidth="1px"
+                            borderColor={borderColor}
+                            sx={cardStyle}
                             textAlign="center"
                           >
                             <VStack spacing={3}>
                               <Text fontSize="6xl">📱</Text>
                               <Heading size="md" color="white">{botSettings.name}</Heading>
-                              <Text color="whiteAlpha.600">{botSettings.description}</Text>
+                              <Text color="white">{botSettings.description}</Text>
                               
                               {botSettings.category === 'restaurant_delivery' && (
                                 <VStack spacing={2}>
@@ -1062,7 +1063,7 @@ const BotBuilderPage: React.FC = () => {
                                 <Text fontWeight="bold">{product.name || 'Новый товар'}</Text>
                                 <Button
                                   size="sm"
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newProducts = [...(botSettings.webAppContent?.products || [])];
@@ -1167,7 +1168,7 @@ const BotBuilderPage: React.FC = () => {
                                 <Text fontWeight="bold">{survey.title || 'Новый опрос'}</Text>
                                 <Button
                                   size="sm"
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newSurveys = [...(botSettings.webAppContent?.surveys || [])];
@@ -1236,7 +1237,7 @@ const BotBuilderPage: React.FC = () => {
                           ))}
                           <Button
                             leftIcon={<span>➕</span>}
-                            colorScheme="purple"
+                            bg="whiteAlpha.300" color="white"
                             variant="outline"
                             onClick={() => {
                               const newSurvey = {
@@ -1272,7 +1273,7 @@ const BotBuilderPage: React.FC = () => {
                                 <Text fontWeight="bold">{activity.name || 'Новая активность'}</Text>
                                 <Button
                                   size="sm"
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newActivities = [...(botSettings.webAppContent?.activities || [])];
@@ -1341,7 +1342,7 @@ const BotBuilderPage: React.FC = () => {
                           ))}
                           <Button
                             leftIcon={<span>➕</span>}
-                            colorScheme="orange"
+                            bg="whiteAlpha.300" color="white"
                             variant="outline"
                             onClick={() => {
                               const newActivity = {
@@ -1377,7 +1378,7 @@ const BotBuilderPage: React.FC = () => {
                                 <Text fontWeight="bold">{event.title || 'Новое мероприятие'}</Text>
                                 <Button
                                   size="sm"
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newSchedule = [...(botSettings.webAppContent?.schedule || [])];
@@ -1447,7 +1448,7 @@ const BotBuilderPage: React.FC = () => {
                           ))}
                           <Button
                             leftIcon={<span>➕</span>}
-                            colorScheme="green"
+                            bg="whiteAlpha.300" color="white"
                             variant="outline"
                             onClick={() => {
                               const newEvent = {
@@ -1536,7 +1537,7 @@ const BotBuilderPage: React.FC = () => {
                                 <Text fontWeight="bold">{location.name || 'Новая локация'}</Text>
                                 <Button
                                   size="sm"
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newLocations = [...(botSettings.webAppContent?.locations || [])];
@@ -1678,14 +1679,14 @@ const BotBuilderPage: React.FC = () => {
                         {botSettings.adminUsers && botSettings.adminUsers.length > 0 && (
                           <HStack mt={2} spacing={2} flexWrap="wrap">
                             {botSettings.adminUsers.map((id, index) => (
-                              <Badge key={index} colorScheme="purple" px={3} py={1} borderRadius="full">
+                              <Badge key={index} bg="whiteAlpha.300" color="white" px={3} py={1} borderRadius="full">
                                 🆔 {id}
                                 <IconButton
                                   aria-label="Удалить"
                                   icon={<DeleteIcon />}
                                   size="xs"
                                   ml={2}
-                                  colorScheme="red"
+                                  bg="whiteAlpha.300" color="white"
                                   variant="ghost"
                                   onClick={() => {
                                     const newAdmins = [...(botSettings.adminUsers || [])];
@@ -2139,17 +2140,18 @@ const BotBuilderPage: React.FC = () => {
                     </CardHeader>
                     <CardBody>
                       <Box
-                        bg="gray.50"
+                        bg={cardBg}
                         borderRadius="lg"
                         p={4}
-                        border="1px"
-                        borderColor="gray.200"
+                        borderWidth="1px"
+                        borderColor={borderColor}
+                        sx={cardStyle}
                         maxH="500px"
                         overflowY="auto"
                       >
                         <VStack align="start" spacing={4}>
                           <HStack>
-                            <Badge colorScheme="green">BOT</Badge>
+                            <Badge bg="whiteAlpha.300" color="white">BOT</Badge>
                             <Text fontWeight="bold">
                               {botSettings.name || 'Название бота'}
                             </Text>
@@ -2160,8 +2162,8 @@ const BotBuilderPage: React.FC = () => {
                               <Text fontSize="xs" color="whiteAlpha.500" mb={2}>
                                 Сценарий #{index + 1}: {scene.name}
                               </Text>
-                              <Box bg="white" p={3} borderRadius="md" border="1px" borderColor="gray.200" mb={2}>
-                                <Text fontSize="sm" whiteSpace="pre-line">
+                              <Box bg="whiteAlpha.200" p={3} borderRadius="md" borderWidth="1px" borderColor="whiteAlpha.300" mb={2}>
+                                <Text fontSize="sm" whiteSpace="pre-line" color="white">
                                   {scene.message}
                                 </Text>
                               </Box>
@@ -2170,14 +2172,14 @@ const BotBuilderPage: React.FC = () => {
                                   {scene.buttons.map((button, btnIndex) => (
                                     <Box
                                       key={btnIndex}
-                                      bg="blue.50"
+                                      bg="whiteAlpha.200"
                                       p={2}
                                       borderRadius="md"
-                                      border="1px"
-                                      borderColor="blue.200"
+                                      borderWidth="1px"
+                                      borderColor="whiteAlpha.300"
                                       textAlign="center"
                                     >
-                                      <Text fontSize="xs" fontWeight="bold">
+                                      <Text fontSize="xs" fontWeight="bold" color="white">
                                         {button.text}
                                       </Text>
                                     </Box>
@@ -2201,7 +2203,7 @@ const BotBuilderPage: React.FC = () => {
                       <VStack spacing={4} align="stretch">
                         <HStack justify="space-between">
                           <Text>Категория:</Text>
-                          <Badge colorScheme="purple">
+                          <Badge bg="whiteAlpha.300" color="white">
                             {botSettings.category}
                           </Badge>
                         </HStack>
@@ -2215,21 +2217,21 @@ const BotBuilderPage: React.FC = () => {
 
                         <HStack justify="space-between">
                           <Text>Кнопок всего:</Text>
-                          <Badge colorScheme="green">
+                          <Badge bg="whiteAlpha.300" color="white">
                             {botSettings.scenes.reduce((sum, scene) => sum + scene.buttons.length, 0)}
                           </Badge>
                         </HStack>
 
                         <HStack justify="space-between">
                           <Text>Полей БД:</Text>
-                          <Badge colorScheme="orange">
+                          <Badge bg="whiteAlpha.300" color="white">
                             {botSettings.database.customFields.length}
                           </Badge>
                         </HStack>
 
                         <HStack justify="space-between">
                           <Text>Функций включено:</Text>
-                          <Badge colorScheme="purple">
+                          <Badge bg="whiteAlpha.300" color="white">
                             {Object.values(botSettings.features).filter(Boolean).length}
                           </Badge>
                         </HStack>
@@ -2365,7 +2367,7 @@ const BotBuilderPage: React.FC = () => {
                           />
                         </FormControl>
 
-                        <Button size="sm" colorScheme="green" onClick={addButtonToScene}>
+                        <Button size="sm" bg="whiteAlpha.300" color="white" onClick={addButtonToScene}>
                           +
                         </Button>
                       </Grid>
@@ -2384,7 +2386,7 @@ const BotBuilderPage: React.FC = () => {
                         icon={<DeleteIcon />}
                         size="xs"
                         variant="ghost"
-                        colorScheme="red"
+                        bg="whiteAlpha.300" color="white"
                         aria-label="Удалить кнопку"
                         onClick={() => removeButtonFromScene(index)}
                       />

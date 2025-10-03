@@ -1,6 +1,6 @@
 {
   "name": "telegram-bot-constructor-frontend",
-  "version": "9.0.0",
+  "version": "9.1.0",
   "description": "TelegramBot Constructor",
   "private": true,
   "dependencies": {
