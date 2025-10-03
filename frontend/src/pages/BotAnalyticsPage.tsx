@@ -286,7 +286,9 @@ const BotAnalyticsPage: React.FC = () => {
             <Button
               leftIcon={<ArrowBackIcon />}
               onClick={() => navigate('/bots')}
-              variant="ghost"
+              bg="whiteAlpha.900"
+              color="gray.800"
+              _hover={{ bg: "white" }}
             >
               Назад
             </Button>
@@ -307,19 +309,22 @@ const BotAnalyticsPage: React.FC = () => {
           <HStack spacing={2}>
             <Button
               leftIcon={<DownloadIcon />}
-              colorScheme="purple"
-              variant="outline"
+              bg="whiteAlpha.900"
+              color="gray.800"
+              _hover={{ bg: "white" }}
               onClick={() => handleExport('all')}
               size="sm"
             >
               Экспорт всех данных
             </Button>
             <Button
-              colorScheme="purple"
+              bg="whiteAlpha.900"
+              color="gray.800"
+              _hover={{ bg: "white" }}
               onClick={loadAnalytics}
               size="sm"
             >
-              🔄 Обновить
+              Обновить
             </Button>
           </HStack>
         </HStack>
@@ -387,14 +392,14 @@ const BotAnalyticsPage: React.FC = () => {
 
         {/* Вкладки с графиками и данными */}
         <Tabs colorScheme="purple" variant="enclosed">
-          <TabList overflowX="auto" overflowY="hidden">
-            <Tab>📈 Активность</Tab>
-            <Tab>🎯 Команды</Tab>
-            <Tab>📱 WebApp</Tab>
-            <Tab>🎟️ Регистрации</Tab>
-            <Tab>📝 Опросы</Tab>
-            <Tab>👥 Пользователи</Tab>
-            <Tab>📊 События</Tab>
+          <TabList overflowX="auto" overflowY="hidden" bg="whiteAlpha.200" p={2} borderRadius="md">
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>Активность</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>Команды</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>WebApp</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>Регистрации</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>Опросы</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>Пользователи</Tab>
+            <Tab color="white" _selected={{ bg: "whiteAlpha.400", color: "white" }}>События</Tab>
           </TabList>
 
           <TabPanels>
@@ -407,6 +412,9 @@ const BotAnalyticsPage: React.FC = () => {
                     value={dateFilter}
                     onChange={(e) => setDateFilter(e.target.value)}
                     w="200px"
+                    bg="whiteAlpha.900"
+                    color="gray.800"
+                    borderColor="whiteAlpha.400"
                   >
                     <option value="7">7 дней</option>
                     <option value="14">14 дней</option>

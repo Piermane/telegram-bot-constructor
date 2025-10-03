@@ -539,7 +539,9 @@ const BotBuilderPage: React.FC = () => {
             <HStack spacing={4}>
               <Button
                 leftIcon={<FiArrowLeft />}
-                variant="ghost"
+                bg="whiteAlpha.900"
+                color="gray.800"
+                _hover={{ bg: "white" }}
                 onClick={() => navigate('/bots')}
               >
                 Назад
@@ -735,7 +737,7 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
-                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle} borderRadius="xl">
+                  <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle} borderRadius="xl">
                     <CardHeader>
                       <HStack>
                         <FiCpu />
@@ -786,7 +788,7 @@ const BotBuilderPage: React.FC = () => {
 
                 <GridItem>
                   <VStack spacing={4} align="stretch">
-                    <Card bg={cardBg} borderColor={borderColor} sx={cardStyle} borderRadius="xl">
+                    <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle} borderRadius="xl">
                       <CardHeader>
                         <Heading size="md" color="white">Токен бота</Heading>
                       </CardHeader>
@@ -805,7 +807,7 @@ const BotBuilderPage: React.FC = () => {
                       </CardBody>
                     </Card>
 
-                    <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                    <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                       <CardHeader>
                         <Heading size="md" color="white">Быстрый старт</Heading>
                       </CardHeader>
@@ -834,7 +836,7 @@ const BotBuilderPage: React.FC = () => {
               <VStack spacing={6} align="stretch">
                 <HStack justify="space-between">
                   <Heading size="md" color="white">Сценарии бота</Heading>
-                  <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={addScene}>
+                  <Button leftIcon={<AddIcon />} bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }} onClick={addScene}>
                     Добавить сценарий
                   </Button>
                 </HStack>
@@ -846,7 +848,7 @@ const BotBuilderPage: React.FC = () => {
                         <HStack justify="space-between">
                           <VStack align="start" spacing={1}>
                             <HStack>
-                              <Badge colorScheme="blue">#{index + 1}</Badge>
+                              <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}>#{index + 1}</Badge>
                               <Heading size="sm">{scene.name}</Heading>
                               <Badge variant="outline">{scene.trigger}</Badge>
                             </HStack>
@@ -859,7 +861,7 @@ const BotBuilderPage: React.FC = () => {
                               icon={<EditIcon />}
                               size="sm"
                               variant="ghost"
-                              colorScheme="blue"
+                              bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}
                               aria-label="Редактировать"
                               onClick={() => editScene(scene)}
                             />
@@ -899,7 +901,7 @@ const BotBuilderPage: React.FC = () => {
             {/* WebApp конструктор */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <HStack justify="space-between">
                       <Heading size="md" color="white">WebApp конструктор</Heading>
@@ -1026,7 +1028,7 @@ const BotBuilderPage: React.FC = () => {
                                 </VStack>
                               )}
                               
-                              <Badge colorScheme="blue">
+                              <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}>
                                 Полноценный WebApp будет автоматически создан при запуске бота
                               </Badge>
                             </VStack>
@@ -1042,7 +1044,7 @@ const BotBuilderPage: React.FC = () => {
             {/* Контент WebApp */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <Heading size="md" color="white">Управление контентом WebApp</Heading>
                   </CardHeader>
@@ -1129,7 +1131,7 @@ const BotBuilderPage: React.FC = () => {
                           ))}
                           <Button
                             leftIcon={<span>➕</span>}
-                            colorScheme="blue"
+                            bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}
                             variant="outline"
                             onClick={() => {
                               const newProduct = {
@@ -1836,7 +1838,7 @@ const BotBuilderPage: React.FC = () => {
             {/* База данных */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <Heading size="md" color="white">Настройки базы данных</Heading>
                   </CardHeader>
@@ -1896,7 +1898,7 @@ const BotBuilderPage: React.FC = () => {
                   </CardBody>
                 </Card>
 
-                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <Heading size="md" color="white">Пользовательские поля</Heading>
                   </CardHeader>
@@ -1915,7 +1917,7 @@ const BotBuilderPage: React.FC = () => {
                             <Tr key={index}>
                               <Td>{field.name}</Td>
                               <Td>
-                                <Badge colorScheme="blue">{field.type}</Badge>
+                                <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}>{field.type}</Badge>
                               </Td>
                               <Td>
                                 <Badge colorScheme={field.required ? 'red' : 'gray'}>
@@ -1935,7 +1937,7 @@ const BotBuilderPage: React.FC = () => {
             {/* Интеграции */}
             <TabPanel>
               <SimpleGrid columns={1} spacing={4}>
-                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <Heading size="md" color="white">Уведомления администратору</Heading>
                   </CardHeader>
@@ -2019,7 +2021,7 @@ const BotBuilderPage: React.FC = () => {
 
             {/* Функции */}
             <TabPanel>
-              <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+              <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                 <CardHeader>
                   <Heading size="md" color="white">Дополнительные функции</Heading>
                 </CardHeader>
@@ -2131,7 +2133,7 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
-                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                  <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
                       <Heading size="md" color="white">Предпросмотр бота</Heading>
                     </CardHeader>
@@ -2191,7 +2193,7 @@ const BotBuilderPage: React.FC = () => {
                 </GridItem>
 
                 <GridItem>
-                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
+                  <Card bg={cardBg} borderWidth="1px" borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
                       <Heading size="md" color="white">Статистика проекта</Heading>
                     </CardHeader>
@@ -2206,7 +2208,7 @@ const BotBuilderPage: React.FC = () => {
 
                         <HStack justify="space-between">
                           <Text>Сценариев:</Text>
-                          <Badge colorScheme="blue">
+                          <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }}>
                             {botSettings.scenes.length}
                           </Badge>
                         </HStack>
@@ -2374,7 +2376,7 @@ const BotBuilderPage: React.FC = () => {
                   {selectedScene.buttons.map((button, index) => (
                     <HStack key={index} p={2} bg="white" borderRadius="md" border="1px" borderColor="gray.200">
                       <Text flex={1} fontSize="sm">{button.text}</Text>
-                      <Badge colorScheme="blue" fontSize="xs">{button.action}</Badge>
+                      <Badge bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }} fontSize="xs">{button.action}</Badge>
                       <Text fontSize="xs" color="whiteAlpha.600" maxW="150px" noOfLines={1}>
                         {button.value}
                       </Text>
@@ -2396,7 +2398,7 @@ const BotBuilderPage: React.FC = () => {
             <Button variant="ghost" mr={3} onClick={onSceneModalClose}>
               Отмена
             </Button>
-            <Button colorScheme="blue" onClick={saveScene}>
+            <Button bg="whiteAlpha.900" color="gray.800" _hover={{ bg: "white" }} onClick={saveScene}>
               Сохранить сценарий
             </Button>
           </ModalFooter>
