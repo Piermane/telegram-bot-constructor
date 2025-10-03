@@ -413,24 +413,29 @@ const BotListPage: React.FC = () => {
                           variant="ghost"
                           size="sm"
                         />
-                        <MenuList>
+                        <MenuList bg="rgba(255, 255, 255, 0.95)" backdropFilter="blur(20px)" borderColor="rgba(255, 255, 255, 0.3)">
                           <MenuItem
                             icon={<ExternalLinkIcon />}
                             as="a"
                             href={bot.url}
                             target="_blank"
+                            color="gray.800"
+                            _hover={{ bg: 'blue.50' }}
                           >
                             Открыть в Telegram
                           </MenuItem>
                           <MenuItem
                             icon={<Icon as={FiBarChart2} />}
                             onClick={() => navigate(`/bots/${bot.id}/analytics`)}
+                            color="gray.800"
+                            _hover={{ bg: 'blue.50' }}
                           >
                             Аналитика
                           </MenuItem>
                           <MenuItem
                             icon={<DeleteIcon />}
-                            color="red.500"
+                            color="red.600"
+                            _hover={{ bg: 'red.50' }}
                             onClick={() => {
                               if (window.confirm(`Удалить бота "${bot.name}"? Это действие необратимо!`)) {
                                 handleDeleteBot(bot.id);

@@ -105,8 +105,16 @@ const BotAnalyticsPage: React.FC = () => {
   const [dateFilter, setDateFilter] = useState('7'); // дней назад
   const [searchTerm, setSearchTerm] = useState('');
 
-  const bgColor = useColorModeValue('white', 'gray.800');
-  const borderColor = useColorModeValue('gray.200', 'gray.700');
+  const bgColor = 'rgba(255, 255, 255, 0.12)';
+  const borderColor = 'rgba(255, 255, 255, 0.25)';
+  const cardStyle = {
+    backdropFilter: 'blur(20px) saturate(180%)',
+    WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.15)',
+    borderWidth: '1px',
+    borderStyle: 'solid',
+    color: 'white',
+  };
 
   const loadAnalytics = useCallback(async () => {
     setLoading(true);
@@ -285,12 +293,12 @@ const BotAnalyticsPage: React.FC = () => {
             <Box>
               <Heading
                 size="lg"
-                bgGradient="linear(to-r, purple.400, pink.400)"
-                bgClip="text"
+                color="white"
+                textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
               >
                 📊 Аналитика бота
               </Heading>
-              <Text color="gray.600" mt={1}>
+              <Text color="whiteAlpha.800" mt={1}>
                 @{analytics.botInfo.username} • {analytics.botInfo.name}
               </Text>
             </Box>
@@ -318,12 +326,12 @@ const BotAnalyticsPage: React.FC = () => {
 
         {/* Основные метрики */}
         <SimpleGrid columns={{ base: 1, md: 2, lg: 5 }} spacing={4}>
-          <Card bg={bgColor} borderWidth="1px" borderColor={borderColor}>
+          <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel>Всего пользователей</StatLabel>
-                <StatNumber color="purple.500">{analytics.stats.total_users}</StatNumber>
-                <StatHelpText>
+                <StatLabel color="whiteAlpha.800">Всего пользователей</StatLabel>
+                <StatNumber color="purple.300">{analytics.stats.total_users}</StatNumber>
+                <StatHelpText color="whiteAlpha.700">
                   <StatArrow type="increase" />
                   {analytics.stats.active_today} сегодня
                 </StatHelpText>
@@ -331,24 +339,24 @@ const BotAnalyticsPage: React.FC = () => {
             </CardBody>
           </Card>
 
-          <Card bg={bgColor} borderWidth="1px" borderColor={borderColor}>
+          <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel>Активных за неделю</StatLabel>
-                <StatNumber color="blue.500">{analytics.stats.active_week}</StatNumber>
-                <StatHelpText>
+                <StatLabel color="whiteAlpha.800">Активных за неделю</StatLabel>
+                <StatNumber color="blue.300">{analytics.stats.active_week}</StatNumber>
+                <StatHelpText color="whiteAlpha.700">
                   {((analytics.stats.active_week / analytics.stats.total_users) * 100).toFixed(1)}% от всех
                 </StatHelpText>
               </Stat>
             </CardBody>
           </Card>
 
-          <Card bg={bgColor} borderWidth="1px" borderColor={borderColor}>
+          <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel>Всего сообщений</StatLabel>
-                <StatNumber color="green.500">{analytics.stats.total_messages}</StatNumber>
-                <StatHelpText>
+                <StatLabel color="whiteAlpha.800">Всего сообщений</StatLabel>
+                <StatNumber color="green.300">{analytics.stats.total_messages}</StatNumber>
+                <StatHelpText color="whiteAlpha.700">
                   <StatArrow type="increase" />
                   {analytics.stats.messages_today} сегодня
                 </StatHelpText>
@@ -356,22 +364,22 @@ const BotAnalyticsPage: React.FC = () => {
             </CardBody>
           </Card>
 
-          <Card bg={bgColor} borderWidth="1px" borderColor={borderColor}>
+          <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel>Действий WebApp</StatLabel>
-                <StatNumber color="orange.500">{analytics.webapp_data.length}</StatNumber>
-                <StatHelpText>Всего записей</StatHelpText>
+                <StatLabel color="whiteAlpha.800">Действий WebApp</StatLabel>
+                <StatNumber color="orange.300">{analytics.webapp_data.length}</StatNumber>
+                <StatHelpText color="whiteAlpha.700">Всего записей</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
 
-          <Card bg={bgColor} borderWidth="1px" borderColor={borderColor}>
+          <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel>События аналитики</StatLabel>
-                <StatNumber color="pink.500">{analytics.analytics_events.length}</StatNumber>
-                <StatHelpText>Всего событий</StatHelpText>
+                <StatLabel color="whiteAlpha.800">События аналитики</StatLabel>
+                <StatNumber color="pink.300">{analytics.analytics_events.length}</StatNumber>
+                <StatHelpText color="whiteAlpha.700">Всего событий</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -394,7 +402,7 @@ const BotAnalyticsPage: React.FC = () => {
             <TabPanel>
               <VStack spacing={6} align="stretch">
                 <HStack justify="space-between">
-                  <Heading size="md">Активность за последние дни</Heading>
+                  <Heading size="md" color="white">Активность за последние дни</Heading>
                   <Select
                     value={dateFilter}
                     onChange={(e) => setDateFilter(e.target.value)}
@@ -406,7 +414,7 @@ const BotAnalyticsPage: React.FC = () => {
                   </Select>
                 </HStack>
 
-                <Card bg={bgColor}>
+                <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                   <CardBody>
                     <ResponsiveContainer width="100%" height={400}>
                       <LineChart data={getActivityChartData()}>
@@ -439,10 +447,10 @@ const BotAnalyticsPage: React.FC = () => {
             {/* Вкладка: Команды */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Heading size="md">Популярные команды и сцены</Heading>
+                <Heading size="md" color="white">Популярные команды и сцены</Heading>
 
                 <SimpleGrid columns={{ base: 1, lg: 2 }} spacing={6}>
-                  <Card bg={bgColor}>
+                  <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
                       <Heading size="sm">Топ-10 команд</Heading>
                     </CardHeader>
@@ -459,7 +467,7 @@ const BotAnalyticsPage: React.FC = () => {
                     </CardBody>
                   </Card>
 
-                  <Card bg={bgColor}>
+                  <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
                       <Heading size="sm">Распределение по командам</Heading>
                     </CardHeader>
@@ -507,7 +515,7 @@ const BotAnalyticsPage: React.FC = () => {
 
                 {analytics.webapp_data.length > 0 ? (
                   <>
-                    <Card bg={bgColor}>
+                    <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                       <CardHeader>
                         <Heading size="sm">Популярные действия</Heading>
                       </CardHeader>
@@ -524,7 +532,7 @@ const BotAnalyticsPage: React.FC = () => {
                       </CardBody>
                     </Card>
 
-                    <Card bg={bgColor}>
+                    <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                       <CardHeader>
                         <Heading size="sm">История действий</Heading>
                       </CardHeader>
@@ -573,7 +581,7 @@ const BotAnalyticsPage: React.FC = () => {
                 <Heading size="md">Регистрации на активности</Heading>
 
                 {analytics.webapp_data.filter(d => d.action === 'register_activity').length > 0 ? (
-                  <Card bg={bgColor}>
+                  <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                     <CardBody>
                       <Table variant="simple" size="sm">
                         <Thead>
@@ -624,7 +632,7 @@ const BotAnalyticsPage: React.FC = () => {
                 <Heading size="md">Ответы на опросы</Heading>
 
                 {analytics.webapp_data.filter(d => d.action === 'start_survey' || d.action === 'survey_answer').length > 0 ? (
-                  <Card bg={bgColor}>
+                  <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                     <CardBody>
                       <Table variant="simple" size="sm">
                         <Thead>
@@ -697,7 +705,7 @@ const BotAnalyticsPage: React.FC = () => {
                   </HStack>
                 </HStack>
 
-                <Card bg={bgColor}>
+                <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                   <CardBody>
                     <Table variant="simple">
                       <Thead>
@@ -789,7 +797,7 @@ const BotAnalyticsPage: React.FC = () => {
                   </Button>
                 </HStack>
 
-                <Card bg={bgColor}>
+                <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
                   <CardBody>
                     <Table variant="simple" size="sm">
                       <Thead>
