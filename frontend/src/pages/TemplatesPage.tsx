@@ -392,14 +392,14 @@ const TemplatesPage: React.FC = () => {
                           {/* Статистика */}
                           <Stack direction="row" spacing={4} w="full">
                             <HStack spacing={2}>
-                              <Icon as={FiClock} color="gray.500" boxSize={4} />
-                              <Text fontSize="xs" color="gray.600" fontWeight="medium">
+                              <Icon as={FiClock} color="whiteAlpha.500" boxSize={4} />
+                              <Text fontSize="xs" color="whiteAlpha.600" fontWeight="medium">
                                 {template.scenesCount} сценариев
                               </Text>
                             </HStack>
                             <HStack spacing={2}>
                               <Icon as={FiCheck} color="green.500" boxSize={4} />
-                              <Text fontSize="xs" color="gray.600" fontWeight="medium">
+                              <Text fontSize="xs" color="whiteAlpha.600" fontWeight="medium">
                                 {template.features.length} функций
                               </Text>
                             </HStack>
@@ -415,7 +415,7 @@ const TemplatesPage: React.FC = () => {
                                   borderRadius="full"
                                   bg="purple.400"
                                 />
-                                <Text fontSize="xs" color="gray.700">Web приложение</Text>
+                                <Text fontSize="xs" color="whiteAlpha.700">Web приложение</Text>
                               </HStack>
                             )}
                             {template.hasPayment && (
@@ -426,7 +426,7 @@ const TemplatesPage: React.FC = () => {
                                   borderRadius="full"
                                   bg="green.400"
                                 />
-                                <Text fontSize="xs" color="gray.700">Приём платежей</Text>
+                                <Text fontSize="xs" color="whiteAlpha.700">Приём платежей</Text>
                               </HStack>
                             )}
                             {template.features.slice(0, 1).map((feature) => (
@@ -437,7 +437,7 @@ const TemplatesPage: React.FC = () => {
                                   borderRadius="full"
                                   bg="blue.400"
                                 />
-                                <Text fontSize="xs" color="gray.700" textTransform="capitalize">
+                                <Text fontSize="xs" color="whiteAlpha.700" textTransform="capitalize">
                                   {feature}
                                 </Text>
                               </HStack>

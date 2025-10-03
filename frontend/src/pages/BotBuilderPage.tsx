@@ -579,7 +579,7 @@ const BotBuilderPage: React.FC = () => {
             <AlertIcon color="blue.500" />
             <Box>
               <AlertTitle fontWeight="semibold">Конструктор Telegram ботов</AlertTitle>
-              <AlertDescription fontSize="sm" color="gray.700">
+              <AlertDescription fontSize="sm" color="whiteAlpha.700">
                 Создавайте ботов для мероприятий, бизнеса, магазинов с полным функционалом: кнопки, база данных, аналитика, интеграции
               </AlertDescription>
             </Box>
@@ -604,7 +604,7 @@ const BotBuilderPage: React.FC = () => {
                       <Text fontWeight="medium" fontSize="sm">Ссылка:</Text>
                       <Text color="blue.600" fontSize="sm">{deployResult.url}</Text>
                     </HStack>
-                    <Text fontSize="sm" color="gray.600">
+                    <Text fontSize="sm" color="whiteAlpha.600">
                       Ваш бот работает и принимает сообщения в Telegram
                     </Text>
                   </VStack>
@@ -735,11 +735,11 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
-                  <Card bg={cardBg} border="1px" borderColor={borderColor} borderRadius="xl">
+                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle} borderRadius="xl">
                     <CardHeader>
                       <HStack>
                         <FiCpu />
-                        <Heading size="md">Информация о боте</Heading>
+                        <Heading size="md" color="white">Информация о боте</Heading>
                       </HStack>
                     </CardHeader>
                     <CardBody>
@@ -786,9 +786,9 @@ const BotBuilderPage: React.FC = () => {
 
                 <GridItem>
                   <VStack spacing={4} align="stretch">
-                    <Card bg={cardBg} border="1px" borderColor={borderColor} borderRadius="xl">
+                    <Card bg={cardBg} borderColor={borderColor} sx={cardStyle} borderRadius="xl">
                       <CardHeader>
-                        <Heading size="md">Токен бота</Heading>
+                        <Heading size="md" color="white">Токен бота</Heading>
                       </CardHeader>
                       <CardBody>
                         <FormControl isRequired>
@@ -805,9 +805,9 @@ const BotBuilderPage: React.FC = () => {
                       </CardBody>
                     </Card>
 
-                    <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                    <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                       <CardHeader>
-                        <Heading size="md">Быстрый старт</Heading>
+                        <Heading size="md" color="white">Быстрый старт</Heading>
                       </CardHeader>
                       <CardBody>
                         <Text fontSize="sm" mb={3}>Загрузить готовый шаблон:</Text>
@@ -833,7 +833,7 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <VStack spacing={6} align="stretch">
                 <HStack justify="space-between">
-                  <Heading size="md">Сценарии бота</Heading>
+                  <Heading size="md" color="white">Сценарии бота</Heading>
                   <Button leftIcon={<AddIcon />} colorScheme="blue" onClick={addScene}>
                     Добавить сценарий
                   </Button>
@@ -850,7 +850,7 @@ const BotBuilderPage: React.FC = () => {
                               <Heading size="sm">{scene.name}</Heading>
                               <Badge variant="outline">{scene.trigger}</Badge>
                             </HStack>
-                            <Text fontSize="xs" color="gray.600">
+                            <Text fontSize="xs" color="whiteAlpha.600">
                               {scene.buttons.length} кнопок
                             </Text>
                           </VStack>
@@ -899,10 +899,10 @@ const BotBuilderPage: React.FC = () => {
             {/* WebApp конструктор */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
                     <HStack justify="space-between">
-                      <Heading size="md">WebApp конструктор</Heading>
+                      <Heading size="md" color="white">WebApp конструктор</Heading>
                       <Badge colorScheme={botSettings.features.webApp ? 'green' : 'gray'}>
                         {botSettings.features.webApp ? 'Включен' : 'Отключен'}
                       </Badge>
@@ -953,7 +953,7 @@ const BotBuilderPage: React.FC = () => {
                               isDisabled
                               bg="gray.50"
                             />
-                            <Text fontSize="sm" color="gray.600" mt={1}>
+                            <Text fontSize="sm" color="whiteAlpha.600" mt={1}>
                               ℹ️ URL определяется автоматически из переменной SERVER_URL
                             </Text>
                           </FormControl>
@@ -962,13 +962,13 @@ const BotBuilderPage: React.FC = () => {
                           <Card bg="blue.50" p={4}>
                             <VStack align="start" spacing={3}>
                               <Heading size="sm">🎨 Дизайн WebApp</Heading>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Адаптивный дизайн под мобильные устройства
                               </Text>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Telegram тема (светлая/темная)
                               </Text>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Интерактивные элементы и анимации
                               </Text>
                             </VStack>
@@ -977,13 +977,13 @@ const BotBuilderPage: React.FC = () => {
                           <Card bg="green.50" p={4}>
                             <VStack align="start" spacing={3}>
                               <Heading size="sm">⚡ Функционал</Heading>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Корзина с подсчетом суммы
                               </Text>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Каталог товаров/услуг
                               </Text>
-                              <Text fontSize="sm" color="gray.600">
+                              <Text fontSize="sm" color="whiteAlpha.600">
                                 ✅ Обратная связь с ботом
                               </Text>
                             </VStack>
@@ -1005,8 +1005,8 @@ const BotBuilderPage: React.FC = () => {
                           >
                             <VStack spacing={3}>
                               <Text fontSize="6xl">📱</Text>
-                              <Heading size="md">{botSettings.name}</Heading>
-                              <Text color="gray.600">{botSettings.description}</Text>
+                              <Heading size="md" color="white">{botSettings.name}</Heading>
+                              <Text color="whiteAlpha.600">{botSettings.description}</Text>
                               
                               {botSettings.category === 'restaurant_delivery' && (
                                 <VStack spacing={2}>
@@ -1042,15 +1042,15 @@ const BotBuilderPage: React.FC = () => {
             {/* Контент WebApp */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
-                    <Heading size="md">Управление контентом WebApp</Heading>
+                    <Heading size="md" color="white">Управление контентом WebApp</Heading>
                   </CardHeader>
                   <CardBody>
                     <VStack spacing={6} align="stretch">
                       <FormControl>
                         <FormLabel fontWeight="semibold">Товары/Услуги</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Добавьте товары или услуги для вашего WebApp магазина
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1155,7 +1155,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl>
                         <FormLabel>📊 Опросы и викторины</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Создайте интерактивные опросы с вопросами и баллами
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1260,7 +1260,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl>
                         <FormLabel fontWeight="semibold">Активности и задания</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Создайте задания с баллами за выполнение
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1365,7 +1365,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl>
                         <FormLabel fontWeight="semibold">Расписание и мероприятия</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Добавьте лекции, встречи и события
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1471,7 +1471,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl>
                         <FormLabel>📱 QR коды и проверки</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Настройте QR-коды для участников и проверки
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1524,7 +1524,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl>
                         <FormLabel>📍 Локации и места</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Добавьте места проведения мероприятий
                         </Text>
                         <VStack spacing={3} align="stretch">
@@ -1628,7 +1628,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl mb={6}>
                         <FormLabel>🎨 Цветовая схема WebApp</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Выберите стиль оформления вашего WebApp
                         </Text>
                         <Select
@@ -1652,7 +1652,7 @@ const BotBuilderPage: React.FC = () => {
 
                       <FormControl mb={6}>
                         <FormLabel>👨‍💼 Администраторы бота</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Укажите Telegram ID пользователей, которые будут иметь доступ к команде /admin
                           <br />
                           <Text as="span" fontSize="xs" color="blue.500">
@@ -1702,7 +1702,7 @@ const BotBuilderPage: React.FC = () => {
                       
                       <FormControl>
                         <FormLabel fontWeight="semibold">Настройки страниц WebApp</FormLabel>
-                        <Text fontSize="sm" color="gray.600" mb={3}>
+                        <Text fontSize="sm" color="whiteAlpha.600" mb={3}>
                           Выберите какие страницы показывать в WebApp
                         </Text>
                         <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
@@ -1836,9 +1836,9 @@ const BotBuilderPage: React.FC = () => {
             {/* База данных */}
             <TabPanel>
               <VStack spacing={6} align="stretch">
-                <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
-                    <Heading size="md">Настройки базы данных</Heading>
+                    <Heading size="md" color="white">Настройки базы данных</Heading>
                   </CardHeader>
                   <CardBody>
                     <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
@@ -1896,9 +1896,9 @@ const BotBuilderPage: React.FC = () => {
                   </CardBody>
                 </Card>
 
-                <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
-                    <Heading size="md">Пользовательские поля</Heading>
+                    <Heading size="md" color="white">Пользовательские поля</Heading>
                   </CardHeader>
                   <CardBody>
                     <TableContainer>
@@ -1935,9 +1935,9 @@ const BotBuilderPage: React.FC = () => {
             {/* Интеграции */}
             <TabPanel>
               <SimpleGrid columns={1} spacing={4}>
-                <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                   <CardHeader>
-                    <Heading size="md">Уведомления администратору</Heading>
+                    <Heading size="md" color="white">Уведомления администратору</Heading>
                   </CardHeader>
                   <CardBody>
                     <VStack spacing={4} align="stretch">
@@ -1954,7 +1954,7 @@ const BotBuilderPage: React.FC = () => {
                           }))}
                           placeholder="123456789"
                         />
-                        <Text fontSize="xs" color="gray.500">
+                        <Text fontSize="xs" color="whiteAlpha.500">
                           Отправьте /start боту и найдите ваш ID в логах
                         </Text>
                       </FormControl>
@@ -2019,9 +2019,9 @@ const BotBuilderPage: React.FC = () => {
 
             {/* Функции */}
             <TabPanel>
-              <Card bg={cardBg} border="1px" borderColor={borderColor}>
+              <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                 <CardHeader>
-                  <Heading size="md">Дополнительные функции</Heading>
+                  <Heading size="md" color="white">Дополнительные функции</Heading>
                 </CardHeader>
                 <CardBody>
                   <SimpleGrid columns={{ base: 1, md: 2 }} spacing={6}>
@@ -2131,9 +2131,9 @@ const BotBuilderPage: React.FC = () => {
             <TabPanel>
               <Grid templateColumns={{ base: '1fr', md: '1fr 1fr' }} gap={6}>
                 <GridItem>
-                  <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
-                      <Heading size="md">Предпросмотр бота</Heading>
+                      <Heading size="md" color="white">Предпросмотр бота</Heading>
                     </CardHeader>
                     <CardBody>
                       <Box
@@ -2155,7 +2155,7 @@ const BotBuilderPage: React.FC = () => {
 
                           {botSettings.scenes.map((scene, index) => (
                             <Box key={scene.id} w="full">
-                              <Text fontSize="xs" color="gray.500" mb={2}>
+                              <Text fontSize="xs" color="whiteAlpha.500" mb={2}>
                                 Сценарий #{index + 1}: {scene.name}
                               </Text>
                               <Box bg="white" p={3} borderRadius="md" border="1px" borderColor="gray.200" mb={2}>
@@ -2191,9 +2191,9 @@ const BotBuilderPage: React.FC = () => {
                 </GridItem>
 
                 <GridItem>
-                  <Card bg={cardBg} border="1px" borderColor={borderColor}>
+                  <Card bg={cardBg} borderColor={borderColor} sx={cardStyle}>
                     <CardHeader>
-                      <Heading size="md">Статистика проекта</Heading>
+                      <Heading size="md" color="white">Статистика проекта</Heading>
                     </CardHeader>
                     <CardBody>
                       <VStack spacing={4} align="stretch">
@@ -2375,7 +2375,7 @@ const BotBuilderPage: React.FC = () => {
                     <HStack key={index} p={2} bg="white" borderRadius="md" border="1px" borderColor="gray.200">
                       <Text flex={1} fontSize="sm">{button.text}</Text>
                       <Badge colorScheme="blue" fontSize="xs">{button.action}</Badge>
-                      <Text fontSize="xs" color="gray.600" maxW="150px" noOfLines={1}>
+                      <Text fontSize="xs" color="whiteAlpha.600" maxW="150px" noOfLines={1}>
                         {button.value}
                       </Text>
                       <IconButton

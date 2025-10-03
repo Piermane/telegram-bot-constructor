@@ -243,8 +243,8 @@ const BotListPage: React.FC = () => {
           <VStack spacing={8} align="stretch">
             {/* Header Skeleton */}
             <Box>
-              <Heading size="xl" mb={2}>Мои боты</Heading>
-              <Text color="gray.600">Управление вашими Telegram ботами</Text>
+              <Heading size="xl" mb={2} color="white">Мои боты</Heading>
+              <Text color="white">Управление вашими Telegram ботами</Text>
             </Box>
             
             {/* Loading Skeleton */}
@@ -294,7 +294,7 @@ const BotListPage: React.FC = () => {
                 onClick={loadBots}
                 isLoading={loading}
                 bg="whiteAlpha.900"
-                color="gray.800"
+                color="white.800"
                 fontWeight="600"
                 _hover={{
                   bg: 'white',
@@ -419,7 +419,7 @@ const BotListPage: React.FC = () => {
                             as="a"
                             href={bot.url}
                             target="_blank"
-                            color="gray.800"
+                            color="white.800"
                             _hover={{ bg: 'blue.50' }}
                           >
                             Открыть в Telegram
@@ -427,7 +427,7 @@ const BotListPage: React.FC = () => {
                           <MenuItem
                             icon={<Icon as={FiBarChart2} />}
                             onClick={() => navigate(`/bots/${bot.id}/analytics`)}
-                            color="gray.800"
+                            color="white.800"
                             _hover={{ bg: 'blue.50' }}
                           >
                             Аналитика

@@ -245,8 +245,8 @@ const DashboardPage: React.FC = () => {
                     <Icon as={FiActivity} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Всего ботов</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="extrabold">{stats.totalBots}</StatNumber>
+                    <StatLabel color="white" fontSize="sm" fontWeight="medium">Всего ботов</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="extrabold" color="white">{stats.totalBots}</StatNumber>
                   </Stat>
                 </HStack>
               </CardBody>
@@ -281,7 +281,7 @@ const DashboardPage: React.FC = () => {
                     <Icon as={FiZap} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Активных</StatLabel>
+                    <StatLabel color="white" fontSize="sm" fontWeight="medium">Активных</StatLabel>
                     <StatNumber fontSize="3xl" fontWeight="extrabold" color="green.500">{stats.activeBots}</StatNumber>
                   </Stat>
                 </HStack>
@@ -317,7 +317,7 @@ const DashboardPage: React.FC = () => {
                     <Icon as={FiShield} boxSize={7} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm" fontWeight="medium">Остановлено</StatLabel>
+                    <StatLabel color="white" fontSize="sm" fontWeight="medium">Остановлено</StatLabel>
                     <StatNumber fontSize="3xl" fontWeight="extrabold" color="red.500">{stats.stoppedBots}</StatNumber>
                   </Stat>
                 </HStack>
@@ -348,9 +348,9 @@ const DashboardPage: React.FC = () => {
                     <Icon as={FiTarget} boxSize={6} color="white" />
                   </Flex>
                   <Stat>
-                    <StatLabel color="gray.600" fontSize="sm">Шаблонов</StatLabel>
-                    <StatNumber fontSize="3xl" fontWeight="bold">{stats.templatesAvailable}</StatNumber>
-                    <StatHelpText fontSize="xs" color="gray.500">Доступно для запуска</StatHelpText>
+                    <StatLabel color="white" fontSize="sm">Шаблонов</StatLabel>
+                    <StatNumber fontSize="3xl" fontWeight="bold" color="white">{stats.templatesAvailable}</StatNumber>
+                    <StatHelpText fontSize="xs" color="white">Доступно для запуска</StatHelpText>
                   </Stat>
                 </HStack>
               </CardBody>
@@ -408,9 +408,9 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               sx={cardStyle}
             >
-              <StatLabel color="whiteAlpha.800">Всего ботов</StatLabel>
-              <StatNumber color="white">{stats.totalBots}</StatNumber>
-              <StatHelpText color="whiteAlpha.700">Созданных ботов</StatHelpText>
+              <StatLabel color="white">Всего ботов</StatLabel>
+              <StatNumber color="white" fontSize="3xl">{stats.totalBots}</StatNumber>
+              <StatHelpText color="white">Созданных ботов</StatHelpText>
             </Stat>
             
             <Stat 
@@ -421,9 +421,9 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               sx={cardStyle}
             >
-              <StatLabel color="whiteAlpha.800">Активные боты</StatLabel>
-              <StatNumber color="green.300">{stats.activeBots}</StatNumber>
-              <StatHelpText color="whiteAlpha.700">Работают сейчас</StatHelpText>
+              <StatLabel color="white">Активных</StatLabel>
+              <StatNumber color="green.300" fontSize="3xl">{stats.activeBots}</StatNumber>
+              <StatHelpText color="white">Работают сейчас</StatHelpText>
             </Stat>
             
             <Stat 
@@ -434,9 +434,9 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               sx={cardStyle}
             >
-              <StatLabel color="whiteAlpha.800">Остановленные</StatLabel>
-              <StatNumber color="red.300">{stats.stoppedBots}</StatNumber>
-              <StatHelpText color="whiteAlpha.700">Не активны</StatHelpText>
+              <StatLabel color="white">Остановлено</StatLabel>
+              <StatNumber color="red.300" fontSize="3xl">{stats.stoppedBots}</StatNumber>
+              <StatHelpText color="white">Не активны</StatHelpText>
             </Stat>
             
             <Stat 
@@ -447,9 +447,9 @@ const DashboardPage: React.FC = () => {
               borderColor={borderColor}
               sx={cardStyle}
             >
-              <StatLabel color="whiteAlpha.800">Шаблоны</StatLabel>
-              <StatNumber color="white">{stats.templatesAvailable}</StatNumber>
-              <StatHelpText color="whiteAlpha.700">Доступно</StatHelpText>
+              <StatLabel color="white">Шаблоны</StatLabel>
+              <StatNumber color="white" fontSize="3xl">{stats.templatesAvailable}</StatNumber>
+              <StatHelpText color="white">Доступно для запуска</StatHelpText>
             </Stat>
           </SimpleGrid>
 

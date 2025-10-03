@@ -296,7 +296,7 @@ const BotAnalyticsPage: React.FC = () => {
                 color="white"
                 textShadow="0 2px 8px rgba(0, 0, 0, 0.3)"
               >
-                📊 Аналитика бота
+                Аналитика бота
               </Heading>
               <Text color="whiteAlpha.800" mt={1}>
                 @{analytics.botInfo.username} • {analytics.botInfo.name}
@@ -329,9 +329,9 @@ const BotAnalyticsPage: React.FC = () => {
           <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel color="whiteAlpha.800">Всего пользователей</StatLabel>
-                <StatNumber color="purple.300">{analytics.stats.total_users}</StatNumber>
-                <StatHelpText color="whiteAlpha.700">
+                <StatLabel color="white">Всего пользователей</StatLabel>
+                <StatNumber color="white">{analytics.stats.total_users}</StatNumber>
+                <StatHelpText color="white">
                   <StatArrow type="increase" />
                   {analytics.stats.active_today} сегодня
                 </StatHelpText>
@@ -342,9 +342,9 @@ const BotAnalyticsPage: React.FC = () => {
           <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel color="whiteAlpha.800">Активных за неделю</StatLabel>
-                <StatNumber color="blue.300">{analytics.stats.active_week}</StatNumber>
-                <StatHelpText color="whiteAlpha.700">
+                <StatLabel color="white">Активных за неделю</StatLabel>
+                <StatNumber color="white">{analytics.stats.active_week}</StatNumber>
+                <StatHelpText color="white">
                   {((analytics.stats.active_week / analytics.stats.total_users) * 100).toFixed(1)}% от всех
                 </StatHelpText>
               </Stat>
@@ -354,9 +354,9 @@ const BotAnalyticsPage: React.FC = () => {
           <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel color="whiteAlpha.800">Всего сообщений</StatLabel>
-                <StatNumber color="green.300">{analytics.stats.total_messages}</StatNumber>
-                <StatHelpText color="whiteAlpha.700">
+                <StatLabel color="white">Всего сообщений</StatLabel>
+                <StatNumber color="white">{analytics.stats.total_messages}</StatNumber>
+                <StatHelpText color="white">
                   <StatArrow type="increase" />
                   {analytics.stats.messages_today} сегодня
                 </StatHelpText>
@@ -367,9 +367,9 @@ const BotAnalyticsPage: React.FC = () => {
           <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel color="whiteAlpha.800">Действий WebApp</StatLabel>
-                <StatNumber color="orange.300">{analytics.webapp_data.length}</StatNumber>
-                <StatHelpText color="whiteAlpha.700">Всего записей</StatHelpText>
+                <StatLabel color="white">Действий WebApp</StatLabel>
+                <StatNumber color="white">{analytics.webapp_data.length}</StatNumber>
+                <StatHelpText color="white">Всего записей</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -377,9 +377,9 @@ const BotAnalyticsPage: React.FC = () => {
           <Card bg={bgColor} borderColor={borderColor} sx={cardStyle}>
             <CardBody>
               <Stat>
-                <StatLabel color="whiteAlpha.800">События аналитики</StatLabel>
-                <StatNumber color="pink.300">{analytics.analytics_events.length}</StatNumber>
-                <StatHelpText color="whiteAlpha.700">Всего событий</StatHelpText>
+                <StatLabel color="white">События аналитики</StatLabel>
+                <StatNumber color="white">{analytics.analytics_events.length}</StatNumber>
+                <StatHelpText color="white">Всего событий</StatHelpText>
               </Stat>
             </CardBody>
           </Card>
@@ -540,23 +540,23 @@ const BotAnalyticsPage: React.FC = () => {
                         <Table variant="simple" size="sm">
                           <Thead>
                             <Tr>
-                              <Th>ID пользователя</Th>
-                              <Th>Действие</Th>
-                              <Th>Данные</Th>
-                              <Th>Дата</Th>
+                              <Th color="white">ID пользователя</Th>
+                              <Th color="white">Действие</Th>
+                              <Th color="white">Данные</Th>
+                              <Th color="white">Дата</Th>
                             </Tr>
                           </Thead>
                           <Tbody>
                             {analytics.webapp_data.slice(0, 50).map((item) => (
                               <Tr key={item.id}>
-                                <Td>{item.user_id}</Td>
-                                <Td>
+                                <Td color="white">{item.user_id}</Td>
+                                <Td color="white">
                                   <Badge colorScheme="green">{item.action}</Badge>
                                 </Td>
-                                <Td fontSize="xs" maxW="300px" isTruncated>
+                                <Td color="white" fontSize="xs" maxW="300px" isTruncated>
                                   {item.data}
                                 </Td>
-                                <Td fontSize="xs">
+                                <Td color="white" fontSize="xs">
                                   {new Date(item.created_at).toLocaleString('ru-RU')}
                                 </Td>
                               </Tr>
@@ -586,9 +586,9 @@ const BotAnalyticsPage: React.FC = () => {
                       <Table variant="simple" size="sm">
                         <Thead>
                           <Tr>
-                            <Th>ID пользователя</Th>
-                            <Th>Активность</Th>
-                            <Th>Дата регистрации</Th>
+                            <Th color="white">ID пользователя</Th>
+                            <Th color="white">Активность</Th>
+                            <Th color="white">Дата регистрации</Th>
                           </Tr>
                         </Thead>
                         <Tbody>
@@ -603,11 +603,11 @@ const BotAnalyticsPage: React.FC = () => {
                               
                               return (
                                 <Tr key={item.id}>
-                                  <Td fontWeight="bold">{item.user_id}</Td>
-                                  <Td>
+                                  <Td color="white" fontWeight="bold">{item.user_id}</Td>
+                                  <Td color="white">
                                     <Badge colorScheme="purple">{activityName}</Badge>
                                   </Td>
-                                  <Td fontSize="sm">
+                                  <Td color="white" fontSize="sm">
                                     {new Date(item.created_at).toLocaleString('ru-RU')}
                                   </Td>
                                 </Tr>
@@ -637,10 +637,10 @@ const BotAnalyticsPage: React.FC = () => {
                       <Table variant="simple" size="sm">
                         <Thead>
                           <Tr>
-                            <Th>ID пользователя</Th>
-                            <Th>Опрос</Th>
-                            <Th>Тип</Th>
-                            <Th>Дата</Th>
+                            <Th color="white">ID пользователя</Th>
+                            <Th color="white">Опрос</Th>
+                            <Th color="white">Тип</Th>
+                            <Th color="white">Дата</Th>
                           </Tr>
                         </Thead>
                         <Tbody>
@@ -655,14 +655,14 @@ const BotAnalyticsPage: React.FC = () => {
                               
                               return (
                                 <Tr key={item.id}>
-                                  <Td fontWeight="bold">{item.user_id}</Td>
-                                  <Td fontSize="sm">{surveyTitle}</Td>
-                                  <Td>
+                                  <Td color="white" fontWeight="bold">{item.user_id}</Td>
+                                  <Td color="white" fontSize="sm">{surveyTitle}</Td>
+                                  <Td color="white">
                                     <Badge colorScheme={item.action === 'start_survey' ? 'blue' : 'green'}>
                                       {item.action === 'start_survey' ? 'Начат' : 'Ответ'}
                                     </Badge>
                                   </Td>
-                                  <Td fontSize="sm">
+                                  <Td color="white" fontSize="sm">
                                     {new Date(item.created_at).toLocaleString('ru-RU')}
                                   </Td>
                                 </Tr>
@@ -710,35 +710,35 @@ const BotAnalyticsPage: React.FC = () => {
                     <Table variant="simple">
                       <Thead>
                         <Tr>
-                          <Th>ID</Th>
-                          <Th>Имя</Th>
-                          <Th>Username</Th>
-                          <Th>Регистрация</Th>
-                          <Th>Последняя активность</Th>
-                          <Th>Действия</Th>
+                          <Th color="white">ID</Th>
+                          <Th color="white">Имя</Th>
+                          <Th color="white">Username</Th>
+                          <Th color="white">Регистрация</Th>
+                          <Th color="white">Последняя активность</Th>
+                          <Th color="white">Действия</Th>
                         </Tr>
                       </Thead>
                       <Tbody>
                         {filteredUsers.map((user) => (
                           <Tr key={user.id}>
-                            <Td fontWeight="bold">{user.id}</Td>
-                            <Td>{user.first_name}</Td>
-                            <Td>
+                            <Td color="white" fontWeight="bold">{user.id}</Td>
+                            <Td color="white">{user.first_name}</Td>
+                            <Td color="white">
                               {user.username ? (
                                 <Badge colorScheme="blue">@{user.username}</Badge>
                               ) : (
-                                <Text color="gray.500" fontSize="sm">—</Text>
+                                <Text color="white.500" fontSize="sm">—</Text>
                               )}
                             </Td>
-                            <Td fontSize="sm">
+                            <Td color="white" fontSize="sm">
                               {new Date(user.created_at).toLocaleDateString('ru-RU')}
                             </Td>
-                            <Td fontSize="sm">
+                            <Td color="white" fontSize="sm">
                               {user.last_active
                                 ? new Date(user.last_active).toLocaleString('ru-RU')
                                 : '—'}
                             </Td>
-                            <Td>
+                            <Td color="white">
                               <HStack spacing={2}>
                                 <Button
                                   size="xs"
@@ -802,17 +802,17 @@ const BotAnalyticsPage: React.FC = () => {
                     <Table variant="simple" size="sm">
                       <Thead>
                         <Tr>
-                          <Th>Тип события</Th>
-                          <Th>ID пользователя</Th>
-                          <Th>Сцена/Команда</Th>
-                          <Th>Данные</Th>
-                          <Th>Дата</Th>
+                          <Th color="white">Тип события</Th>
+                          <Th color="white">ID пользователя</Th>
+                          <Th color="white">Сцена/Команда</Th>
+                          <Th color="white">Данные</Th>
+                          <Th color="white">Дата</Th>
                         </Tr>
                       </Thead>
                       <Tbody>
                         {analytics.analytics_events.slice(0, 100).map((event) => (
                           <Tr key={event.id}>
-                            <Td>
+                            <Td color="white">
                               <Badge
                                 colorScheme={
                                   event.event_type === 'command_used' ? 'purple' :
@@ -823,12 +823,12 @@ const BotAnalyticsPage: React.FC = () => {
                                 {event.event_type}
                               </Badge>
                             </Td>
-                            <Td>{event.user_id}</Td>
-                            <Td fontSize="xs">{event.scene_id || '—'}</Td>
-                            <Td fontSize="xs" maxW="200px" isTruncated>
+                            <Td color="white">{event.user_id}</Td>
+                            <Td color="white" fontSize="xs">{event.scene_id || '—'}</Td>
+                            <Td color="white" fontSize="xs" maxW="200px" isTruncated>
                               {event.data || '—'}
                             </Td>
-                            <Td fontSize="xs">
+                            <Td color="white" fontSize="xs">
                               {new Date(event.created_at).toLocaleString('ru-RU')}
                             </Td>
                           </Tr>

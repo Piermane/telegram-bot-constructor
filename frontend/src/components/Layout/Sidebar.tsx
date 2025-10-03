@@ -95,7 +95,7 @@ const Sidebar: React.FC = () => {
 
         {/* Footer */}
         <VStack spacing={2}>
-          <Text fontSize="xs" color="whiteAlpha.700" fontWeight="medium">
+          <Text fontSize="xs" color="white" fontWeight="medium">
             v1.0.0
           </Text>
         </VStack>
